@@ -1,5 +1,6 @@
 package edu.lehman.android;
 
+import edu.lehman.android.views.BubbleSurfaceView1stSample;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
@@ -9,7 +10,8 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+//		setContentView(R.layout.activity_main);
+		setContentView(new BubbleSurfaceView1stSample(this));
 	}
 
 	@Override

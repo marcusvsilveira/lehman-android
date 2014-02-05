@@ -20,15 +20,18 @@ public class BubbleSurfaceView1stSample extends SurfaceView implements Callback 
 	    paint.setColor(Color.BLUE);
 	    paint.setStyle(Style.FILL);
 	  }
+	  
 	  public void surfaceCreated(SurfaceHolder holder) {
 	    Canvas canvas = sh.lockCanvas();
 	    canvas.drawColor(Color.BLACK);
 	    canvas.drawCircle(100, 200, 50, paint);
 	    sh.unlockCanvasAndPost(canvas);
 	  }
+	  
 	  public void surfaceChanged(SurfaceHolder holder, int format, int width,
 				int height) {
 	  }
+	  
 	  public void surfaceDestroyed(SurfaceHolder holder) {
 	  }
 }

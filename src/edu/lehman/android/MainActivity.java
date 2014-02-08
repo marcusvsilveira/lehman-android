@@ -1,13 +1,10 @@
 package edu.lehman.android;
 
-import edu.lehman.android.views.BubbleSurfaceView1stSample;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ImageView;
 
 /**
  * MainActivity initializes a simple activity with a background image
@@ -22,39 +19,30 @@ import android.widget.ImageView;
  */
 public class MainActivity extends Activity {
 
-	private Intent intent;
+	private Intent startGameIntent;
+	private Intent optionsIntent;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
- 	    intent = new Intent(this, GameSettingsActivity.class);
-
-		
-		/*
-		 * The image initialized by activity_main.xml as the main
-		 * screen image is given an anonymous onClickListener, which is an
-		 * actionListener that listens for taps on the screen and
-		 * then redirects to a new activity.
-		 * 
-		 * TODO: Change the activity from the BubbleSurfaceView example
-		 * that Marcus wrote to the proper screen either to set parameters
-		 * before starting the game (or more simply for now, the game itself)
-		 * 
-		 * TODO: Get a better starting image! 
-		 */
-		ImageView view = (ImageView) findViewById(R.id.mainImage);
-		OnClickListener viewTapped = new OnClickListener() {
-		       @Override
-		       public void onClick(View v) {
-		         // TODO Auto-generated method stub
-		    	   startActivity(intent);
-		       }
-		     };
-		     
-		view.setOnClickListener(viewTapped);
-
+		startGameIntent = new Intent(this, SheepHerderActivity.class);
+		optionsIntent = new Intent(this, GameSettingsActivity.class);
 	}
+	
+	/*
+	 * When the start button is clicked, launch the activity associated with
+	 * starting the game. The onClicklistener is defined in the xml for this
+	 * activity
+	 */
+	public void startGame(View view) {
+		startActivity(startGameIntent);
+	}
+	
+	public void options(View view){
+		startActivity(optionsIntent);
+	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

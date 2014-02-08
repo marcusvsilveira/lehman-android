@@ -19,7 +19,6 @@ public class GameSettingsActivity extends Activity {
 	// Intents for the buttons to point to the class files of the activities
 	// that they should launch
 	private Intent backIntent;
-	private Intent startGameIntent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +26,6 @@ public class GameSettingsActivity extends Activity {
 		setContentView(R.layout.activity_game_settings_panel);
 		
 		backIntent = new Intent(this, MainActivity.class);
-		startGameIntent = new Intent(this, SheepHerderActivity.class);
 	}
 
 	@Override
@@ -46,13 +44,6 @@ public class GameSettingsActivity extends Activity {
 		startActivity(backIntent);
 	}
 	
-	/*
-	 * When the start button is clicked, launch the activity associated
-	 * with starting the game. The onClicklistener is defined in the xml
-	 * for this activity
-	 */
-	public void startGame(View view){
-		startActivity(startGameIntent);
-	}
+	
 
 }

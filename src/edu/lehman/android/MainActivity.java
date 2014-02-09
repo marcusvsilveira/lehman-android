@@ -3,6 +3,7 @@ package edu.lehman.android;
 import edu.lehman.android.views.BubbleSurfaceView1stSample;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,13 +22,14 @@ import android.widget.ImageView;
  */
 public class MainActivity extends Activity {
 
-	// For the actionListener to be able to react to taps
-	private MainActivity mainReference = this;
+	private Intent intent;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+ 	    intent = new Intent(this, GameSettingsActivity.class);
+
 		
 		/*
 		 * The image initialized by activity_main.xml as the main
@@ -46,7 +48,7 @@ public class MainActivity extends Activity {
 		       @Override
 		       public void onClick(View v) {
 		         // TODO Auto-generated method stub
-		    	   setContentView(new BubbleSurfaceView1stSample(mainReference));
+		    	   startActivity(intent);
 		       }
 		     };
 		     

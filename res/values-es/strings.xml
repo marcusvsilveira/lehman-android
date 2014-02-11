@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Android en espanol</string>
+    <string name="action_settings">Controles</string>
+    <string name="hello_world">Ola Mundo 2!</string>
+
+</resources>

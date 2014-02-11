@@ -22,6 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="edu.lehman.android.GameSettingsActivity"
+            android:label="@string/title_activity_game_settings_panel" >
+        </activity>
+        <activity
+            android:name="edu.lehman.android.SheepHerderActivity"
+            android:label="@string/title_activity_sheep_herder" >
+        </activity>
     </application>
 
 </manifest>

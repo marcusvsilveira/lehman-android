@@ -4,5 +4,7 @@
     <string name="app_name">Android en espanol</string>
     <string name="action_settings">Controles</string>
     <string name="hello_world">Ola Mundo 2!</string>
+    <string name="title_activity_game_settings_panel">Panel de Control</string>
+    <string name="title_activity_sheep_herder">Actividade SheepHerder</string>
 
 </resources>

@@ -9,29 +9,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <Button
-        android:id="@+id/quitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/settingsButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:minWidth="200dip"
-        android:text="@string/quit" />
-
-    <Button
-        android:id="@+id/settingsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/startButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:minWidth="200dip"
-        android:text="@string/settings" />
-
     <ImageView
-        android:id="@+id/mainImage"
-        android:layout_width="wrap_content"
+        android:id="@+id/logo"
+        android:layout_width="wrap_content" 
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -44,9 +24,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/settingsButton"
-        android:layout_below="@+id/mainImage"
+        android:layout_below="@+id/logo"
         android:layout_marginTop="43dp"
         android:minWidth="200dip"
         android:text="@string/startGame" />
+    
+    <Button
+        android:id="@+id/settingsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/startButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:minWidth="200dip"
+        android:text="@string/settings" />
 
+    <Button
+        android:id="@+id/quitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/settingsButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:minWidth="200dip"
+        android:text="@string/quit" />
+    
 </RelativeLayout>

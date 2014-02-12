@@ -11,4 +11,5 @@
     <string name="settings">Controles</string>
     <string name="sheepHerder">Sheep Herder</string>
 	<string name="quit">Salir</string>
+	<string name="title">Pastor de ovejas</string>
 </resources>

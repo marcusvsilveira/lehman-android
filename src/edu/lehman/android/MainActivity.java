@@ -1,66 +1,61 @@
 package edu.lehman.android;
 
-import edu.lehman.android.views.BubbleSurfaceView1stSample;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageView;
+import android.widget.Button;
 
 /**
- * MainActivity initializes a simple activity with a background image
- * that serves as the introduction to the game.
+ * MainActivity initializes the main page with options to control settings 
+ * or start a new game (both new activities)
  * 
  * @author Marcos Davila, Marcus Silveira
  * @revisionhistory
+ * 		2/11/2014 - Creating main layout and navigation. Setting up button listeners (settings, start game, and quit)
  * 		2/4/2014 - OnClickListener implemented so this activity listens
  * 				   for taps
  * 		2/1/2014 - Project Created
  *
  */
 public class MainActivity extends Activity {
-
-	private Intent intent;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
- 	    intent = new Intent(this, GameSettingsActivity.class);
-
 		
-		/*
-		 * The image initialized by activity_main.xml as the main
-		 * screen image is given an anonymous onClickListener, which is an
-		 * actionListener that listens for taps on the screen and
-		 * then redirects to a new activity.
-		 * 
-		 * TODO: Change the activity from the BubbleSurfaceView example
-		 * that Marcus wrote to the proper screen either to set parameters
-		 * before starting the game (or more simply for now, the game itself)
-		 * 
-		 * TODO: Get a better starting image! 
-		 */
-		ImageView view = (ImageView) findViewById(R.id.mainImage);
-		OnClickListener viewTapped = new OnClickListener() {
-		       @Override
-		       public void onClick(View v) {
-		         // TODO Auto-generated method stub
-		    	   startActivity(intent);
-		       }
-		     };
-		     
-		view.setOnClickListener(viewTapped);
-
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+		//button handling
+		Button settings = (Button) findViewById(R.id.settingsButton);
+		Button startGame = (Button) findViewById(R.id.startButton);
+		Button quitButton = (Button) findViewById(R.id.quitButton);
+		
+		//setup listeners
+		quitButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				finish();
+			}
+		});
+		
+		settings.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				Intent settingsIntent = new Intent(MainActivity.this, GameSettingsActivity.class);
+				startActivity(settingsIntent);
+			}
+		});
+		
+		startGame.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				Intent startGameIntent = new Intent(MainActivity.this, SheepHerderActivity.class);
+				startActivity(startGameIntent);
+			}
+		});
 	}
 
 }

@@ -11,14 +11,14 @@
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="wrap_content" 
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="86dp"
+        android:layout_marginTop="41dp"
         android:contentDescription="@string/sheepHerder"
-        android:src="@drawable/mainmenuplaceholder" />
-
+        android:src="@drawable/sheepherder" />
+    
     <Button
         android:id="@+id/startButton"
         android:layout_width="wrap_content"
@@ -48,5 +48,5 @@
         android:layout_marginTop="15dp"
         android:minWidth="200dip"
         android:text="@string/quit" />
-    
+
 </RelativeLayout>

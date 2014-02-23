@@ -8,7 +8,7 @@
     <string name="title_activity_sheep_herder">SheepHerderActivity</string>
     <string name="back">Back</string>
     <string name="startGame">StartGame</string>
-    <string name="settings">Settings</string>
+    <string name="settings">Speed-Options</string>
 	<string name="sheepHerder">Sheep Herder</string>
 	<string name="quit">Quit</string>
 	<string name="title">Sheep Herder</string>

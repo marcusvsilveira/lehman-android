@@ -7,15 +7,116 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".GameSettingsActivity" >
+    
+    
+    <TextView
+         android:id="@+id/sheep_text2"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignBaseline="@+id/sheep_text"
+         android:layout_alignBottom="@+id/sheep_text"
+         android:layout_alignRight="@+id/sheep"
+         android:text="max_speed" />
 
-    <Button
-        android:id="@+id/backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/back"/>
+     <TextView
+         android:id="@+id/TextView01"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignLeft="@+id/fox"
+         android:layout_alignTop="@+id/TextView03"
+         android:text="min_speed" />
+
+     <TextView
+         android:id="@+id/TextView02"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignLeft="@+id/dog"
+         android:layout_below="@+id/dog"
+         android:text="min_speed" />
+
+     <TextView
+         android:id="@+id/TextView03"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignRight="@+id/fox"
+         android:layout_below="@+id/fox"
+         android:text="max_speed" />
+
+     <TextView
+         android:id="@+id/TextView04"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignBaseline="@+id/TextView02"
+         android:layout_alignBottom="@+id/TextView02"
+         android:layout_alignRight="@+id/dog"
+         android:text="max_speed" />
+
+     <TextView
+         android:id="@+id/TextView05"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignLeft="@+id/dog"
+         android:layout_alignParentTop="true"
+         android:layout_marginTop="51dp"
+         android:textColor="#E40045"
+         android:text="Dog" />
+
+     <TextView
+         android:id="@+id/TextView06"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignLeft="@+id/fox"
+         android:layout_below="@+id/TextView02"
+         android:layout_marginTop="38dp"
+         android:textColor="#E40045"
+         android:text="Fox" />
+
+     <TextView
+         android:id="@+id/sheep_text"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignLeft="@+id/sheep"
+         android:layout_below="@+id/sheep"
+         android:text="min_speed" />
+
+     <SeekBar
+         android:id="@+id/dog"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_alignLeft="@+id/dog_text"
+         android:layout_below="@+id/TextView05" />
+
+     <SeekBar
+         android:id="@+id/fox"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_alignLeft="@+id/TextView02"
+         android:layout_below="@+id/TextView06" />
+
+     <SeekBar
+         android:id="@+id/sheep"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_alignLeft="@+id/TextView07"
+         android:layout_below="@+id/TextView01"
+         android:layout_marginTop="74dp" />
+
+     <TextView
+         android:id="@+id/TextView07"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignBottom="@+id/sheep"
+         android:layout_alignLeft="@+id/TextView01"
+         android:layout_marginBottom="39dp"
+         android:textColor="#E40045"
+         android:text="Sheep" />
+
+     <Button
+         android:id="@+id/backButton"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentBottom="true"
+         android:layout_centerHorizontal="true"
+         android:text="@string/back" />
 
 </RelativeLayout>

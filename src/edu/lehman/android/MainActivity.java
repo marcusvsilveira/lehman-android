@@ -26,7 +26,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		//button handling
+		//button handling 
 		Button settings = (Button) findViewById(R.id.settingsButton);
 		Button startGame = (Button) findViewById(R.id.startButton);
 		Button quitButton = (Button) findViewById(R.id.quitButton);

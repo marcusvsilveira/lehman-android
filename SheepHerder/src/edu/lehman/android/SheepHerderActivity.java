@@ -65,11 +65,6 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME,
 				MODE_PRIVATE);
 		
-		if (settings != null) {
-			// Load from the default preferences files
-			settings = getSharedPreferences(DEFAULT_PREFS_NAME, MODE_PRIVATE);
-		}
-		
 		DOG_SPEED = settings.getInt(DOG_SPEED_PREFS, DEFAULT_DOG_SPEED);
 		NUM_SHEEP = settings.getInt(NUM_SHEEP_PREFS, DEFAULT_NUM_SHEEPS);
 		NUM_FOXES = settings.getInt(NUM_FOXES_PREFS, DEFAULT_NUM_FOXES);

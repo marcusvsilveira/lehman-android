@@ -17,14 +17,13 @@ import android.widget.Button;
  *
  */
 public class SheepHerderActivity extends Activity implements SettingsInterface {
-
+	private static final String LOG_TAG = "SheepHerderActivity";
+	
 	private int DOG_SPEED;
 	private int NUM_SHEEP;
 	private int NUM_FOXES;
 	private int SHEEP_SPEED;
 	private int FOX_SPEED;
-	
-	public static final String TAG = "SheepHerderActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +41,11 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 		
 		loadPreferences();
 		
-		Log.i(TAG, "Dog speed: " + DOG_SPEED);
-		Log.i(TAG, "# Sheep: " + NUM_SHEEP);
-		Log.i(TAG, "# Foxes: " + NUM_FOXES);
-		Log.i(TAG, "Sheep speed: " + SHEEP_SPEED);
-		Log.i(TAG, "Fox speed: " + FOX_SPEED);
+		Log.i(LOG_TAG, "Dog speed: " + DOG_SPEED);
+		Log.i(LOG_TAG, "# Sheep: " + NUM_SHEEP);
+		Log.i(LOG_TAG, "# Foxes: " + NUM_FOXES);
+		Log.i(LOG_TAG, "Sheep speed: " + SHEEP_SPEED);
+		Log.i(LOG_TAG, "Fox speed: " + FOX_SPEED);
 		
 		//TODO create fragment with canvas that starts threads responsible for rendering each component
 	}
@@ -89,4 +88,39 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 		editor.commit();
 	}
 
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		Log.i(LOG_TAG, "onRestart()");
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		Log.i(LOG_TAG, "onStart()");
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Log.i(LOG_TAG, "onResume()");
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Log.i(LOG_TAG, "onPause()");
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		Log.i(LOG_TAG, "onStop()");
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.i(LOG_TAG, "onDestroy()");
+	}
 }

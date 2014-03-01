@@ -15,16 +15,18 @@ import android.widget.Button;
  * start a new game (both new activities)
  * 
  * @author Marcos Davila, Marcus Silveira
- * @revisionhistory 2/11/2014 - Creating main layout and navigation. Setting up
+ * @revisionhistory 3/01/2014 - Adding logs to each lifecycle state for later use on integration tests
+ * 					2/11/2014 - Creating main layout and navigation. Setting up
  *                  button listeners (settings, start game, and quit) 2/4/2014 -
  *                  OnClickListener implemented so this activity listens for
- *                  taps 2/1/2014 - Project Created
+ *                  taps 
+ *                  2/1/2014 - Project Created
  * 
  */
 public class MainActivity extends Activity implements SettingsInterface,
 		Runnable {
 
-	
+	private static final String LOG_TAG = "MainActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,7 @@ public class MainActivity extends Activity implements SettingsInterface,
 			e.printStackTrace();
 		}
 
+		Log.i(LOG_TAG, "onCreate()");
 	}
 
 	@Override
@@ -91,20 +94,58 @@ public class MainActivity extends Activity implements SettingsInterface,
 
 		// Commit the edits!
 		editor.commit();
-
+		
+		Log.i(LOG_TAG, "loadPreferences()");
 	}
 
 	@Override
 	public void storePreferences() {
 		// Do nothing
-
+		Log.i(LOG_TAG, "storePreferences()");
 	}
 
 	@Override
 	public void run() {
 		// Sets up the default preferences in a new thread
 		loadPreferences();
-		Log.i("Main", "Preferences loaded!");
+		
+		Log.i(LOG_TAG, "run()");
+	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		Log.i(LOG_TAG, "onRestart()");
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		Log.i(LOG_TAG, "onStart()");
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Log.i(LOG_TAG, "onResume()");
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Log.i(LOG_TAG, "onPause()");
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		Log.i(LOG_TAG, "onStop()");
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.i(LOG_TAG, "onDestroy()");
 	}
 
 }

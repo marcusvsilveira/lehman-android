@@ -8,6 +8,11 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+/**
+ * Unit test class to ensure main UI components are rendered and properly set
+ * @author marcus.silveira
+ *
+ */
 public class GameSettingsActivityUnitTest extends ActivityUnitTestCase<GameSettingsActivity> {
 	private Button backButton;
 	public SeekBar seekBarDogSpeed, seekBarFoxSpeed, seekBarSheepSpeed;
@@ -46,6 +51,7 @@ public class GameSettingsActivityUnitTest extends ActivityUnitTestCase<GameSetti
 		assertNotNull(this.textViewFoxSpeed);
 		assertNotNull(this.textViewSheepSpeed);
 		
+		//check if all are enabled
 		assertTrue(this.seekBarDogSpeed.isEnabled());
 		assertTrue(this.seekBarFoxSpeed.isEnabled());
 		assertTrue(this.seekBarSheepSpeed.isEnabled());
@@ -65,6 +71,7 @@ public class GameSettingsActivityUnitTest extends ActivityUnitTestCase<GameSetti
 	}
 	
 	public void testBack() {
+		//ensures back button works as expected
 		assertFalse(isFinishCalled());
 		this.backButton.performClick();
 		assertTrue(isFinishCalled());

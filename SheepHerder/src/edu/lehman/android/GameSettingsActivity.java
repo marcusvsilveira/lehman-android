@@ -4,6 +4,7 @@ import interfaces.SettingsInterface;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,7 +20,8 @@ import android.widget.TextView;
  * @author Marcos Davila
  * @author Marcus Silveira
  * @author Prince Oladimeji
- * @revisionhistory 3/1/2014 - A new interface, SettingsInterface, is implemented
+ * @revisionhistory 3/01/2014 - Adding logs to each lifecycle state for later use on integration tests
+ * 					3/1/2014 - A new interface, SettingsInterface, is implemented
  * 					so that this class can work with the default preferences file
  * 					and their own user-created preferences file. The settings from
  * 					the preferences file are reflected in the initial positions of
@@ -37,7 +39,8 @@ import android.widget.TextView;
  *                  2/4/2014 - File created
  */
 public class GameSettingsActivity extends Activity implements SettingsInterface {
-
+	private static final String LOG_TAG = "GameSettingsActivity";
+	
 	public SeekBar dogSpeedSeekBar, foxSpeedSeekBar, sheepSpeedSeekBar, numFoxSeekBar, numSheepSeekBar;
 	public TextView textView1, textView2, textView3;
 
@@ -205,6 +208,42 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 
 		// Commit the edits!
 		editor.commit();
+	}
+	
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		Log.i(LOG_TAG, "onRestart()");
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		Log.i(LOG_TAG, "onStart()");
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Log.i(LOG_TAG, "onResume()");
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Log.i(LOG_TAG, "onPause()");
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		Log.i(LOG_TAG, "onStop()");
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.i(LOG_TAG, "onDestroy()");
 	}
 
 }

@@ -14,19 +14,19 @@
          android:layout_height="wrap_content"
          android:layout_alignBaseline="@+id/TextView02"
          android:layout_alignBottom="@+id/TextView02"
-         android:layout_alignRight="@+id/dog"
-         android:text="max_speed" />
+         android:layout_alignRight="@+id/dogSpeed"
+         android:text="@string/maxSpeed" />
     
     <TextView
          android:id="@+id/TextView02"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_alignLeft="@+id/dog"
-         android:layout_below="@+id/dog"
-         android:text="min_speed" />
+         android:layout_alignLeft="@+id/dogSpeed"
+         android:layout_below="@+id/dogSpeed"
+         android:text="@string/minSpeed" />
     
     <SeekBar
-         android:id="@+id/fox"
+         android:id="@+id/foxSpeed"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:layout_alignLeft="@+id/TextView02"
@@ -37,21 +37,21 @@
          android:id="@+id/TextView03"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_alignRight="@+id/fox"
-         android:layout_below="@+id/fox"
-         android:text="max_speed" />
+         android:layout_alignRight="@+id/foxSpeed"
+         android:layout_below="@+id/foxSpeed"
+         android:text="@string/maxSpeed" />
 
      
     <TextView
          android:id="@+id/TextView01"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_alignLeft="@+id/fox"
+         android:layout_alignLeft="@+id/foxSpeed"
          android:layout_alignTop="@+id/TextView03"
-         android:text="min_speed" />
+         android:text="@string/minSpeed" />
     
     <SeekBar
-         android:id="@+id/sheep"
+         android:id="@+id/sheepSpeed"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:layout_alignRight="@+id/TextView03"
@@ -66,16 +66,16 @@
          android:layout_height="wrap_content"
          android:layout_alignBaseline="@+id/sheep_text"
          android:layout_alignBottom="@+id/sheep_text"
-         android:layout_alignRight="@+id/sheep"
-         android:text="max_speed" />
+         android:layout_alignRight="@+id/sheepSpeed"
+         android:text= "@string/maxSpeed"/>
 
      <TextView
          android:id="@+id/sheep_text"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_alignLeft="@+id/sheep"
-         android:layout_below="@+id/sheep"
-         android:text="min_speed" />
+         android:layout_alignLeft="@+id/sheepSpeed"
+         android:layout_below="@+id/sheepSpeed"
+         android:text="@string/minSpeed" />
 
      <Button
          android:id="@+id/backButton"
@@ -92,15 +92,15 @@
          android:layout_alignLeft="@+id/TextView05"
          android:layout_below="@+id/TextView02"
          android:layout_marginTop="48dp"
-         android:text="Fox"
+         android:text="@string/foxSpeed"
          android:textColor="#E40045" />
      
      <TextView
          android:id="@+id/textV06"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_alignRight="@+id/fox"
-         android:layout_alignTop="@+id/fox"
+         android:layout_alignRight="@+id/foxSpeed"
+         android:layout_alignTop="@+id/foxSpeed"
          android:singleLine="true"
          android:textColor="#E40045" />
 
@@ -108,48 +108,48 @@
          android:id="@+id/TextView07"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_alignBottom="@+id/sheep"
-         android:layout_alignLeft="@+id/sheep"
+         android:layout_alignBottom="@+id/sheepSpeed"
+         android:layout_alignLeft="@+id/sheepSpeed"
          android:layout_marginBottom="32dp"
-         android:text="Sheep"
+         android:text="@string/sheepSpeed"
          android:textColor="#E40045" />
      
      <TextView
          android:id="@+id/textV07"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_alignRight="@+id/sheep"
-         android:layout_alignTop="@+id/sheep"
+         android:layout_alignRight="@+id/sheepSpeed"
+         android:layout_alignTop="@+id/sheepSpeed"
          android:singleLine="true"
          android:textColor="#E40045">
      </TextView>
         
     
      <SeekBar
-         android:id="@+id/dog"
+         android:id="@+id/dogSpeed"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:layout_alignParentLeft="true"
          android:layout_below="@+id/TextView05"
          android:max="10"/>
-
-     <TextView
-         android:id="@+id/TextView05"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_alignLeft="@+id/dog"
-         android:layout_alignParentTop="true"
-         android:layout_marginTop="22dp"
-         android:text="Dog"
-         android:textColor="#E40045" />
      
      <TextView
          android:id="@+id/textV05"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_alignRight="@+id/dog"
-         android:layout_alignTop="@+id/dog"
+         android:layout_alignRight="@+id/dogSpeed"
+         android:layout_alignTop="@+id/dogSpeed"
          android:singleLine="true"
+         android:textColor="#E40045" />
+
+     <TextView
+         android:id="@+id/TextView05"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignLeft="@+id/dogSpeed"
+         android:layout_alignParentTop="true"
+         android:layout_marginTop="32dp"
+         android:text="@string/dogSpeed"
          android:textColor="#E40045" />
      
 </RelativeLayout>

@@ -1,7 +1,6 @@
 package interfaces;
 
 public interface SettingsInterface {
-	public static final String DEFAULT_PREFS_NAME = "DefaultPrefs";
 	public static final String PREFS_NAME = "MyPrefsFile";
 
 	public static final String DOG_SPEED_PREFS = "dogSpeed";

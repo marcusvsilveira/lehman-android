@@ -16,5 +16,4 @@ public interface SettingsInterface {
 	public int DEFAULT_SHEEP_SPEED = 3;
 	
 	public void loadPreferences();
-	public void storePreferences();
 }

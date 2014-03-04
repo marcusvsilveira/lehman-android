@@ -43,40 +43,25 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 	
 	public SeekBar dogSpeedSeekBar, foxSpeedSeekBar, sheepSpeedSeekBar, numFoxSeekBar, numSheepSeekBar;
 	public TextView textView1, textView2, textView3;
-
+	
 	private int DOG_SPEED;
 	private int NUM_SHEEP;
 	private int NUM_FOXES;
-	private int FOX_SPEED;
 	private int SHEEP_SPEED;
-
+	private int FOX_SPEED;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_settings_panel);
 
-		loadPreferences();
-
 		dogSpeedSeekBar = (SeekBar) findViewById(R.id.dogSpeed);
 		foxSpeedSeekBar = (SeekBar) findViewById(R.id.foxSpeed);
 		sheepSpeedSeekBar = (SeekBar) findViewById(R.id.sheepSpeed);
 		
-		
-		// Sets the defaults for the seekbar
-		dogSpeedSeekBar.setProgress(DOG_SPEED);
-		foxSpeedSeekBar.setProgress(FOX_SPEED);
-		sheepSpeedSeekBar.setProgress(SHEEP_SPEED);
-		
-		
 		textView1 = (TextView) findViewById(R.id.textV05);
 		textView2 = (TextView) findViewById(R.id.textV06);
 		textView3 = (TextView) findViewById(R.id.textV07);
-		// Initialize the textview with '0'
-
-		textView1.setText(dogSpeedSeekBar.getProgress() + "/" + dogSpeedSeekBar.getMax());
-		textView2.setText(foxSpeedSeekBar.getProgress() + "/" + foxSpeedSeekBar.getMax());
-		textView3.setText(sheepSpeedSeekBar.getProgress() + "/"
-				+ sheepSpeedSeekBar.getMax());
 
 		Button backButton = (Button) findViewById(R.id.backButton);
 		backButton.setOnClickListener(new OnClickListener() {
@@ -158,17 +143,8 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 
 			}
 		});
-	}
-
-	protected void onStop(Bundle savedInstanceState) {
-		super.onStop();
-
-		storePreferences();
-	}
-	
-	protected void onPause(Bundle savedInstanceState) {
-		super.onPause();
-		storePreferences();
+		
+		Log.i(LOG_TAG, "GameSettingsActivity.onCreate()");
 	}
 
 	@Override
@@ -186,19 +162,30 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME,
 				MODE_PRIVATE);
 		
-		DOG_SPEED = settings.getInt(DOG_SPEED_PREFS, DEFAULT_DOG_SPEED);
-		NUM_SHEEP = settings.getInt(NUM_SHEEP_PREFS, DEFAULT_NUM_SHEEPS);
-		NUM_FOXES = settings.getInt(NUM_FOXES_PREFS, DEFAULT_NUM_FOXES);
-		SHEEP_SPEED = settings.getInt(SHEEP_SPEED_PREFS, DEFAULT_SHEEP_SPEED);
-		FOX_SPEED = settings.getInt(FOX_SPEED_PREFS, DEFAULT_FOX_SPEED);
-
+		if(settings != null) {
+			DOG_SPEED = settings.getInt(DOG_SPEED_PREFS, DEFAULT_DOG_SPEED);
+			NUM_SHEEP = settings.getInt(NUM_SHEEP_PREFS, DEFAULT_NUM_SHEEPS);
+			NUM_FOXES = settings.getInt(NUM_FOXES_PREFS, DEFAULT_NUM_FOXES);
+			SHEEP_SPEED = settings.getInt(SHEEP_SPEED_PREFS, DEFAULT_SHEEP_SPEED);
+			FOX_SPEED = settings.getInt(FOX_SPEED_PREFS, DEFAULT_FOX_SPEED);
+		}
+		
+		// Sets the defaults for the seekbar
+		dogSpeedSeekBar.setProgress(DOG_SPEED);
+		foxSpeedSeekBar.setProgress(FOX_SPEED);
+		sheepSpeedSeekBar.setProgress(SHEEP_SPEED);
+		
+		// Initialize the textview with '0'
+		textView1.setText(dogSpeedSeekBar.getProgress() + "/" + dogSpeedSeekBar.getMax());
+		textView2.setText(foxSpeedSeekBar.getProgress() + "/" + foxSpeedSeekBar.getMax());
+		textView3.setText(sheepSpeedSeekBar.getProgress() + "/"
+				+ sheepSpeedSeekBar.getMax());
 	}
 
-	@Override
 	public void storePreferences() {
 		// We need an Editor object to make preference changes.
 		// All objects are from android.context.Context
-		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putInt(DOG_SPEED_PREFS, DOG_SPEED);
 		editor.putInt(NUM_SHEEP_PREFS, NUM_SHEEP);
@@ -213,37 +200,39 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 	@Override
 	protected void onRestart() {
 		super.onRestart();
-		Log.i(LOG_TAG, "onRestart()");
+		Log.i(LOG_TAG, "GameSettingsActivity.onRestart()");
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		Log.i(LOG_TAG, "onStart()");
+		Log.i(LOG_TAG, "GameSettingsActivity.onStart()");
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Log.i(LOG_TAG, "onResume()");
+		loadPreferences();
+		Log.i(LOG_TAG, "GameSettingsActivity.onResume()");
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		Log.i(LOG_TAG, "onPause()");
+		storePreferences();
+		Log.i(LOG_TAG, "GameSettingsActivity.onPause()");
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		Log.i(LOG_TAG, "onStop()");
+		Log.i(LOG_TAG, "GameSettingsActivity.onStop()");
 	}
 	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		Log.i(LOG_TAG, "onDestroy()");
+		Log.i(LOG_TAG, "GameSettingsActivity.onDestroy()");
 	}
 
 }

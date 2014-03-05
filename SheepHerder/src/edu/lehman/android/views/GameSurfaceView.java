@@ -63,8 +63,14 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 					if( canvas != null) {
 						//TODO
 						//MAKE dog MOVE HERE
+						canvas.drawBitmap(dogBitmap, 5, 5, null);
 						surfaceHolder.unlockCanvasAndPost(canvas);
 					}
+				}
+				try{
+					Thread.sleep(1000);
+				} catch(InterruptedException e) {
+					//ignore it
 				}
 				
 			}
@@ -73,12 +79,19 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 		foxThread = new Thread(new Runnable() {
 			public void run() {
 				Canvas canvas = null;
+				
 				while(!Thread.currentThread().isInterrupted() /* && condition to stop game */) {
 					canvas = surfaceHolder.lockCanvas();
 					if( canvas != null) {
 						//TODO
 						//MAKE fox MOVE HERE
+						canvas.drawBitmap(foxBitmap, 100, 5, null);
 						surfaceHolder.unlockCanvasAndPost(canvas);
+					}
+					try{
+						Thread.sleep(1000);
+					} catch(InterruptedException e) {
+						//ignore it
 					}
 				}
 			}
@@ -92,8 +105,14 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 					if( canvas != null) {
 						//TODO
 						//MAKE sheep MOVE HERE
+						canvas.drawBitmap(sheepBitmap, 200, 5, null);
 						surfaceHolder.unlockCanvasAndPost(canvas);
 					}
+				}
+				try{
+					Thread.sleep(1000);
+				} catch(InterruptedException e) {
+					//ignore it
 				}
 			}
 		});

@@ -1,14 +1,17 @@
 package edu.lehman.android;
 
+import edu.lehman.android.views.GameSurfaceView;
 import interfaces.SettingsInterface;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 /**
  * 
@@ -39,6 +42,12 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 			}
 		});
 		
+		RelativeLayout surfaceLayout = (RelativeLayout) findViewById(R.id.gamelayout);
+		final GameSurfaceView surfaceView = new GameSurfaceView(getApplicationContext(), 
+										BitmapFactory.decodeResource(getResources(), R.drawable.gamedog),
+										BitmapFactory.decodeResource(getResources(), R.drawable.gamefox),
+										BitmapFactory.decodeResource(getResources(), R.drawable.gamesheep));
+		surfaceLayout.addView(surfaceView);
 		Log.i(LOG_TAG, "SheepHerderActivity.onCreate()");
 		//TODO create fragment with canvas that starts threads responsible for rendering each component
 	}

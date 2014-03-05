@@ -1,7 +1,13 @@
 package edu.lehman.android.views;
 
+import java.util.List;
+
+import edu.lehman.android.domain.Dog;
+import edu.lehman.android.domain.Fox;
+import edu.lehman.android.domain.Sheep;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -14,20 +20,28 @@ import android.view.SurfaceView;
  */
 public class GameSurfaceView extends SurfaceView implements Callback {
 
-	private Bitmap dog;
-	private Bitmap fox;
-	private Bitmap sheep;
+	private Bitmap dogBitmap;
+	private Bitmap foxBitmap;
+	private Bitmap sheepBitmap;
 	
 	private SurfaceHolder surfaceHolder;
 	private Thread dogThread;
 	private Thread foxThread;
 	private Thread sheepThread;
 	
+	private Dog dog;
+	private Fox fox;
+	private List<Sheep> sheep;
+	
+	
 	public GameSurfaceView(Context context, Bitmap dog, Bitmap fox, Bitmap sheep) {
 		super(context);
-		this.dog = dog;
-		this.fox = fox;
-		this.sheep = sheep;
+		this.dogBitmap = dog;
+		this.foxBitmap = fox;
+		this.sheepBitmap = sheep;
+		
+		//TODO
+		//initialize dog, fox, and sheep objects and get some info from the sharedPreferences (possibly to be passed by parameter here)
 		
 		surfaceHolder = getHolder();
 		surfaceHolder.addCallback(this);
@@ -41,14 +55,65 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 
 	@Override
 	public void surfaceCreated(SurfaceHolder arg0) {
-		// TODO Auto-generated method stub
+		dogThread = new Thread(new Runnable() {
+			public void run() {
+				Canvas canvas = null;
+				while(!Thread.currentThread().isInterrupted() /* && condition to stop game */) {
+					canvas = surfaceHolder.lockCanvas();
+					if( canvas != null) {
+						//TODO
+						//MAKE dog MOVE HERE
+						surfaceHolder.unlockCanvasAndPost(canvas);
+					}
+				}
+				
+			}
+		});
 
+		foxThread = new Thread(new Runnable() {
+			public void run() {
+				Canvas canvas = null;
+				while(!Thread.currentThread().isInterrupted() /* && condition to stop game */) {
+					canvas = surfaceHolder.lockCanvas();
+					if( canvas != null) {
+						//TODO
+						//MAKE fox MOVE HERE
+						surfaceHolder.unlockCanvasAndPost(canvas);
+					}
+				}
+			}
+		});
+		
+		sheepThread = new Thread(new Runnable() {
+			public void run() {
+				Canvas canvas = null;
+				while(!Thread.currentThread().isInterrupted() /* && condition to stop game */) {
+					canvas = surfaceHolder.lockCanvas();
+					if( canvas != null) {
+						//TODO
+						//MAKE sheep MOVE HERE
+						surfaceHolder.unlockCanvasAndPost(canvas);
+					}
+				}
+			}
+		});
+		
+		dogThread.start();
+		foxThread.start();
+		sheepThread.start();
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder arg0) {
-		// TODO Auto-generated method stub
-
+		if( foxThread != null) {
+			foxThread.interrupt();
+		}
+		if( dogThread != null) {
+			dogThread.interrupt();
+		}
+		if( sheepThread != null) {
+			sheepThread.interrupt();
+		}
+		
 	}
-
 }

@@ -25,9 +25,7 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 	private Bitmap sheepBitmap;
 	
 	private SurfaceHolder surfaceHolder;
-	private Thread dogThread;
-	private Thread foxThread;
-	private Thread sheepThread;
+	private Thread gameThread;
 	
 	private Dog dog;
 	private Fox fox;
@@ -55,56 +53,16 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 
 	@Override
 	public void surfaceCreated(SurfaceHolder arg0) {
-		dogThread = new Thread(new Runnable() {
+		gameThread = new Thread(new Runnable() {
 			public void run() {
 				Canvas canvas = null;
 				while(!Thread.currentThread().isInterrupted() /* && condition to stop game */) {
 					canvas = surfaceHolder.lockCanvas();
 					if( canvas != null) {
 						//TODO
-						//MAKE dog MOVE HERE
+						//MAKE game elements MOVE HERE
 						canvas.drawBitmap(dogBitmap, 5, 5, null);
-						surfaceHolder.unlockCanvasAndPost(canvas);
-					}
-				}
-				try{
-					Thread.sleep(1000);
-				} catch(InterruptedException e) {
-					//ignore it
-				}
-				
-			}
-		});
-
-		foxThread = new Thread(new Runnable() {
-			public void run() {
-				Canvas canvas = null;
-				
-				while(!Thread.currentThread().isInterrupted() /* && condition to stop game */) {
-					canvas = surfaceHolder.lockCanvas();
-					if( canvas != null) {
-						//TODO
-						//MAKE fox MOVE HERE
 						canvas.drawBitmap(foxBitmap, 100, 5, null);
-						surfaceHolder.unlockCanvasAndPost(canvas);
-					}
-					try{
-						Thread.sleep(1000);
-					} catch(InterruptedException e) {
-						//ignore it
-					}
-				}
-			}
-		});
-		
-		sheepThread = new Thread(new Runnable() {
-			public void run() {
-				Canvas canvas = null;
-				while(!Thread.currentThread().isInterrupted() /* && condition to stop game */) {
-					canvas = surfaceHolder.lockCanvas();
-					if( canvas != null) {
-						//TODO
-						//MAKE sheep MOVE HERE
 						canvas.drawBitmap(sheepBitmap, 200, 5, null);
 						surfaceHolder.unlockCanvasAndPost(canvas);
 					}
@@ -117,22 +75,13 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 			}
 		});
 		
-		dogThread.start();
-		foxThread.start();
-		sheepThread.start();
+		gameThread.start();
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder arg0) {
-		if( foxThread != null) {
-			foxThread.interrupt();
+		if( gameThread != null) {
+			gameThread.interrupt();
 		}
-		if( dogThread != null) {
-			dogThread.interrupt();
-		}
-		if( sheepThread != null) {
-			sheepThread.interrupt();
-		}
-		
 	}
 }

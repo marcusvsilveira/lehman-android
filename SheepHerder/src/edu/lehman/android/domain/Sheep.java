@@ -1,22 +1,21 @@
 package edu.lehman.android.domain;
 
-public class Sheep extends Animal {
+public class Sheep extends AnimalBot {
 
 	private boolean isBeingEaten = false;
-	
-	public Sheep(){
-		
+	public Sheep(int x, int y, int speed, int width, int height) {
+		super(x, y, speed, width, height);
 	}
 	
 	@Override
-	public Position move(double moveX, double moveY) {
+	public Position move() {
 		// TODO Auto-generated method stub
 		
 		if (isBeingEaten){
 			
 		}
 		
-		return null;
+		return position;
 	}
 	
 	// move away from dog

@@ -2,15 +2,19 @@ package edu.lehman.android.domain;
 
 import java.util.List;
 
-public class Fox extends Animal {
+public class Fox extends AnimalBot {
+	public final long EATING_TIME = 1000;	// 1 second 
 
 	private boolean isEating = false;
-	public final long EATING_TIME = 1000;	// 1 second 
+	private boolean isVisible = false;
+	
+	public Fox(int x, int y, int speed, int width, int height) {
+		super(x, y, speed, width, height);
+	}
 	
 	@Override
-	public Position move(double moveX, double moveY) {
-		// TODO Auto-generated method stub
-		return null;
+	public Position move() {
+		return position;
 	}
 	
 	private boolean isFoxSafe(Position dog_position) {
@@ -37,4 +41,13 @@ public class Fox extends Animal {
 	public void setEating(boolean isEating) {
 		this.isEating = isEating;
 	}
+
+	public boolean isVisible() {
+		return isVisible;
+	}
+
+	public void setVisible(boolean isVisible) {
+		this.isVisible = isVisible;
+	}
+	
 }

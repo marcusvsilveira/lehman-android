@@ -11,12 +11,21 @@ public abstract class Animal {
 	protected Position position;
 	protected int width;
 	protected int height;
+	protected AnimalType type;
 
-	public Animal(int x, int y, int speed, int width, int height){
+	public Animal(AnimalType type, int x, int y, int speed, int width, int height){
 		this.position = new Position(x, y);
 		this.speed = speed;
 		this.width = width;
 		this.height = height;
+	}
+	
+	public void moveX(float moveX) {
+		position.setX(position.getX() + moveX);
+	}
+
+	public void moveY(float moveY) {
+		position.setY(position.getY() + moveY);
 	}
 	
 	/**
@@ -44,7 +53,7 @@ public abstract class Animal {
 		    (y1max >= y2min)
 		);
 	}
-
+	
 	public int getSpeed() {
 		return speed;
 	}

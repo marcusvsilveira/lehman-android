@@ -11,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
@@ -32,7 +33,7 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 	
 	private Dog dog;
 	private Fox fox;
-	private List<Sheep> sheep;
+	private List<Sheep> sheepList;
 	
 	
 	public GameSurfaceView(Context context, Bitmap dogBitmap, Bitmap foxBitmap, Bitmap sheepBitmap) {
@@ -46,12 +47,12 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 		// we need to make sure it gets created 
 		dog = new Dog(0, 0, 5, dogBitmap.getWidth(), dogBitmap.getHeight());
 		fox = new Fox(300, 200, 5, foxBitmap.getWidth(), foxBitmap.getHeight());
-		sheep = new ArrayList<Sheep>(5);
-		sheep.add(new Sheep(300, 400, 5, sheepBitmap.getWidth(), sheepBitmap.getHeight()));
-		sheep.add(new Sheep(360, 580, 5, sheepBitmap.getWidth(), sheepBitmap.getHeight()));
-		sheep.add(new Sheep(400, 280, 5, sheepBitmap.getWidth(), sheepBitmap.getHeight()));
-		sheep.add(new Sheep(400, 400, 5, sheepBitmap.getWidth(), sheepBitmap.getHeight()));
-		sheep.add(new Sheep(200, 140, 5, sheepBitmap.getWidth(), sheepBitmap.getHeight()));
+		sheepList = new ArrayList<Sheep>(5);
+		sheepList.add(new Sheep(300, 400, 5, sheepBitmap.getWidth(), sheepBitmap.getHeight()));
+		sheepList.add(new Sheep(360, 580, 5, sheepBitmap.getWidth(), sheepBitmap.getHeight()));
+		sheepList.add(new Sheep(400, 280, 5, sheepBitmap.getWidth(), sheepBitmap.getHeight()));
+		sheepList.add(new Sheep(400, 400, 5, sheepBitmap.getWidth(), sheepBitmap.getHeight()));
+		sheepList.add(new Sheep(200, 140, 5, sheepBitmap.getWidth(), sheepBitmap.getHeight()));
 		
 		
 		surfaceHolder = getHolder();
@@ -69,35 +70,23 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 		gameThread = new Thread(new Runnable() {
 			public void run() {
 				Canvas canvas = null;
-				Position foxPosition = null;
-				Position dogPosition = null;
-				Position sheepPosition = null;
 				while(!Thread.currentThread().isInterrupted() /* && condition to stop game */) {
 					canvas = surfaceHolder.lockCanvas();
 					if( canvas != null) {
-						//TODO
-						//MAKE game elements MOVE HERE
-		
-						//dog position changes according to the touch listener
-						dogPosition = dog.getPosition();
-						canvas.drawBitmap(dogBitmap, dogPosition.getX(), dogPosition.getY(), null);
+						//reset canvas so that objects can be redrawn. Otherwise, they get duplicated when they move
+						canvas.drawColor(Color.GREEN);
 						
-						if( sheep != null) {
-							for(Sheep oneSheep : sheep) {
-								sheepPosition = oneSheep.move();
-								canvas.drawBitmap(sheepBitmap, sheepPosition.getX(), sheepPosition.getY(), null);
-							}
-						}
+						//TODO: check screen boundaries. Sheep and dog shouldn't be allowed to go out of screen
 						
-						foxPosition = fox.move();
-						canvas.drawBitmap(foxBitmap, foxPosition.getX(), foxPosition.getY(), null);
-						
+						moveDog(canvas);
+						moveSheep(canvas);
+						moveFox(canvas);
 						surfaceHolder.unlockCanvasAndPost(canvas);
 						
 						//TODO we might want to update a clock on the top here
 					}
 					try{
-						Thread.sleep(1000);
+						Thread.sleep(300);
 						
 					} catch(InterruptedException e) {
 						//ignore it
@@ -105,11 +94,51 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 				}
 				
 			}
+
+			private void moveDog(Canvas canvas) {
+				Position dogPosition;
+				//dog position changes according to the touch listener
+				dogPosition = dog.getPosition();
+				canvas.drawBitmap(dogBitmap, dogPosition.getX(), dogPosition.getY(), null);
+			}
+
+			private void moveFox(Canvas canvas) {
+				Position foxPosition;
+				fox.move(dog, sheepList);
+				foxPosition = fox.getPosition();
+				canvas.drawBitmap(foxBitmap, foxPosition.getX(), foxPosition.getY(), null);
+			}
+
+			private void moveSheep(Canvas canvas) {
+				Position sheepPosition;
+				if( sheepList != null) {
+					for(Sheep sheep : sheepList) {
+						if( !sheep.isBeingEaten()) {
+							sheep.move(fox, dog);
+							sheepPosition = sheep.getPosition();
+							canvas.drawBitmap(sheepBitmap, sheepPosition.getX(), sheepPosition.getY(), null);	
+						}
+					}
+				}
+			}
 		});
 		
 		gameThread.start();
 	}
+   
 
+//	   public List<Sheep> createSheep(int count) {
+//		   List<Sheep> sheepList = new ArrayList<Sheep>(count);
+//
+//	      int columns = (int)Math.ceil(Math.sqrt(count));
+//
+//	      for(int i = 0; i < count; i++) {
+//	         sheepList.add(new Sheep(500 - columns*6 + 12*(i%columns), 350 - 6*columns + 12*(i/columns)));
+//	      }
+//
+//	      return sheepList;
+//	   }
+	
 	@Override
 	public void surfaceDestroyed(SurfaceHolder arg0) {
 		if( gameThread != null) {

@@ -12,6 +12,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
@@ -64,9 +65,28 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 		// TODO Auto-generated method stub
 
 	}
+	
+	@Override
+	public boolean onTouchEvent(MotionEvent me) {		
+		int action = me.getAction();
+
+		// Get the action event that happened and the location that was
+		// pressed on the screen
+		if (action == MotionEvent.ACTION_DOWN
+				|| action == MotionEvent.ACTION_UP 
+				|| action == MotionEvent.ACTION_MOVE){
+			
+			dog.moveTo( (int) me.getX(), (int) me.getY() );
+			
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder arg0) {
+
 		gameThread = new Thread(new Runnable() {
 			public void run() {
 				Canvas canvas = null;

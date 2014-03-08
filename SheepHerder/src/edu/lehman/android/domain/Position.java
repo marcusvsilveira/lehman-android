@@ -8,30 +8,30 @@ package edu.lehman.android.domain;
  */
 public class Position {
 
-	private float x, y;
+	private int x, y;
 	
-	public Position(float x, float y){
+	public Position(int x, int y){
 		this.x = x;
 		this.y = y;
 	}
 
-	public float getX() {
+	public int getX() {
 		return x;
 	}
 
-	public float getY() {
+	public int getY() {
 		return y;
 	}
 
-	public void setX(float x) {
+	public void setX(int x) {
 		this.x = x;
 	}
 
-	public void setY(float y) {
+	public void setY(int y) {
 		this.y = y;
 	}
 	
-	public void setXY(float x, float y) {
+	public void setXY(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}

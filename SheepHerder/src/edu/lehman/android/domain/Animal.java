@@ -20,11 +20,11 @@ public abstract class Animal {
 		this.height = height;
 	}
 	
-	public void moveX(float moveX) {
+	public void moveX(int moveX) {
 		position.setX(position.getX() + moveX);
 	}
 
-	public void moveY(float moveY) {
+	public void moveY(int moveY) {
 		position.setY(position.getY() + moveY);
 	}
 	

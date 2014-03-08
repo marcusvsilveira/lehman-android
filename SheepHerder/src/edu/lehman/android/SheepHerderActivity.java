@@ -16,12 +16,13 @@ import android.widget.RelativeLayout;
 /**
  * 
  * This is the Game screen
+ * 
  * @author Marcos Davila, Marcus Silveira
- *
+ * 
  */
 public class SheepHerderActivity extends Activity implements SettingsInterface {
 	private static final String LOG_TAG = "SheepHerderActivity";
-	
+
 	private int DOG_SPEED;
 	private int NUM_SHEEP;
 	private int NUM_FOXES;
@@ -33,23 +34,27 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sheep_herder);
 
-		//setup back button listener
 		Button backButton = (Button) findViewById(R.id.backButton);
 		backButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				finish(); //finishes game and free up resources
+				finish(); // finishes game and free up resources
 			}
 		});
-		
+
 		RelativeLayout surfaceLayout = (RelativeLayout) findViewById(R.id.gamelayout);
-		final GameSurfaceView surfaceView = new GameSurfaceView(getApplicationContext(), 
-										BitmapFactory.decodeResource(getResources(), R.drawable.gamedog),
-										BitmapFactory.decodeResource(getResources(), R.drawable.gamefox),
-										BitmapFactory.decodeResource(getResources(), R.drawable.gamesheep));
+		final GameSurfaceView surfaceView = new GameSurfaceView(
+				getApplicationContext(), BitmapFactory.decodeResource(
+						getResources(), R.drawable.gamedog),
+				BitmapFactory
+						.decodeResource(getResources(), R.drawable.gamefox),
+				BitmapFactory.decodeResource(getResources(),
+						R.drawable.gamesheep));
 		surfaceLayout.addView(surfaceView);
+
 		Log.i(LOG_TAG, "SheepHerderActivity.onCreate()");
-		//TODO create fragment with canvas that starts threads responsible for rendering each component
+		// TODO create fragment with canvas that starts threads responsible for
+		// rendering each component
 	}
 
 	@Override
@@ -65,13 +70,13 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 		// preference exists
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME,
 				MODE_PRIVATE);
-		
+
 		DOG_SPEED = settings.getInt(DOG_SPEED_PREFS, DEFAULT_DOG_SPEED);
 		NUM_SHEEP = settings.getInt(NUM_SHEEP_PREFS, DEFAULT_NUM_SHEEPS);
 		NUM_FOXES = settings.getInt(NUM_FOXES_PREFS, DEFAULT_NUM_FOXES);
 		SHEEP_SPEED = settings.getInt(SHEEP_SPEED_PREFS, DEFAULT_SHEEP_SPEED);
 		FOX_SPEED = settings.getInt(FOX_SPEED_PREFS, DEFAULT_FOX_SPEED);
-		
+
 		Log.i(LOG_TAG, "Dog speed: " + DOG_SPEED);
 		Log.i(LOG_TAG, "# Sheep: " + NUM_SHEEP);
 		Log.i(LOG_TAG, "# Foxes: " + NUM_FOXES);
@@ -90,7 +95,7 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 		super.onStart();
 		Log.i(LOG_TAG, "SheepHerderActivity.onStart()");
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -109,7 +114,7 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 		super.onStop();
 		Log.i(LOG_TAG, "SheepHerderActivity.onStop()");
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();

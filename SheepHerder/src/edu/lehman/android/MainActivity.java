@@ -24,46 +24,57 @@ import android.widget.Button;
 public class MainActivity extends Activity {
 
 	private static final String LOG_TAG = "MainActivity";
+	
+	// A runnable object that runs on the UI Thread
+	Runnable uithread = new Runnable(){
+
+		@Override
+		public void run() {
+			// Draw the screen
+			Button settings = (Button) findViewById(R.id.settingsButton);
+			Button startGame = (Button) findViewById(R.id.startButton);
+			Button quitButton = (Button) findViewById(R.id.quitButton);
+
+			// setup listeners
+			quitButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					finish();
+				}
+			});
+
+			settings.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View arg0) {
+					Intent settingsIntent = new Intent(MainActivity.this,
+							GameSettingsActivity.class);
+					startActivity(settingsIntent);
+				}
+			});
+
+			startGame.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View arg0) {
+					Intent startGameIntent = new Intent(MainActivity.this,
+							SheepHerderActivity.class);
+					startActivity(startGameIntent);
+				}
+			});
+		}
+	};
+
+	// workerThread to handle background tasks
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		// Sets up the view. All changing of the UI must be done in the
-		// UI thread
-		Button settings = (Button) findViewById(R.id.settingsButton);
-		Button startGame = (Button) findViewById(R.id.startButton);
-		Button quitButton = (Button) findViewById(R.id.quitButton);
-
-		// setup listeners
-		quitButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				finish();
-			}
-		});
-
-		settings.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				Intent settingsIntent = new Intent(MainActivity.this,
-						GameSettingsActivity.class);
-				startActivity(settingsIntent);
-			}
-		});
-
-		startGame.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				Intent startGameIntent = new Intent(MainActivity.this,
-						SheepHerderActivity.class);
-				startActivity(startGameIntent);
-			}
-		});
-		
+		runOnUiThread(uithread);
+				
 		Log.i(LOG_TAG, "MainActivity.onCreate()");
 	}
 
@@ -102,5 +113,5 @@ public class MainActivity extends Activity {
 		super.onDestroy();
 		Log.i(LOG_TAG, "MainActivity.onDestroy()");
 	}
-
+	
 }

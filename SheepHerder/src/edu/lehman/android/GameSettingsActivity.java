@@ -2,6 +2,7 @@ package edu.lehman.android;
 
 import interfaces.SettingsInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -41,8 +42,115 @@ import android.widget.TextView;
 public class GameSettingsActivity extends Activity implements SettingsInterface {
 	private static final String LOG_TAG = "GameSettingsActivity";
 	
-	public SeekBar dogSpeedSeekBar, foxSpeedSeekBar, sheepSpeedSeekBar, numFoxSeekBar, numSheepSeekBar;
-	public TextView textView1, textView2, textView3;
+	private SeekBar dogSpeedSeekBar, foxSpeedSeekBar, sheepSpeedSeekBar;
+	private TextView textView1, textView2, textView3;
+	private Button backButton;
+	
+	// Used to call things in a background thread
+	private Handler handler = new Handler();
+	
+	// Runnable objects that the handler executes
+	private Runnable backgroundHandler = new Runnable(){
+
+		@Override
+		public void run() {
+			// Implement actionlisteners and tie actionlisteners to the
+			// variables that hold the preferences in the background thread
+			backButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					handler.post(storePreferencesHandler);
+					finish(); // finishes settings view and free up resources
+				}
+			});
+
+			dogSpeedSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+				@Override
+				public void onProgressChanged(SeekBar seekBar, int progressValue,
+						boolean fromUser) {
+					DOG_SPEED = progressValue;
+
+				}
+
+				public void onStartTrackingTouch(SeekBar seekBar) {
+					// Do something here, //if you want to do anything at the start
+					// of
+					// touching the seekbar
+				}
+
+				@Override
+				public void onStopTrackingTouch(SeekBar seekBar) {
+					// Display the value in textview
+
+					textView1.setText(DOG_SPEED + "/" + dogSpeedSeekBar.getMax());
+
+				}
+			});
+
+			foxSpeedSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+				@Override
+				public void onProgressChanged(SeekBar seekBar, int progressValue,
+						boolean fromUser) {
+					FOX_SPEED = progressValue;
+
+				}
+
+				@Override
+				public void onStartTrackingTouch(SeekBar seekBar) {
+					// Do something here, //if you want to do anything at the start
+					// of
+					// touching the seekbar
+				}
+
+				public void onStopTrackingTouch(SeekBar seekBar) {
+					// Display the value in textview
+
+					textView2.setText(FOX_SPEED + "/" + foxSpeedSeekBar.getMax());
+
+				}
+			});
+
+			sheepSpeedSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+				public void onProgressChanged(SeekBar seekBar, int progressValue,
+						boolean fromUser) {
+					SHEEP_SPEED = progressValue;
+
+				}
+
+				public void onStartTrackingTouch(SeekBar seekBar) {
+					// Do something here, //if you want to do anything at the start
+					// of
+					// touching the seekbar
+				}
+
+				public void onStopTrackingTouch(SeekBar seekBar) {
+					// Display the value in textview
+					textView3.setText(SHEEP_SPEED + "/" + sheepSpeedSeekBar.getMax());
+
+				}
+			});
+		}
+		
+	};
+	private Runnable storePreferencesHandler = new Runnable(){
+
+		@Override
+		public void run() {
+			storePreferences();
+		}
+		
+	};
+	private Runnable loadPreferencesHandler = new Runnable(){
+
+		@Override
+		public void run() {
+			loadPreferences();
+		}
+		
+	};
 	
 	private int DOG_SPEED;
 	private int NUM_SHEEP;
@@ -55,6 +163,8 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_settings_panel);
 
+		// No matter what, all values are defined before the
+		// threads begin
 		dogSpeedSeekBar = (SeekBar) findViewById(R.id.dogSpeed);
 		foxSpeedSeekBar = (SeekBar) findViewById(R.id.foxSpeed);
 		sheepSpeedSeekBar = (SeekBar) findViewById(R.id.sheepSpeed);
@@ -62,87 +172,9 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 		textView1 = (TextView) findViewById(R.id.textV05);
 		textView2 = (TextView) findViewById(R.id.textV06);
 		textView3 = (TextView) findViewById(R.id.textV07);
-
-		Button backButton = (Button) findViewById(R.id.backButton);
-		backButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				storePreferences();
-				finish(); // finishes settings view and free up resources
-			}
-		});
-
-		// TODO implement actionlisteners and tie actionlisteners to the
-		// variables that hold the preferences
-
-		dogSpeedSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progressValue,
-					boolean fromUser) {
-				DOG_SPEED = progressValue;
-
-			}
-
-			public void onStartTrackingTouch(SeekBar seekBar) {
-				// Do something here, //if you want to do anything at the start
-				// of
-				// touching the seekbar
-			}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				// Display the value in textview
-
-				textView1.setText(DOG_SPEED + "/" + dogSpeedSeekBar.getMax());
-
-			}
-		});
-
-		foxSpeedSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progressValue,
-					boolean fromUser) {
-				FOX_SPEED = progressValue;
-
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-				// Do something here, //if you want to do anything at the start
-				// of
-				// touching the seekbar
-			}
-
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				// Display the value in textview
-
-				textView2.setText(FOX_SPEED + "/" + foxSpeedSeekBar.getMax());
-
-			}
-		});
-
-		sheepSpeedSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
-			public void onProgressChanged(SeekBar seekBar, int progressValue,
-					boolean fromUser) {
-				SHEEP_SPEED = progressValue;
-
-			}
-
-			public void onStartTrackingTouch(SeekBar seekBar) {
-				// Do something here, //if you want to do anything at the start
-				// of
-				// touching the seekbar
-			}
-
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				// Display the value in textview
-				textView3.setText(SHEEP_SPEED + "/" + sheepSpeedSeekBar.getMax());
-
-			}
-		});
+		backButton = (Button) findViewById(R.id.backButton);
+		
+		handler.post(backgroundHandler);
 		
 		Log.i(LOG_TAG, "GameSettingsActivity.onCreate()");
 	}
@@ -184,8 +216,8 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 
 	public void storePreferences() {
 		// We need an Editor object to make preference changes.
-		// All objects are from android.context.Context
-		SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME,
+				MODE_PRIVATE);
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putInt(DOG_SPEED_PREFS, DOG_SPEED);
 		editor.putInt(NUM_SHEEP_PREFS, NUM_SHEEP);
@@ -196,7 +228,7 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 		// Commit the edits!
 		editor.commit();
 	}
-	
+
 	@Override
 	protected void onRestart() {
 		super.onRestart();
@@ -212,14 +244,14 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		loadPreferences();
+		handler.post(loadPreferencesHandler);
 		Log.i(LOG_TAG, "GameSettingsActivity.onResume()");
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		storePreferences();
+		handler.post(storePreferencesHandler);
 		Log.i(LOG_TAG, "GameSettingsActivity.onPause()");
 	}
 

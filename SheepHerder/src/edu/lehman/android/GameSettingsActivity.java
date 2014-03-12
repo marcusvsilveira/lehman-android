@@ -56,12 +56,7 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 			backButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
-					// Doesn't need to remove itself from the activity stack
-					// It just needs to pause. The upside is that when the
-					// menu is loaded again it loads much more quickly because
-					// the activity does not have to be re-created.
-					startActivity(new Intent(GameSettingsActivity.this,
-							MainActivity.class));
+					finish();
 				}
 			});
 

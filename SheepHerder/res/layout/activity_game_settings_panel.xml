@@ -167,7 +167,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/ten_sheeps"
         android:gravity="right"
-        android:text="fiften" />
+        android:text="fifteen" />
 
     </RadioGroup>
     

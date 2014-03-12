@@ -3,7 +3,9 @@ package edu.lehman.android;
 import edu.lehman.android.views.GameSurfaceView;
 import interfaces.SettingsInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -15,9 +17,10 @@ import android.widget.RelativeLayout;
 
 /**
  * 
- * This is the Game screen
+ * Hosts the game screen.
  * 
  * @author Marcos Davila, Marcus Silveira
+ * 
  * 
  */
 public class SheepHerderActivity extends Activity implements SettingsInterface {
@@ -28,33 +31,64 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 	private int NUM_FOXES;
 	private int SHEEP_SPEED;
 	private int FOX_SPEED;
+	private Button backButton;
+	private Handler handler = new Handler();
+	GameSurfaceView surfaceView;
+	
+	private Runnable uiThread = new Runnable(){
 
+		@Override
+		public void run() {
+			backButton = (Button) findViewById(R.id.backButton);
+			backButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					Intent startGameIntent = new Intent(SheepHerderActivity.this,
+							MainActivity.class);
+					startActivity(startGameIntent);
+				}
+			});
+		}
+		
+	};
+
+	private Runnable surfaceThread = new Runnable(){
+
+		@Override
+		public void run() {
+			RelativeLayout surfaceLayout = (RelativeLayout) findViewById(R.id.gamelayout);
+			surfaceView = new GameSurfaceView(
+					getApplicationContext(), BitmapFactory.decodeResource(
+							getResources(), R.drawable.gamedog),
+					BitmapFactory
+							.decodeResource(getResources(), R.drawable.gamefox),
+					BitmapFactory.decodeResource(getResources(),
+							R.drawable.gamesheep));
+			surfaceLayout.addView(surfaceView);
+		}
+		
+	};
+	
+	private Runnable loadPreferencesHandler = new Runnable(){
+
+		@Override
+		public void run() {
+			loadPreferences();
+		}
+		
+	};
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sheep_herder);
 
-		Button backButton = (Button) findViewById(R.id.backButton);
-		backButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				finish(); // finishes game and free up resources
-			}
-		});
-
-		RelativeLayout surfaceLayout = (RelativeLayout) findViewById(R.id.gamelayout);
-		final GameSurfaceView surfaceView = new GameSurfaceView(
-				getApplicationContext(), BitmapFactory.decodeResource(
-						getResources(), R.drawable.gamedog),
-				BitmapFactory
-						.decodeResource(getResources(), R.drawable.gamefox),
-				BitmapFactory.decodeResource(getResources(),
-						R.drawable.gamesheep));
-		surfaceLayout.addView(surfaceView);
-
+		// Creates the UI on the UI thread and the handler
+		// creates the surface on another
+		runOnUiThread(uiThread);
+		handler.post(surfaceThread);
+		
 		Log.i(LOG_TAG, "SheepHerderActivity.onCreate()");
-		// TODO create fragment with canvas that starts threads responsible for
-		// rendering each component
 	}
 
 	@Override
@@ -87,6 +121,7 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 	@Override
 	protected void onRestart() {
 		super.onRestart();
+		surfaceView.restart();
 		Log.i(LOG_TAG, "SheepHerderActivity.onRestart()");
 	}
 
@@ -99,25 +134,37 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		loadPreferences();
+		handler.post(loadPreferencesHandler);
 		Log.i(LOG_TAG, "SheepHerderActivity.onResume()");
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
+		// The game thread is running in the GameSurfaceView. We must
+		// notify that object to stop running
+		surfaceView.stop();
+		
 		Log.i(LOG_TAG, "SheepHerderActivity.onPause()");
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
+		// The game thread is running in the GameSurfaceView. We must
+		// notify that object to stop running
+		surfaceView.stop();
+
 		Log.i(LOG_TAG, "SheepHerderActivity.onStop()");
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		// The game thread is running in the GameSurfaceView. We must
+		// notify that object to stop running
+		surfaceView.stop();
+
 		Log.i(LOG_TAG, "SheepHerderActivity.onDestroy()");
 	}
 }

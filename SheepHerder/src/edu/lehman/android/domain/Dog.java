@@ -24,6 +24,11 @@ public class Dog extends Animal {
 	public void moveTo(final int x, final int y) {
 		int oldX = this.getPosition().getX();
 		int oldY = this.getPosition().getY();
+		
+		// There is an inverse relationship between the pause rate
+		// of the move function and the dog's speed. The higher the
+		// speed, the less time the thread should be paused.
+		final int APPARENT_DOG_SPEED = 15 - getSpeed();
 
 		while (true) {
 			if (oldX == x && oldY == y) {
@@ -45,6 +50,13 @@ public class Dog extends Animal {
 					position.setY(oldY--);
 				}
 			}
+
+			try {
+				Thread.sleep(APPARENT_DOG_SPEED);
+			} catch (Exception e) {
+
+			}
 		}
+
 	}
 }

@@ -2,8 +2,8 @@ package edu.lehman.android;
 
 import interfaces.SettingsInterface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.Menu;
@@ -46,11 +46,8 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 	private TextView textView1, textView2, textView3;
 	private Button backButton;
 	
-	// Used to call things in a background thread
-	private Handler handler = new Handler();
-	
 	// Runnable objects that the handler executes
-	private Runnable backgroundHandler = new Runnable(){
+	private Runnable setListeners = new Runnable(){
 
 		@Override
 		public void run() {
@@ -59,95 +56,88 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 			backButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
-					handler.post(storePreferencesHandler);
-					finish(); // finishes settings view and free up resources
+					// Doesn't need to remove itself from the activity stack
+					// It just needs to pause. The upside is that when the
+					// menu is loaded again it loads much more quickly because
+					// the activity does not have to be re-created.
+					startActivity(new Intent(GameSettingsActivity.this,
+							MainActivity.class));
 				}
 			});
 
-			dogSpeedSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			dogSpeedSeekBar
+					.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
-				@Override
-				public void onProgressChanged(SeekBar seekBar, int progressValue,
-						boolean fromUser) {
-					DOG_SPEED = progressValue;
+						@Override
+						public void onProgressChanged(SeekBar seekBar,
+								int progressValue, boolean fromUser) {
+							DOG_SPEED = progressValue;
 
-				}
+						}
 
-				public void onStartTrackingTouch(SeekBar seekBar) {
-					// Do something here, //if you want to do anything at the start
-					// of
-					// touching the seekbar
-				}
+						public void onStartTrackingTouch(SeekBar seekBar) {
+							// Do something here if you want to do anything at
+							// the start of touching the seekbar
+						}
 
-				@Override
-				public void onStopTrackingTouch(SeekBar seekBar) {
-					// Display the value in textview
+						@Override
+						public void onStopTrackingTouch(SeekBar seekBar) {
+							// Display the value in textview
 
-					textView1.setText(DOG_SPEED + "/" + dogSpeedSeekBar.getMax());
+							textView1.setText(DOG_SPEED + "/"
+									+ dogSpeedSeekBar.getMax());
 
-				}
-			});
+						}
+					});
 
-			foxSpeedSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			foxSpeedSeekBar
+					.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
-				@Override
-				public void onProgressChanged(SeekBar seekBar, int progressValue,
-						boolean fromUser) {
-					FOX_SPEED = progressValue;
+						@Override
+						public void onProgressChanged(SeekBar seekBar,
+								int progressValue, boolean fromUser) {
+							FOX_SPEED = progressValue;
 
-				}
+						}
 
-				@Override
-				public void onStartTrackingTouch(SeekBar seekBar) {
-					// Do something here, //if you want to do anything at the start
-					// of
-					// touching the seekbar
-				}
+						@Override
+						public void onStartTrackingTouch(SeekBar seekBar) {
+							// Do something here if you want to do anything at
+							// the start
+							// of touching the seekbar
+						}
 
-				public void onStopTrackingTouch(SeekBar seekBar) {
-					// Display the value in textview
+						public void onStopTrackingTouch(SeekBar seekBar) {
+							// Display the value in textview
 
-					textView2.setText(FOX_SPEED + "/" + foxSpeedSeekBar.getMax());
+							textView2.setText(FOX_SPEED + "/"
+									+ foxSpeedSeekBar.getMax());
 
-				}
-			});
+						}
+					});
 
-			sheepSpeedSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			sheepSpeedSeekBar
+					.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
-				public void onProgressChanged(SeekBar seekBar, int progressValue,
-						boolean fromUser) {
-					SHEEP_SPEED = progressValue;
+						public void onProgressChanged(SeekBar seekBar,
+								int progressValue, boolean fromUser) {
+							SHEEP_SPEED = progressValue;
 
-				}
+						}
 
-				public void onStartTrackingTouch(SeekBar seekBar) {
-					// Do something here, //if you want to do anything at the start
-					// of
-					// touching the seekbar
-				}
+						public void onStartTrackingTouch(SeekBar seekBar) {
+							// Do something here if you want to do anything at
+							// the start
+							// of touching the seekbar
+						}
 
-				public void onStopTrackingTouch(SeekBar seekBar) {
-					// Display the value in textview
-					textView3.setText(SHEEP_SPEED + "/" + sheepSpeedSeekBar.getMax());
+						public void onStopTrackingTouch(SeekBar seekBar) {
+							// Display the value in textview
+							textView3.setText(SHEEP_SPEED + "/"
+									+ sheepSpeedSeekBar.getMax());
 
-				}
-			});
-		}
-		
-	};
-	private Runnable storePreferencesHandler = new Runnable(){
-
-		@Override
-		public void run() {
-			storePreferences();
-		}
-		
-	};
-	private Runnable loadPreferencesHandler = new Runnable(){
-
-		@Override
-		public void run() {
-			loadPreferences();
+						}
+					});
 		}
 		
 	};
@@ -174,7 +164,8 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 		textView3 = (TextView) findViewById(R.id.textV07);
 		backButton = (Button) findViewById(R.id.backButton);
 		
-		handler.post(backgroundHandler);
+		// Set the action listeners for the seekbars
+		new Thread(setListeners).start();
 		
 		Log.i(LOG_TAG, "GameSettingsActivity.onCreate()");
 	}
@@ -232,38 +223,42 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 	@Override
 	protected void onRestart() {
 		super.onRestart();
+		loadPreferences();
 		Log.i(LOG_TAG, "GameSettingsActivity.onRestart()");
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
+		loadPreferences();
 		Log.i(LOG_TAG, "GameSettingsActivity.onStart()");
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
-		handler.post(loadPreferencesHandler);
+		loadPreferences();
 		Log.i(LOG_TAG, "GameSettingsActivity.onResume()");
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		handler.post(storePreferencesHandler);
+		storePreferences();
 		Log.i(LOG_TAG, "GameSettingsActivity.onPause()");
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
+		storePreferences();
 		Log.i(LOG_TAG, "GameSettingsActivity.onStop()");
 	}
 	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		storePreferences();
 		Log.i(LOG_TAG, "GameSettingsActivity.onDestroy()");
 	}
 

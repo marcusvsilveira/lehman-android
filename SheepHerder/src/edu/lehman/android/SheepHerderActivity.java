@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -32,32 +33,19 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 	private int SHEEP_SPEED;
 	private int FOX_SPEED;
 	private Button backButton;
-	private Handler handler = new Handler();
-	GameSurfaceView surfaceView;
+	private GameSurfaceView surfaceView;
+	private Thread t;
 	
-	private Runnable uiThread = new Runnable(){
-
-		@Override
-		public void run() {
-			backButton = (Button) findViewById(R.id.backButton);
-			backButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View arg0) {
-					Intent startGameIntent = new Intent(SheepHerderActivity.this,
-							MainActivity.class);
-					startActivity(startGameIntent);
-				}
-			});
-		}
-		
-	};
-
+	// A reference to this object so that the surface view can query
+	// the width and height of the phone
+	private SheepHerderActivity reference = this;
+	
 	private Runnable surfaceThread = new Runnable(){
 
 		@Override
 		public void run() {
 			RelativeLayout surfaceLayout = (RelativeLayout) findViewById(R.id.gamelayout);
-			surfaceView = new GameSurfaceView(
+			surfaceView = new GameSurfaceView(reference,
 					getApplicationContext(), BitmapFactory.decodeResource(
 							getResources(), R.drawable.gamedog),
 					BitmapFactory
@@ -69,15 +57,6 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 		
 	};
 	
-	private Runnable loadPreferencesHandler = new Runnable(){
-
-		@Override
-		public void run() {
-			loadPreferences();
-		}
-		
-	};
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -85,8 +64,29 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 
 		// Creates the UI on the UI thread and the handler
 		// creates the surface on another
-		runOnUiThread(uiThread);
-		handler.post(surfaceThread);
+		backButton = (Button) findViewById(R.id.backButton);
+		backButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Intent startGameIntent = new Intent(SheepHerderActivity.this,
+						MainActivity.class);
+				startActivity(startGameIntent);
+			}
+		});
+		
+		t = new Thread(new Runnable(){
+
+			Handler h = new Handler();
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				h.post(surfaceThread);
+			}
+			
+		});
+		t.start();
+		
 		
 		Log.i(LOG_TAG, "SheepHerderActivity.onCreate()");
 	}
@@ -134,7 +134,7 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		handler.post(loadPreferencesHandler);
+		loadPreferences();
 		Log.i(LOG_TAG, "SheepHerderActivity.onResume()");
 	}
 
@@ -167,4 +167,37 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 
 		Log.i(LOG_TAG, "SheepHerderActivity.onDestroy()");
 	}
+	
+	/**
+	 * A class to hold the width and height of the phone
+	 * @author Marcos Davila
+	 *
+	 */
+	public class Boundaries {
+		private int WIDTH, HEIGHT;
+		
+		// Sets width and height to predetermined values w and h
+		public Boundaries(int w, int h){
+			WIDTH = w;
+			HEIGHT = h;
+		}
+		
+		// Gets the width and height of the phone's display
+		public Boundaries(){
+			DisplayMetrics displaymetrics = new DisplayMetrics();
+			getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+			HEIGHT = displaymetrics.heightPixels;
+			WIDTH = displaymetrics.widthPixels;
+		}
+		
+		public int getScreenWidth(){
+			return WIDTH;
+		}
+		
+		public int getScreenHeight(){
+			return HEIGHT;
+		}
+	}
+	
+	
 }

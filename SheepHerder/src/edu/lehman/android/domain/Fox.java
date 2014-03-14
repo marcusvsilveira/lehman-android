@@ -3,6 +3,8 @@ package edu.lehman.android.domain;
 import java.util.List;
 import java.util.Random;
 
+import edu.lehman.android.SheepHerderActivity.Boundaries;
+
 public class Fox extends Animal {
 	public final long EATING_TIME = 1000;	// 1 second 
 	public final int OUT_OF_RANGE_RADIUS = 100000;
@@ -12,8 +14,8 @@ public class Fox extends Animal {
 	private boolean isEating = false;
 	private boolean isVisible = false;
 	
-	public Fox(int x, int y, int speed, int width, int height) {
-		super(AnimalType.FOX, x, y, speed, width, height);
+	public Fox(int x, int y, int speed, int width, int height, Boundaries b) {
+		super(AnimalType.FOX, x, y, speed, width, height, b);
 	}
 	
 	public void move(Dog dog, List<Sheep> sheepList) {
@@ -122,5 +124,4 @@ public class Fox extends Animal {
 	public void setVisible(boolean isVisible) {
 		this.isVisible = isVisible;
 	}
-	
 }

@@ -3,6 +3,8 @@ package edu.lehman.android.views;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.lehman.android.SheepHerderActivity;
+import edu.lehman.android.SheepHerderActivity.Boundaries;
 import edu.lehman.android.domain.Dog;
 import edu.lehman.android.domain.Fox;
 import edu.lehman.android.domain.Position;
@@ -22,6 +24,7 @@ import android.view.SurfaceView;
  * @author marcus.silveira
  *
  */
+
 @SuppressLint("ViewConstructor")
 public class GameSurfaceView extends SurfaceView implements Callback {
 
@@ -41,7 +44,7 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 	// Approximates 1/60 of a second. The game runs at 60 FPS
 	private final int GAME_SPEED = 17;
 	
-	public GameSurfaceView(Context context, final Bitmap dogBitmap, final Bitmap foxBitmap, final Bitmap sheepBitmap) {
+	public GameSurfaceView(final SheepHerderActivity parent, Context context, final Bitmap dogBitmap, final Bitmap foxBitmap, final Bitmap sheepBitmap) {
 		super(context);
 		this.dogBitmap = dogBitmap;
 		this.foxBitmap = foxBitmap;
@@ -49,19 +52,22 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 		
 		Thread initializeObjects = new Thread(new Runnable(){
 
+			// Get screen width and height
+			Boundaries b = parent.new Boundaries();
+			
 			@Override
 			public void run() {
 				//TODO
 				// initialize dog, fox, and sheep objects and get some info from the sharedPreferences (possibly to be passed by parameter here)
 				// we need to make sure it gets created 
-				dog = new Dog(0, 0, 5, dogBitmap.getWidth(), dogBitmap.getHeight());
-				fox = new Fox(300, 200, 5, foxBitmap.getWidth(), foxBitmap.getHeight());
+				dog = new Dog(0, 0, 5, dogBitmap.getWidth(), dogBitmap.getHeight(), b);
+				fox = new Fox(300, 200, 5, foxBitmap.getWidth(), foxBitmap.getHeight(), b);
 				sheepList = new ArrayList<Sheep>(5);
-				sheepList.add(new Sheep(300, 400, 5, sheepBitmap.getWidth(), sheepBitmap.getHeight()));
-				sheepList.add(new Sheep(360, 580, 5, sheepBitmap.getWidth(), sheepBitmap.getHeight()));
-				sheepList.add(new Sheep(400, 280, 5, sheepBitmap.getWidth(), sheepBitmap.getHeight()));
-				sheepList.add(new Sheep(400, 400, 5, sheepBitmap.getWidth(), sheepBitmap.getHeight()));
-				sheepList.add(new Sheep(200, 140, 5, sheepBitmap.getWidth(), sheepBitmap.getHeight()));
+				sheepList.add(new Sheep(300, 400, 5, sheepBitmap.getWidth(), sheepBitmap.getHeight(), b));
+				sheepList.add(new Sheep(360, 580, 5, sheepBitmap.getWidth(), sheepBitmap.getHeight(), b));
+				sheepList.add(new Sheep(400, 280, 5, sheepBitmap.getWidth(), sheepBitmap.getHeight(), b));
+				sheepList.add(new Sheep(400, 400, 5, sheepBitmap.getWidth(), sheepBitmap.getHeight(), b));
+				sheepList.add(new Sheep(200, 140, 5, sheepBitmap.getWidth(), sheepBitmap.getHeight(), b));
 				
 				
 				surfaceHolder = getHolder();
@@ -80,7 +86,6 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 		surfaceHolder.addCallback(this);
 	}
 
-	@Override
 	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {
 		// TODO Auto-generated method stub
 
@@ -109,7 +114,6 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 	 * Initializes the game thread and the surface properties when
 	 * the surface is created
 	 */
-	@Override
 	public void surfaceCreated(SurfaceHolder arg0) {
 
 		// Background should only be drawn green once
@@ -195,7 +199,6 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 	 * 
 	 * @see android.view.SurfaceHolder.Callback#surfaceDestroyed(android.view.SurfaceHolder)
 	 */
-	@Override
 	public void surfaceDestroyed(SurfaceHolder arg0) {
 		if( gameThread != null) {
 			gameThread.interrupt();

@@ -1,5 +1,6 @@
 package edu.lehman.android;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -13,68 +14,56 @@ import android.widget.Button;
  * start a new game (both new activities)
  * 
  * @author Marcos Davila, Marcus Silveira
- * @revisionhistory 3/01/2014 - Adding logs to each lifecycle state for later use on integration tests
- * 					2/11/2014 - Creating main layout and navigation. Setting up
- *                  button listeners (settings, start game, and quit) 2/4/2014 -
- *                  OnClickListener implemented so this activity listens for
- *                  taps 
- *                  2/1/2014 - Project Created
+ * @revisionhistory 3/01/2014 - Adding logs to each lifecycle state for later
+ *                  use on integration tests 2/11/2014 - Creating main layout
+ *                  and navigation. Setting up button listeners (settings, start
+ *                  game, and quit) 2/4/2014 - OnClickListener implemented so
+ *                  this activity listens for taps 2/1/2014 - Project Created
  * 
  */
 public class MainActivity extends Activity {
 
 	private static final String LOG_TAG = "MainActivity";
-	
-	// A runnable object that runs on the UI Thread
-	Runnable uithread = new Runnable(){
-
-		@Override
-		public void run() {
-			// Draw the screen
-			Button settings = (Button) findViewById(R.id.settingsButton);
-			Button startGame = (Button) findViewById(R.id.startButton);
-			Button quitButton = (Button) findViewById(R.id.quitButton);
-
-			// setup listeners
-			quitButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View arg0) {
-					finish();
-				}
-			});
-
-			settings.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View arg0) {
-					Intent settingsIntent = new Intent(MainActivity.this,
-							GameSettingsActivity.class);
-					startActivity(settingsIntent);
-				}
-			});
-
-			startGame.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View arg0) {
-					Intent startGameIntent = new Intent(MainActivity.this,
-							SheepHerderActivity.class);
-					startActivity(startGameIntent);
-				}
-			});
-		}
-	};
-
-	// workerThread to handle background tasks
-
+	private Button settings, startGame, quitButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		runOnUiThread(uithread);
-				
+
+		// Draw the screen
+		settings = (Button) findViewById(R.id.settingsButton);
+		startGame = (Button) findViewById(R.id.startButton);
+		quitButton = (Button) findViewById(R.id.quitButton);
+
+		// setup listeners
+		quitButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				finish();
+			}
+		});
+
+		settings.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				Intent settingsIntent = new Intent(MainActivity.this,
+						GameSettingsActivity.class);
+				startActivity(settingsIntent);
+			}
+		});
+
+		startGame.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				Intent startGameIntent = new Intent(MainActivity.this,
+						SheepHerderActivity.class);
+				startActivity(startGameIntent);
+			}
+		});
+
 		Log.i(LOG_TAG, "MainActivity.onCreate()");
 	}
 
@@ -89,7 +78,7 @@ public class MainActivity extends Activity {
 		super.onStart();
 		Log.i(LOG_TAG, "MainActivity.onStart()");
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -107,11 +96,11 @@ public class MainActivity extends Activity {
 		super.onStop();
 		Log.i(LOG_TAG, "MainActivity.onStop()");
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		Log.i(LOG_TAG, "MainActivity.onDestroy()");
 	}
-	
+
 }

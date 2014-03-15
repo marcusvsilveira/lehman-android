@@ -100,7 +100,7 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 
 	@Override
 	public void loadPreferences() {
-		// TODO: Restore preferences and set default values if no such
+		//Restore preferences and set default values if no such
 		// preference exists
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME,
 				MODE_PRIVATE);

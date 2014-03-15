@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -47,10 +48,12 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 	private static final String LOG_TAG = "GameSettingsActivity";
 
 	private SeekBar dogSpeedSeekBar, foxSpeedSeekBar, sheepSpeedSeekBar;
-	private RadioButton fiveSheeps, tenSheeps, fifteenSheeps, oneFox,
-			threeFoxes, fiveFoxes;
 	private TextView textView1, textView2, textView3;
 	private Button backButton;
+	private RadioListener radioListener;
+	
+	private RadioGroup foxRadioGroup;
+	private RadioGroup sheepRadioGroup;
 
 	private int DOG_SPEED;
 	private int NUM_SHEEP;
@@ -74,14 +77,9 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 		textView3 = (TextView) findViewById(R.id.textV07);
 		backButton = (Button) findViewById(R.id.backButton);
 
-		fiveSheeps = (RadioButton) findViewById(R.id.five_sheeps);
-		tenSheeps = (RadioButton) findViewById(R.id.ten_sheeps);
-		fifteenSheeps = (RadioButton) findViewById(R.id.fifteen_sheeps);
-
-		oneFox = (RadioButton) findViewById(R.id.oneFoxButton);
-		threeFoxes = (RadioButton) findViewById(R.id.three_foxes);
-		fiveFoxes = (RadioButton) findViewById(R.id.five_foxes);
-
+		foxRadioGroup = (RadioGroup) findViewById(R.id.fox_radios);
+		sheepRadioGroup = (RadioGroup) findViewById(R.id.sheep_radios);
+		
 		// Implement actionlisteners and tie actionlisteners to the
 		// variables that hold the preferences in the background thread
 		backButton.setOnClickListener(new OnClickListener() {
@@ -91,6 +89,11 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 			}
 		});
 
+		//radio buttons
+		radioListener = new RadioListener();
+		foxRadioGroup.setOnCheckedChangeListener(radioListener);
+		sheepRadioGroup.setOnCheckedChangeListener(radioListener);
+		
 		dogSpeedSeekBar
 				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
@@ -165,54 +168,37 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 					}
 				});
 
-		oneFox.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				NUM_FOXES = 1;
-			}
-		});
-
-		threeFoxes.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				NUM_FOXES = 3;
-			}
-
-		});
-
-		fiveFoxes.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				NUM_FOXES = 5;
-			}
-		});
-
-		fiveSheeps.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				NUM_SHEEP = 5;
-			}
-		});
-
-		tenSheeps.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				NUM_SHEEP = 10;
-			}
-		});
-
-		fifteenSheeps.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				NUM_SHEEP = 15;
-			}
-		});
-
 		Log.i(LOG_TAG, "GameSettingsActivity.onCreate()");
 	}
 
+	private class RadioListener implements RadioGroup.OnCheckedChangeListener {	
+		@Override
+		public void onCheckedChanged(RadioGroup group, int checkedId) {
+			switch(checkedId) {
+				case R.id.oneFoxButton: 
+					NUM_FOXES = 1;
+					break;
+				case R.id.three_foxes: 
+					NUM_FOXES = 3;
+					break;
+				case R.id.five_foxes: 
+					NUM_FOXES = 5;
+					break;
+				case R.id.five_sheeps: 
+					NUM_SHEEP = 5;
+					break;
+				case R.id.ten_sheeps: 
+					NUM_SHEEP = 10;
+					break;
+				case R.id.fifteen_sheeps: 
+					NUM_SHEEP = 15;
+					break;
+			}
+			Log.i(LOG_TAG, "sheep count: "+ NUM_SHEEP);
+			Log.i(LOG_TAG, "fox count: "+ NUM_FOXES);
+		}
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; //this adds items to the action bar if it is

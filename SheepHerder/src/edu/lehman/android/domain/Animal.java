@@ -1,9 +1,6 @@
 package edu.lehman.android.domain;
 
-import edu.lehman.android.SheepHerderActivity.Boundaries;
-import android.util.DisplayMetrics;
-import android.view.Display;
-import android.view.WindowManager;
+import edu.lehman.android.views.GameSurfaceView.Boundaries;
 
 /**
  * Generic class to represent an animal
@@ -17,10 +14,19 @@ public abstract class Animal {
 	protected int width;
 	protected int height;
 	protected AnimalType type;
-	protected int SCREEN_WIDTH;
-	protected int SCREEN_HEIGHT;
 	protected Boundaries visible_screen_boundaries;
 
+	/**
+	 * Constructs an animal object
+	 * 
+	 * @param type defines the type of animal
+	 * @param x the initial starting x position
+	 * @param y the initial starting y position
+	 * @param speed how fast the animal can move
+	 * @param width width of the bitmap
+	 * @param height height of the bitmap
+	 * @param b defines the size of the surface view the animal can move in
+	 */
 	public Animal(AnimalType type, int x, int y, int speed, int width, int height, Boundaries b){
 		this.position = new Position(x, y);
 		this.speed = speed;
@@ -29,23 +35,69 @@ public abstract class Animal {
 		visible_screen_boundaries = b;
 	}
 	
-	public void moveX(int moveX) {
-		if (position.getX() + moveX > 0 && position.getX() + moveX < visible_screen_boundaries.getScreenWidth())
-			position.setX(position.getX() + moveX);
-		else if (position.getX() + moveX <= 0)
-			position.setX(0);
-		else
-			position.setX(visible_screen_boundaries.getScreenWidth());
-			
-	}
+	/**
+	 * Moves an animal towards the location on screen specified by x and y.
+	 * x and y are determined by the location on the screen that the user
+	 * selects
+	 * 
+	 * @param x the x coordinate to move towards
+	 * @param y the y coordinate to move towards
+	 */
+	public void moveTo(final int x, final int y) {
+		final int PACE = 15 + getSpeed();
+		Position p = getPosition();
+		int oldX = p.getX();
+		int oldY = p.getY();
+		int newX, newY;
 
-	public void moveY(int moveY) {
-		if (position.getY() + moveY > 0 && position.getY() + moveY < visible_screen_boundaries.getScreenHeight())
-			position.setY(position.getY() + moveY);
-		else if (position.getY() + moveY <= 0)
-			position.setY(0);
-		else
-			position.setY(visible_screen_boundaries.getScreenHeight());
+		// If the dog is not told to move to where it already is, it calculates
+		// the direction that it needs to move in and then moves one unit in that 
+		// direction
+		if (oldX != x){
+			newX = (oldX < x) ? oldX+PACE : oldX-PACE;
+			
+			if (newX + width >= visible_screen_boundaries.getScreenWidth()){
+				newX = visible_screen_boundaries.getScreenWidth() - width;
+			} else if (newX < 0){
+				newX = 0;
+			}
+			
+			position.setX(newX);
+		}
+		
+		if (oldY != y){
+			newY = (oldY < y) ? oldY+PACE : oldY-PACE;
+			
+			if (newY + height >= visible_screen_boundaries
+					.getScreenHeight()) {
+				newY = visible_screen_boundaries.getScreenHeight() - height;
+			} else if (newY < 0){
+				newY = 0;
+			}
+			 
+			position.setY(newY);
+		}
+
+		// Pause the thread for 1/1000 of a second
+		final int THREAD_SLEEP = 15;
+
+		try {
+			Thread.sleep(THREAD_SLEEP);
+		} catch (Exception e) {
+			// Do nothing
+		}
+	}
+	
+	// Sheeps only care about moving in one direction at a time, so 
+	// create these methods to call moveTo methods much more easily
+	public void moveX(int moveX){
+		Position p = getPosition();
+		moveTo(p.getX() + moveX, p.getY());
+	}
+	
+	public void moveY(int moveY){
+		Position p = getPosition();
+		moveTo(p.getX(), p.getY() + moveY);
 	}
 	
 	/**

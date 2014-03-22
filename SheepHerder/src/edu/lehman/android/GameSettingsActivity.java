@@ -227,6 +227,22 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 		dogSpeedSeekBar.setProgress(DOG_SPEED);
 		foxSpeedSeekBar.setProgress(FOX_SPEED);
 		sheepSpeedSeekBar.setProgress(SHEEP_SPEED);
+		
+		if (NUM_SHEEP == 5){
+			sheepRadioGroup.check(R.id.five_sheeps);
+		} else if (NUM_SHEEP == 10){
+			sheepRadioGroup.check(R.id.ten_sheeps);
+		} else {
+			sheepRadioGroup.check(R.id.fifteen_sheeps);
+		}
+		
+		if (NUM_FOXES == 1){
+			foxRadioGroup.check(R.id.oneFoxButton);
+		} else if (NUM_FOXES == 3){
+			foxRadioGroup.check(R.id.three_foxes);
+		} else {
+			foxRadioGroup.check(R.id.five_foxes);
+		}
 
 		// Initialize the textview with '0'
 		textView1.setText(dogSpeedSeekBar.getProgress() + "/"

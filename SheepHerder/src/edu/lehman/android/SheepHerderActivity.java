@@ -51,7 +51,7 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 					BitmapFactory
 							.decodeResource(getResources(), R.drawable.gamefox),
 					BitmapFactory.decodeResource(getResources(),
-							R.drawable.gamesheep));
+							R.drawable.gamesheep), NUM_FOXES, NUM_SHEEP, DOG_SPEED, FOX_SPEED, SHEEP_SPEED );
 			surfaceLayout.addView(surfaceView);
 		}
 		
@@ -68,25 +68,12 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 		backButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				Intent startGameIntent = new Intent(SheepHerderActivity.this,
-						MainActivity.class);
-				startActivity(startGameIntent);
+				finish();
 			}
 		});
 		
-		t = new Thread(new Runnable(){
-
-			Handler h = new Handler();
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				h.post(surfaceThread);
-			}
-			
-		});
-		t.start();
-		
+		Handler h = new Handler();
+		h.post(surfaceThread);
 		
 		Log.i(LOG_TAG, "SheepHerderActivity.onCreate()");
 	}
@@ -167,37 +154,4 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 
 		Log.i(LOG_TAG, "SheepHerderActivity.onDestroy()");
 	}
-	
-	/**
-	 * A class to hold the width and height of the phone
-	 * @author Marcos Davila
-	 *
-	 */
-	public class Boundaries {
-		private int WIDTH, HEIGHT;
-		
-		// Sets width and height to predetermined values w and h
-		public Boundaries(int w, int h){
-			WIDTH = w;
-			HEIGHT = h;
-		}
-		
-		// Gets the width and height of the phone's display
-		public Boundaries(){
-			DisplayMetrics displaymetrics = new DisplayMetrics();
-			getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-			HEIGHT = displaymetrics.heightPixels;
-			WIDTH = displaymetrics.widthPixels;
-		}
-		
-		public int getScreenWidth(){
-			return WIDTH;
-		}
-		
-		public int getScreenHeight(){
-			return HEIGHT;
-		}
-	}
-	
-	
 }

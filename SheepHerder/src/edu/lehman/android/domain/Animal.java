@@ -3,8 +3,10 @@ package edu.lehman.android.domain;
 import edu.lehman.android.views.GameSurfaceView.Boundaries;
 
 /**
- * Generic class to represent an animal
+ * Generic class to represent characteristics all animal entities share.
+ * 
  * @author marcus.silveira
+ * @author Marcos Davila
  *
  */
 public abstract class Animal {
@@ -88,6 +90,11 @@ public abstract class Animal {
 		}
 	}
 	
+	/**
+	 * Directs an animal to move in just the x direction
+	 * 
+	 * @param moveX the speed and direction to move in
+	 */
 	// Sheeps only care about moving in one direction at a time, so 
 	// create these methods to call moveTo methods much more easily
 	public void moveX(int moveX){
@@ -95,6 +102,11 @@ public abstract class Animal {
 		moveTo(p.getX() + moveX, p.getY());
 	}
 	
+	/**
+	 * Directs an animal to move in just the y direction
+	 * 
+	 * @param moveY the speed and direction to move in
+	 */
 	public void moveY(int moveY){
 		Position p = getPosition();
 		moveTo(p.getX(), p.getY() + moveY);
@@ -102,8 +114,9 @@ public abstract class Animal {
 	
 	/**
 	 * Checks if the animals are colliding
-	 * @param anotherAnimal
-	 * @return
+	 * 
+	 * @param anotherAnimal the animal to check collision against
+	 * @return true if collision is detected, false otherwise
 	 */
 	public boolean collidesWith (Animal anotherAnimal) {
 		if(anotherAnimal == null) return false;
@@ -126,18 +139,38 @@ public abstract class Animal {
 		);
 	}
 	
+	/**
+	 * Returns the rate at which the animal moves
+	 * @return the speed of the animal
+	 */
 	public int getSpeed() {
 		return speed;
 	}
 
+	/**
+	 * Returns the x and y coordinates of the animal
+	 * @return the location of the animal on the screen
+	 */
 	public Position getPosition() {
 		return position;
 	}
 
+	/**
+	 * Returns the width of the bitmap image of the animal calculated from the
+	 * upper left hand corner
+	 * 
+	 * @return width of bitmap image
+	 */
 	public int getWidth() {
 		return width;
 	}
 
+	/**
+	 * Returns the height of the bitmap image of the animal calculated from the
+	 * upper left hand corner
+	 * 
+	 * @return height of bitmap image
+	 */
 	public int getHeight() {
 		return height;
 	}

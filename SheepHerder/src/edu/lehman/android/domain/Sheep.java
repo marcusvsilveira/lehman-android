@@ -26,10 +26,31 @@ public class Sheep extends Animal {
 
 	private Fox closestFox;
 
+	/**
+	 * Constructs a sheep
+	 * 
+	 * @param type defines the type of animal
+	 * @param x the initial starting x position
+	 * @param y the initial starting y position
+	 * @param speed how fast the animal can move
+	 * @param width width of the bitmap
+	 * @param height height of the bitmap
+	 * @param b defines the size of the surface view the animal can move in
+	 */
 	public Sheep(int x, int y, int speed, int width, int height, Boundaries b) {
 		super(AnimalType.SHEEP, x, y, speed, width, height, b);
 	}
 
+	/**
+	 * Determines how the sheep should move based on the location of the dog
+	 * and the presence of one or more foxes. Sheep should do so only if it
+	 * is not being eaten. It looks for the presence of any foxes first, and
+	 * if it senses none it looks for the dog. If neither are close, it just
+	 * wanders.
+	 * 
+	 * @param foxList a list containing attributes of all foxes
+	 * @param dog a reference to the player
+	 */
 	public void move(List<Fox> foxList, Dog dog) {
 		if (!isBeingEaten) {
 			if (sees(foxList)) {
@@ -41,25 +62,29 @@ public class Sheep extends Animal {
 			}
 		}
 	}
-
-	// move away from dog
-	public boolean isSafeFromDog(Position dog_pos) {
-		return false;
-	}
-
-	// move away from fox
-	public boolean isSafeFromFox(Position fox_pos) {
-		return false;
-	}
-
+	
+	/**
+	 * A flag to determine if the sheep has been caught by a fox
+	 * @return true if the sheep has been caught, false otherwise
+	 */
 	public boolean isBeingEaten() {
 		return isBeingEaten;
 	}
 
+	/**
+	 * A method to signify if the sheep has changed state from being
+	 * eaten to not being eaten (and vice versa)
+	 * @param isBeingEaten the new state of the sheep
+	 */
 	public void setBeingEaten(boolean isBeingEaten) {
 		this.isBeingEaten = isBeingEaten;
 	}
 
+	/**
+	 * Logic the sheep should take to avoid any animal that is not another
+	 * sheep.
+	 * @param animal the fox or dog entity that the sheep should run away from
+	 */
 	public void evade(Animal animal) {
 		int animalX = animal.getPosition().getX();
 		int animalY = animal.getPosition().getY();
@@ -91,6 +116,12 @@ public class Sheep extends Animal {
 		}
 	}
 
+	/**
+	 * Determines if the sheep is sufficiently close to one of the foxes.
+	 * 
+	 * @param foxList list of fox entities in the game
+	 * @return true if fox is close, false otherwise
+	 */
 	public boolean sees(List<Fox> foxList) {
 		boolean sees = false;
 
@@ -110,7 +141,7 @@ public class Sheep extends Animal {
 	}
 
 	/**
-	 * Defines sheep behavior when a sheep is not being pursued by a fox or dog.
+	 * Sheep behavior when not being pursued by a fox or dog.
 	 */
 	public void graze() {
 		final int RANGE = 4; // range of random numbers to generate

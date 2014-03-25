@@ -72,8 +72,8 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 			}
 		});
 		
-		Handler h = new Handler();
-		h.post(surfaceThread);
+		new Handler().post(surfaceThread);
+
 		
 		Log.i(LOG_TAG, "SheepHerderActivity.onCreate()");
 	}

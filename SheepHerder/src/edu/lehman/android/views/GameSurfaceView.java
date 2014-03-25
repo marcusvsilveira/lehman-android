@@ -251,14 +251,11 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 				Position foxPosition;
 				for (Fox fox : foxList) {
 					
-					if (fox.canMove()) {
-
 						fox.move(dog, sheepList);
-
 						foxPosition = fox.getPosition();
 						canvas.drawBitmap(foxBitmap, foxPosition.getX(),
 								foxPosition.getY(), null);
-					}
+					
 				}
 			}
 

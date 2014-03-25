@@ -18,58 +18,30 @@ public class Fox extends Animal {
 	public int foxAppearanceRate;
 	private boolean isEating = false;
 	private boolean isVisible = false;
-	private boolean canMove = false;
-	private Timer foxTimer;
 
-	private TimerTask foxTask = new TimerTask() {
-
-		@Override
-		public void run() {
-			canMove = true;
-			pause();
-		}
-
-	};
-
+	/**
+	 * Constructs a fox object and sets the rate at which the fox should appear
+	 * on screen
+	 * 
+	 * @param type defines the type of animal
+	 * @param x the initial starting x position
+	 * @param y the initial starting y position
+	 * @param speed how fast the animal can move
+	 * @param width width of the bitmap
+	 * @param height height of the bitmap
+	 * @param b defines the size of the surface view the animal can move in
+	 */
 	public Fox(int x, int y, int speed, int width, int height, Boundaries b) {
 		super(AnimalType.FOX, x, y, speed, width, height, b);
 		foxAppearanceRate = foxRandomAppearance.nextInt(RANGE_OF_WAITING_TIME)
 				* DELAY + 1;
-		foxTimer = new Timer();
-		foxTimer.scheduleAtFixedRate(foxTask, foxAppearanceRate,
-				foxRandomAppearance.nextInt(RANGE_OF_WAITING_TIME));
-	}
-
-	public void pause() {
-		foxTimer.cancel();
-	}
-
-	public void resume() {
-		foxTimer = new Timer();
-		foxTimer.scheduleAtFixedRate(foxTask, foxAppearanceRate,
-				foxRandomAppearance.nextInt(RANGE_OF_WAITING_TIME));
 	}
 
 	public void move(Dog dog, List<Sheep> sheepList) {
-		// TODO check when fox should show up // random logic
-
-		// if fox goes off screen get time break
-		if (dog.collidesWith(this)) {
-			setVisible(false);
-		} else if (dog.closeTo(this)) {
-			//evade(dog);
-
-			// TODO when fox goes off the screen restart timer here
-
-		} else {
-			chaseClosest(sheepList);
-		}
+	
+		
 	}
-
-	public boolean canMove() {
-		return canMove;
-	}
-
+	
 	public void chaseClosest(List<Sheep> sheepList) {
 		Sheep closest = findClosest(sheepList);
 
@@ -164,9 +136,6 @@ public class Fox extends Animal {
 					- FOX_STARTING_POINT);
 
 		}
-		
-		// Start timer
-		resume();
 	}
 
 	@Override
@@ -193,13 +162,11 @@ public class Fox extends Animal {
 					- FOX_STARTING_POINT);
 
 		}
-		// Start timer
-		resume();
 	}
 
 	private boolean isFoxSafe(Position dog_position) {
 		// Calculate distance between fox and dog and see if the dog is close
-		final int RADIUS = 30;
+		final int RADIUS = 100;
 		float dogx = dog_position.getX();
 		float dogy = dog_position.getY();
 
@@ -209,7 +176,7 @@ public class Fox extends Animal {
 		float dx = Math.abs(dogx - x);
 		float dy = Math.abs(dogy - y);
 
-		if (dx < RADIUS && dy < RADIUS) {
+		if (dx * dx - dy * dy < RADIUS) {
 			return true;
 		} else {
 			return false;

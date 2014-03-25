@@ -2,6 +2,7 @@ package edu.lehman.android.domain;
 
 import java.util.List;
 
+import edu.lehman.android.factory.AnimalType;
 import edu.lehman.android.views.GameSurfaceView.Boundaries;
 
 /**
@@ -126,10 +127,7 @@ public class Sheep extends Animal {
 		boolean sees = false;
 
 		for (int i = 0; i < foxList.size(); i++) {
-			sees = (Math.abs(position.getX()
-					- foxList.get(i).getPosition().getX()) < FOX_AWARENESS_RANGE)
-					&& (Math.abs(position.getY()
-							- foxList.get(i).getPosition().getY()) < FOX_AWARENESS_RANGE);
+			sees = this.closeTo(foxList.get(i));
 
 			if (sees) {
 				closestFox = foxList.get(i);

@@ -5,6 +5,8 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.util.Log;
+import edu.lehman.android.factory.AnimalType;
 import edu.lehman.android.views.GameSurfaceView.Boundaries;
 
 public class Fox extends Animal {
@@ -17,7 +19,8 @@ public class Fox extends Animal {
 	public Random foxRandomAppearance = new Random();
 	public int foxAppearanceRate;
 	private boolean isEating = false;
-	private boolean isVisible = false;
+	private boolean isVisible = true;
+	private boolean canMove = false;
 
 	/**
 	 * Constructs a fox object and sets the rate at which the fox should appear
@@ -38,8 +41,23 @@ public class Fox extends Animal {
 	}
 
 	public void move(Dog dog, List<Sheep> sheepList) {
+		if (dog.collidesWith(this)) {
+			caught();
+		} else if (dog.closeTo(this)) {
+			evade(dog);
+		} else {
+			chaseClosest(sheepList);
+			Log.i("FOX", "CHASING");
+		}
+	}
 	
+	public void caught(){
+		canMove = false;
+		isVisible = false;
 		
+		// TODO: Reset position
+		
+		// TODO: Give user points
 	}
 	
 	public void chaseClosest(List<Sheep> sheepList) {
@@ -77,11 +95,12 @@ public class Fox extends Animal {
 		Sheep closest = null;
 
 		for (Sheep sheep : sheepList) {
-			float temp = Math.abs(sheep.getPosition().getX() - position.getX())
-					+ Math.abs(sheep.getPosition().getY() - position.getY());
+			float temp = findSheep(sheep);
+			
 			if (temp < distance) {
 				distance = temp;
 				closest = sheep;
+				break;
 			}
 		}
 
@@ -94,7 +113,7 @@ public class Fox extends Animal {
 		int fox_x = getPosition().getX();
 		int fox_y = getPosition().getY();
 
-		while (!isFoxSafe(dog_position)) {
+		while (closeTo(dog)) {
 			float dx = Math.abs(dog_position.getX() - fox_x);
 			float dy = Math.abs(dog_position.getY() - fox_y);
 
@@ -114,77 +133,32 @@ public class Fox extends Animal {
 
 	@Override
 	public void moveX(int moveX) {
-		int foxPos = getPosition().getX();
-		final int FOX_STARTING_POINT = -20;
-
-		// Calculate distance between fox and edge of screen
-		if (moveX < 0) {
-
-			while (foxPos >= 0)
-				(getPosition()).setX(foxPos + moveX);
-
-			// Reset fox off the screen
-			(getPosition()).setX(FOX_STARTING_POINT);
-
-		} else {
-
-			while (foxPos <= visible_screen_boundaries.getScreenWidth())
-				(getPosition()).setX(foxPos + moveX);
-
-			// Reset fox off the screen
-			(getPosition()).setX(visible_screen_boundaries.getScreenWidth()
-					- FOX_STARTING_POINT);
-
-		}
+		int foxPos = getPosition().getX() + moveX;
+		
+		(getPosition()).setX(foxPos);
+		
+		if (foxPos < 0 || foxPos > visible_screen_boundaries.getScreenWidth());
+				setVisible(false); // Fox gets away
 	}
 
 	@Override
 	public void moveY(int moveY) {
 		int foxPos = getPosition().getY();
-		final int FOX_STARTING_POINT = -20;
 
-		// Calculate distance between fox and edge of screen
-		if (moveY < 0) {
+		(getPosition()).setY(foxPos);
 
-			while (foxPos >= 0)
-				(getPosition()).setY(foxPos + moveY);
-
-			// Reset fox off the screen
-			(getPosition()).setY(FOX_STARTING_POINT);
-
-		} else {
-
-			while (foxPos <= visible_screen_boundaries.getScreenHeight())
-				(getPosition()).setY(foxPos + moveY);
-
-			// Reset fox off the screen
-			(getPosition()).setY(visible_screen_boundaries.getScreenHeight()
-					- FOX_STARTING_POINT);
-
-		}
+		if (foxPos < 0 || foxPos > visible_screen_boundaries.getScreenHeight())
+			setVisible(false); // Fox gets away
 	}
 
-	private boolean isFoxSafe(Position dog_position) {
-		// Calculate distance between fox and dog and see if the dog is close
-		final int RADIUS = 100;
-		float dogx = dog_position.getX();
-		float dogy = dog_position.getY();
-
-		float x = position.getX();
-		float y = position.getY();
-
-		float dx = Math.abs(dogx - x);
-		float dy = Math.abs(dogy - y);
-
-		if (dx * dx - dy * dy < RADIUS) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private Position findSheep(List<Sheep> sheeps) {
-		return null;
+	/**
+	 * Returns the position between this fox and a sheep
+	 * @param sheeps the sheep to determine distance from
+	 * @return distance between fox and sheep
+	 */
+	private int findSheep(Sheep sheeps) {
+		return Math.abs(sheeps.getPosition().getX() - position.getX())
+				+ Math.abs(sheeps.getPosition().getY() - position.getY());
 	}
 
 	private void eat(Sheep sheep) {

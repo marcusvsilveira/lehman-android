@@ -1,5 +1,6 @@
 package edu.lehman.android.domain;
 
+import edu.lehman.android.factory.AnimalType;
 import edu.lehman.android.views.GameSurfaceView.Boundaries;
 
 /**
@@ -35,6 +36,24 @@ public abstract class Animal {
 		this.width = width;
 		this.height = height;
 		visible_screen_boundaries = b;
+	}
+	
+	/**
+	 * Determines if one animal is close to another animal
+	 */
+	public boolean closeTo(final Animal animal) {
+		final Position animalPosition = animal.getPosition();
+		final int RADIUS;
+
+		if (animal instanceof Fox)
+			RADIUS = 40;
+		else if (animal instanceof Sheep)
+			RADIUS = 100;
+		else
+			RADIUS = 40;
+
+		return Math.abs(position.getX() - animalPosition.getX()) < RADIUS
+				&& Math.abs(position.getY() - animalPosition.getY()) < RADIUS;
 	}
 	
 	/**

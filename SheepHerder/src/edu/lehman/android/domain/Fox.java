@@ -55,12 +55,12 @@ public class Fox extends Animal {
 				isEating = false;
 				eatingClock = Fox.EATING_TIME;
 				//ready to move again
-				//TODO check which sheep was eaten and remove from the list
+				
 				Sheep sheep = null;
 				for(Iterator<Sheep> it = sheepList.iterator(); it.hasNext(); ) {
 					sheep = it.next();
 					if(sheep.isBeingEaten() ) {
-						it.remove();
+						it.remove(); //sheep is now gone
 					}
 				}
 			}
@@ -68,7 +68,7 @@ public class Fox extends Animal {
 		
 		if (dog.collidesWith(this)) {
 			Log.i(LOG_TAG, "FOX WAS CAUGHT");
-			caught();
+			caught(sheepList);
 		} else if (dog.closeTo(this)) {
 			Log.i(LOG_TAG, "FOX EVADE");
 			evade(dog);
@@ -79,9 +79,16 @@ public class Fox extends Animal {
 		
 	}
 	
-	public void caught(){
+	public void caught(List<Sheep> sheepList){
 		isVisible = false;
 		isEating = false;
+		Sheep sheep = null;
+		for(Iterator<Sheep> it = sheepList.iterator(); it.hasNext(); ) {
+			sheep = it.next();
+			if(sheep.isBeingEaten() ) {
+				sheep.setBeingEaten(false); // sheep was SAVED!
+			}
+		}
 	}
 	
 	public boolean canRespawn() {

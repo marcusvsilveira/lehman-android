@@ -3,12 +3,9 @@ package edu.lehman.android;
 import edu.lehman.android.views.GameSurfaceView;
 import interfaces.SettingsInterface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -34,34 +31,17 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 	private int FOX_SPEED;
 	private Button backButton;
 	private GameSurfaceView surfaceView;
-	private Thread t;
+	private RelativeLayout surfaceLayout;
 	
 	// A reference to this object so that the surface view can query
 	// the width and height of the phone
-	private SheepHerderActivity reference = this;
-	
-	private Runnable surfaceThread = new Runnable(){
-
-		@Override
-		public void run() {
-			RelativeLayout surfaceLayout = (RelativeLayout) findViewById(R.id.gamelayout);
-			surfaceView = new GameSurfaceView(reference,
-					getApplicationContext(), BitmapFactory.decodeResource(
-							getResources(), R.drawable.gamedog),
-					BitmapFactory
-							.decodeResource(getResources(), R.drawable.gamefox),
-					BitmapFactory.decodeResource(getResources(),
-							R.drawable.gamesheep), NUM_FOXES, NUM_SHEEP, DOG_SPEED, FOX_SPEED, SHEEP_SPEED );
-			surfaceLayout.addView(surfaceView);
-		}
-		
-	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sheep_herder);
-
+		surfaceLayout = (RelativeLayout) findViewById(R.id.gamelayout);
+		
 		// Creates the UI on the UI thread and the handler
 		// creates the surface on another
 		backButton = (Button) findViewById(R.id.backButton);
@@ -71,10 +51,14 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 				finish();
 			}
 		});
-		
-		new Handler().post(surfaceThread);
-
-		
+		loadPreferences();
+		this.surfaceView = new GameSurfaceView(getApplicationContext(), 
+				BitmapFactory.decodeResource(getResources(), R.drawable.gamedog),
+				BitmapFactory.decodeResource(getResources(), R.drawable.gamefox),
+				BitmapFactory.decodeResource(getResources(), R.drawable.gamesheep), 
+				NUM_FOXES, NUM_SHEEP, DOG_SPEED, FOX_SPEED, SHEEP_SPEED );
+		this.surfaceLayout.addView(this.surfaceView); //touch events will already be handled by the surfaceView
+				
 		Log.i(LOG_TAG, "SheepHerderActivity.onCreate()");
 	}
 
@@ -121,7 +105,9 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		loadPreferences();
+		
+
+					
 		Log.i(LOG_TAG, "SheepHerderActivity.onResume()");
 	}
 
@@ -130,8 +116,10 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 		super.onPause();
 		// The game thread is running in the GameSurfaceView. We must
 		// notify that object to stop running
-		surfaceView.stop();
 		
+		this.surfaceView.stop();
+		//resetting layout to add the game again later. This would have to change if you want to handle "pausing the game"
+		this.surfaceLayout.removeAllViews();
 		Log.i(LOG_TAG, "SheepHerderActivity.onPause()");
 	}
 

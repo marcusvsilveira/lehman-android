@@ -13,17 +13,17 @@ public class AnimalFactory {
 		Animal animal = null;
 		
 		switch (t) {
-		case DOG:
-			animal = new Dog(x,y,speed,width,height,b);
-			break;
-		case FOX:
-			animal = new Fox(x,y,speed,width,height,b);
-			break;
-		case SHEEP:
-			animal = new Sheep(x,y,speed,width,height,b);
-			break;
-		default:
-			break;
+			case DOG:
+				animal = new Dog(x,y,speed,width,height,b);
+				break;
+			case FOX:
+				animal = new Fox(x,y,speed,width,height,b);
+				break;
+			case SHEEP:
+				animal = new Sheep(x,y,speed,width,height,b);
+				break;
+			default:
+				break;
 		}
 		
 		return animal;

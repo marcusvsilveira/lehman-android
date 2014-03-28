@@ -10,12 +10,15 @@ import edu.lehman.android.factory.AnimalType;
 import edu.lehman.android.views.GameSurfaceView.Boundaries;
 
 public class Fox extends Animal {
-	public final long EATING_TIME = 1000; // 1 second
-	public final int DELAY = 1000;
-	public final int OUT_OF_RANGE_RADIUS = 100000;
-	public final int RANGE_OF_WAITING_TIME = 30; // time for the fox to wait in
+	public static final long EATING_TIME = 1000; // 1 second
+	public static final int DELAY = 10;
+	public static final int OUT_OF_RANGE_RADIUS = 100000;
+	public static final int RANGE_OF_WAITING_TIME = 30; // time for the fox to wait in
 													// seconds
-
+	public static final int NUM_EDGES = 4;
+	public static final int OFF_SCREEN_FOX_RANGE = 20;
+	public static final int FOX_STARTING_POINT = 100;
+	
 	public Random foxRandomAppearance = new Random();
 	public int foxAppearanceRate;
 	private boolean isEating = false;
@@ -58,6 +61,24 @@ public class Fox extends Animal {
 		// TODO: Reset position
 		
 		// TODO: Give user points
+	}
+	
+	public boolean canRespawn() {
+		if( this.foxAppearanceRate > 0) {
+			this.foxAppearanceRate--;
+			return false;
+		} else {
+			//respawn and resets the appearance rate
+			foxAppearanceRate = foxRandomAppearance.nextInt(RANGE_OF_WAITING_TIME)
+					* DELAY + 1;
+			return true;
+		}
+	}
+	
+	public void spawn(Position newPosition) {
+		this.position.setX(newPosition.getX());
+		this.position.setY(newPosition.getY());
+		this.isVisible = true;
 	}
 	
 	public void chaseClosest(List<Sheep> sheepList) {

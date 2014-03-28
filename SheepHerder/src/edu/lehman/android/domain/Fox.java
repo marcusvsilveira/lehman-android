@@ -1,5 +1,6 @@
 package edu.lehman.android.domain;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
@@ -10,7 +11,8 @@ import edu.lehman.android.factory.AnimalType;
 import edu.lehman.android.views.GameSurfaceView.Boundaries;
 
 public class Fox extends Animal {
-	public static final long EATING_TIME = 1000; // 1 second
+	public static final String LOG_TAG = "FOX";
+	public static final int EATING_TIME = 100; // 1 second
 	public static final int DELAY = 10;
 	public static final int OUT_OF_RANGE_RADIUS = 100000;
 	public static final int RANGE_OF_WAITING_TIME = 30; // time for the fox to wait in
@@ -19,11 +21,11 @@ public class Fox extends Animal {
 	public static final int OFF_SCREEN_FOX_RANGE = 20;
 	public static final int FOX_STARTING_POINT = 100;
 	
-	public Random foxRandomAppearance = new Random();
-	public int foxAppearanceRate;
+	private Random foxRandomAppearance = new Random();
+	private int foxAppearanceRate;
+	private int eatingClock = Fox.EATING_TIME;
 	private boolean isEating = false;
 	private boolean isVisible = true;
-	private boolean canMove = false;
 
 	/**
 	 * Constructs a fox object and sets the rate at which the fox should appear
@@ -44,23 +46,42 @@ public class Fox extends Animal {
 	}
 
 	public void move(Dog dog, List<Sheep> sheepList) {
+		if(isEating) {
+			if(eatingClock > 0) {
+				Log.i(LOG_TAG, "FOX IS EATING");
+				eatingClock--;
+				return;
+			} else {
+				isEating = false;
+				eatingClock = Fox.EATING_TIME;
+				//ready to move again
+				//TODO check which sheep was eaten and remove from the list
+				Sheep sheep = null;
+				for(Iterator<Sheep> it = sheepList.iterator(); it.hasNext(); ) {
+					sheep = it.next();
+					if(sheep.isBeingEaten() ) {
+						it.remove();
+					}
+				}
+			}
+		}
+		
 		if (dog.collidesWith(this)) {
+			Log.i(LOG_TAG, "FOX WAS CAUGHT");
 			caught();
 		} else if (dog.closeTo(this)) {
+			Log.i(LOG_TAG, "FOX EVADE");
 			evade(dog);
 		} else {
+			Log.i(LOG_TAG, "FOX CHASING");
 			chaseClosest(sheepList);
-			Log.i("FOX", "CHASING");
-		}
+		} 
+		
 	}
 	
 	public void caught(){
-		canMove = false;
 		isVisible = false;
-		
-		// TODO: Reset position
-		
-		// TODO: Give user points
+		isEating = false;
 	}
 	
 	public boolean canRespawn() {
@@ -107,6 +128,11 @@ public class Fox extends Animal {
 				moveY(speed);
 			if (sheepy < y)
 				moveY(-speed);
+		}
+		
+		//TODO enhance this detection since it doesn't consider the distance of the movement, just the final position
+		if(closest.collidesWith(this)) {
+			eat(closest);
 		}
 
 	}
@@ -183,7 +209,10 @@ public class Fox extends Animal {
 	}
 
 	private void eat(Sheep sheep) {
-
+		Log.i(LOG_TAG, "FOX CAUGHT A SHEEP");
+		//fox is eating now
+		isEating = true;
+		sheep.setBeingEaten(true);
 	}
 
 	public boolean isEating() {

@@ -238,23 +238,29 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 
 			private void moveFox() {
 				Position foxPosition;
+				boolean wasEating = false;
 				for (Fox fox : foxList) {
 					if( fox.isVisible() ) {
+						wasEating = fox.isEating();
 						fox.move(dog, sheepList);
+						
 						if( fox.isVisible()) { //still visible, still in the game
 							foxPosition = fox.getPosition();
 							canvas.drawBitmap(foxBitmap, foxPosition.getX(), foxPosition.getY(), null);
+							if(!wasEating && fox.isEating()) {
+								//TODO take points out
+							}
 						} else {
 							//TODO possibly count points here. You got the fox!
 						}
 					} else {
-						Log.e(LOG_TAG, "Fox is not visible, check if it can respawn");
+//						Log.e(LOG_TAG, "Fox is not visible, check if it can respawn");
 						if(fox.canRespawn()) {
 							Log.e(LOG_TAG, "Fox is ready to respawn");
-							Position foxPos = spawnFox(locationGenerator, Fox.NUM_EDGES,
+							Position foxNewPos = spawnFox(locationGenerator, Fox.NUM_EDGES,
 									Fox.OFF_SCREEN_FOX_RANGE, Fox.FOX_STARTING_POINT);
-							fox.spawn(foxPos);
-							Log.e(LOG_TAG, "Fox is now visible, position: "+ foxPos);
+							fox.spawn(foxNewPos);
+							Log.e(LOG_TAG, "Fox is now visible, position: "+ foxNewPos);
 						}
 					}
 				}

@@ -75,6 +75,8 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 	private int NUM_FOX, NUM_SHEEP, DOG_SPEED, FOX_SPEED, SHEEP_SPEED;
 	private Boundaries surfaceBoundaries;
 	private Random locationGenerator = new Random();
+	
+	private boolean dogMovementLock = false;
 
 	// Approximates 1/60 of a second. The game runs at 60 FPS
 	private final int GAME_SPEED = 17;
@@ -116,24 +118,29 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 		// TODO Auto-generated method stub
 
 	}
+	
+	private synchronized void locksDog(boolean value) {
+		this.dogMovementLock = value;
+	}
+	private synchronized boolean isDogLocked() {
+		return this.dogMovementLock;
+	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent me) {
 		int action = me.getAction();
-
 		// Get the action event that happened and the location that was
 		// pressed on the screen, then move the dog there
 		if (action == MotionEvent.ACTION_DOWN
 				|| action == MotionEvent.ACTION_UP
 				|| action == MotionEvent.ACTION_MOVE) {
-
-			dog.moveTo((int) me.getX(), (int) me.getY());
-
-			return true;
-		} else {
-			// There was no touch event
-			return false;
+			if(! isDogLocked() ) {
+				this.locksDog(true);
+				dog.moveTo((int) me.getX(), (int) me.getY());
+			}
 		}
+		return true;
+		
 	}
 
 	/*
@@ -231,6 +238,11 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 			}
 
 			private void moveDog() {
+				if(isDogLocked() ) {
+					locksDog(false);
+				} else {
+					//no movement was recorded - nothing to be changed
+				}
 				Position dogPosition = dog.getPosition();
 				canvas.drawBitmap(dogBitmap, dogPosition.getX(),
 						dogPosition.getY(), null);
@@ -260,6 +272,7 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 							Position foxNewPos = spawnFox(locationGenerator, Fox.NUM_EDGES,
 									Fox.OFF_SCREEN_FOX_RANGE, Fox.FOX_STARTING_POINT);
 							fox.spawn(foxNewPos);
+							canvas.drawBitmap(foxBitmap, foxNewPos.getX(), foxNewPos.getY(), null);
 							Log.e(LOG_TAG, "Fox is now visible, position: "+ foxNewPos);
 						}
 					}
@@ -269,13 +282,20 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 			private void moveSheep() {
 				Position sheepPosition;
 				if (sheepList != null) {
-					for (Sheep sheep : sheepList) {
-						if (!sheep.isBeingEaten()) {
-							sheep.move(foxList, dog);
-							sheepPosition = sheep.getPosition();
-							canvas.drawBitmap(sheepBitmap,
-									sheepPosition.getX(), sheepPosition.getY(),
-									null);
+					if( sheepList.isEmpty()) {
+						//GAME IS OVER! 
+						//TODO create interstitial screen with GAME OVER message, with option to restart
+						//TODO show score
+						running = false;
+					} else {
+						for (Sheep sheep : sheepList) {
+							if (!sheep.isBeingEaten()) {
+								sheep.move(foxList, dog);
+								sheepPosition = sheep.getPosition();
+								canvas.drawBitmap(sheepBitmap,
+										sheepPosition.getX(), sheepPosition.getY(),
+										null);
+							}
 						}
 					}
 				}

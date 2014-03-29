@@ -3,8 +3,6 @@ package edu.lehman.android.domain;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import android.util.Log;
 import edu.lehman.android.factory.AnimalType;
@@ -25,7 +23,7 @@ public class Fox extends Animal {
 	private int foxAppearanceRate;
 	private int eatingClock = Fox.EATING_TIME;
 	private boolean isEating = false;
-	private boolean isVisible = true;
+	private boolean isVisible = false;
 
 	/**
 	 * Constructs a fox object and sets the rate at which the fox should appear
@@ -46,36 +44,38 @@ public class Fox extends Animal {
 	}
 
 	public void move(Dog dog, List<Sheep> sheepList) {
-		if(isEating) {
-			if(eatingClock > 0) {
-				Log.i(LOG_TAG, "FOX IS EATING");
-				eatingClock--;
-				return;
-			} else {
-				isEating = false;
-				eatingClock = Fox.EATING_TIME;
-				//ready to move again
-				
-				Sheep sheep = null;
-				for(Iterator<Sheep> it = sheepList.iterator(); it.hasNext(); ) {
-					sheep = it.next();
-					if(sheep.isBeingEaten() ) {
-						it.remove(); //sheep is now gone
+		if(isVisible) {
+			if(isEating) {
+				if(eatingClock > 0) {
+					Log.i(LOG_TAG, "FOX IS EATING");
+					eatingClock--;
+					return;
+				} else {
+					isEating = false;
+					eatingClock = Fox.EATING_TIME;
+					//ready to move again
+					
+					Sheep sheep = null;
+					for(Iterator<Sheep> it = sheepList.iterator(); it.hasNext(); ) {
+						sheep = it.next();
+						if(sheep.isBeingEaten() ) {
+							it.remove(); //sheep is now gone
+						}
 					}
 				}
 			}
+			
+			if (dog.collidesWith(this)) {
+				Log.i(LOG_TAG, "FOX WAS CAUGHT");
+				caught(sheepList);
+			} else if (dog.closeTo(this)) {
+				Log.i(LOG_TAG, "FOX EVADE");
+				evade(dog);
+			} else {
+				Log.i(LOG_TAG, "FOX CHASING");
+				chaseClosest(sheepList);
+			} 
 		}
-		
-		if (dog.collidesWith(this)) {
-			Log.i(LOG_TAG, "FOX WAS CAUGHT");
-			caught(sheepList);
-		} else if (dog.closeTo(this)) {
-			Log.i(LOG_TAG, "FOX EVADE");
-			evade(dog);
-		} else {
-			Log.i(LOG_TAG, "FOX CHASING");
-			chaseClosest(sheepList);
-		} 
 		
 	}
 	
@@ -107,6 +107,7 @@ public class Fox extends Animal {
 		this.position.setX(newPosition.getX());
 		this.position.setY(newPosition.getY());
 		this.isVisible = true;
+		this.isEating = false;
 	}
 	
 	public void chaseClosest(List<Sheep> sheepList) {

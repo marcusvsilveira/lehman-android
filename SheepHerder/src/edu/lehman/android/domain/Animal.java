@@ -98,15 +98,6 @@ public abstract class Animal {
 			 
 			position.setY(newY);
 		}
-
-		// Pause the thread for 1/1000 of a second
-		final int THREAD_SLEEP = 15;
-
-		try {
-			Thread.sleep(THREAD_SLEEP);
-		} catch (Exception e) {
-			// Do nothing
-		}
 	}
 	
 	/**

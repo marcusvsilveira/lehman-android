@@ -3,6 +3,7 @@ package edu.lehman.android;
 import edu.lehman.android.views.GameSurfaceView;
 import interfaces.SettingsInterface;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 /**
  * 
@@ -30,6 +32,7 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 	private int SHEEP_SPEED;
 	private int FOX_SPEED;
 	private Button backButton;
+	public TextView timerView;
 	private GameSurfaceView surfaceView;
 	private RelativeLayout surfaceLayout;
 	
@@ -41,6 +44,7 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sheep_herder);
 		surfaceLayout = (RelativeLayout) findViewById(R.id.gamelayout);
+		timerView = (TextView) findViewById(R.id.timer);
 		
 		// Creates the UI on the UI thread and the handler
 		// creates the surface on another
@@ -93,12 +97,34 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 	protected void onRestart() {
 		super.onRestart();
 		surfaceView.restart();
+
 		Log.i(LOG_TAG, "SheepHerderActivity.onRestart()");
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
+		
+		new CountDownTimer (40 * 1000, 1* 1000) 
+		{
+	        
+			TextView timerView = (TextView) findViewById(R.id.timer);
+			
+			
+	        public  void onTick(long millisUntilFinished) 
+	        {
+				timerView.setText("Time-Left :" + millisUntilFinished / 1000);
+		
+			}
+	        
+			public void onFinish() 
+			{	
+				timerView.setText("Time-up  :   Your Score =" );
+                onStop();
+                   
+			}	
+		}.start();
+		
 		Log.i(LOG_TAG, "SheepHerderActivity.onStart()");
 	}
 

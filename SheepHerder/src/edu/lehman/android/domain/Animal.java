@@ -1,5 +1,6 @@
 package edu.lehman.android.domain;
 
+import android.util.Log;
 import edu.lehman.android.factory.AnimalType;
 import edu.lehman.android.views.GameSurfaceView.Boundaries;
 
@@ -69,16 +70,27 @@ public abstract class Animal {
 		Position p = getPosition();
 		int oldX = p.getX();
 		int oldY = p.getY();
-		int newX, newY;
-
+		int newX = 0, newY = 0;
+		final int posXDir = oldX+PACE;
+		final int negXDir = oldX-PACE;
+		final int posYDir = oldY+PACE;
+		final int negYDir = oldY-PACE;
+		final int screenWidth = visible_screen_boundaries.getScreenWidth();
+		final int screenHeight = visible_screen_boundaries.getScreenHeight();
+		
+		
 		// If the dog is not told to move to where it already is, it calculates
 		// the direction that it needs to move in and then moves one unit in that 
 		// direction
 		if (oldX != x){
-			newX = (oldX < x) ? oldX+PACE : oldX-PACE;
-			
-			if (newX + width >= visible_screen_boundaries.getScreenWidth()){
-				newX = visible_screen_boundaries.getScreenWidth() - width;
+			if (oldX <= x){
+				newX = (posXDir >= x) ? x : posXDir;
+			} else if (oldX > x) {
+				newX = (negXDir <= x) ? x : negXDir;
+			}
+					
+			if (newX + width >= screenWidth){
+				newX = screenWidth - width;
 			} else if (newX < 0){
 				newX = 0;
 			}
@@ -86,12 +98,15 @@ public abstract class Animal {
 			position.setX(newX);
 		}
 		
-		if (oldY != y){
-			newY = (oldY < y) ? oldY+PACE : oldY-PACE;
+		if (oldY != y || oldY == screenHeight || oldY == 0){
+			if (oldY <= y){
+				newY = (posYDir >= y) ? y : posYDir;
+			} else {
+				newY = (negYDir <= y) ? y : negYDir;
+			}
 			
-			if (newY + height >= visible_screen_boundaries
-					.getScreenHeight()) {
-				newY = visible_screen_boundaries.getScreenHeight() - height;
+			if (newY + height >= screenHeight) {
+				newY = screenHeight - height;
 			} else if (newY < 0){
 				newY = 0;
 			}

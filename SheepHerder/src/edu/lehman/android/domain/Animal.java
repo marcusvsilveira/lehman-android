@@ -66,7 +66,7 @@ public abstract class Animal {
 	 * @param y the y coordinate to move towards
 	 */
 	public void moveTo(final int x, final int y) {
-		final int PACE = 15 + getSpeed();
+		final int PACE = getSpeed();
 		Position p = getPosition();
 		int oldX = p.getX();
 		int oldY = p.getY();
@@ -169,7 +169,7 @@ public abstract class Animal {
 	 * @return the speed of the animal
 	 */
 	public int getSpeed() {
-		return speed;
+		return speed * 3; //make speed more significant because it will use to be rendered (pixels)
 	}
 
 	/**

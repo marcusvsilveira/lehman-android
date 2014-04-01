@@ -77,7 +77,10 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 	private Random locationGenerator = new Random();
 	
 	private boolean dogMovementLock = false;
-
+	private boolean isLongPressing = false;
+	private int dogDirectionY;
+	private int dogDirectionX;
+	
 	// Approximates 1/60 of a second. The game runs at 60 FPS
 	private final int GAME_SPEED = 17;
 	private final String LOG_TAG = "GameSurfaceView";
@@ -125,19 +128,31 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 	private synchronized boolean isDogLocked() {
 		return this.dogMovementLock;
 	}
-
+	private synchronized void stopLongPress() {
+		this.isLongPressing = false;
+	}
+	private synchronized void longPress(int x, int y) {
+		this.isLongPressing = true;
+		this.dogDirectionX = x;
+		this.dogDirectionY = y;
+	}
+	private synchronized boolean isLongPressing() {
+		return this.isLongPressing;
+	}
+	
 	@Override
 	public boolean onTouchEvent(MotionEvent me) {
 		int action = me.getAction();
 		// Get the action event that happened and the location that was
 		// pressed on the screen, then move the dog there
-		if (action == MotionEvent.ACTION_DOWN
-				|| action == MotionEvent.ACTION_UP
-				|| action == MotionEvent.ACTION_MOVE) {
+		if (action == MotionEvent.ACTION_DOWN) {
 			if(! isDogLocked() ) {
 				this.locksDog(true);
-				dog.moveTo((int) me.getX(), (int) me.getY());
+				this.longPress((int) me.getX(), (int) me.getY());
 			}
+		} else if (action == MotionEvent.ACTION_UP
+				|| action == MotionEvent.ACTION_CANCEL) {
+			this.stopLongPress();
 		}
 		return true;
 		
@@ -240,8 +255,13 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 			private void moveDog() {
 				if(isDogLocked() ) {
 					locksDog(false);
-				} else {
-					//no movement was recorded - nothing to be changed
+//				} else { 
+					//no new movement was recorded - nothing to be changed unless it's long pressing 
+//				}
+				}
+				
+				if(isLongPressing()) {
+					dog.moveTo(dogDirectionX, dogDirectionY);
 				}
 				Position dogPosition = dog.getPosition();
 				canvas.drawBitmap(dogBitmap, dogPosition.getX(),

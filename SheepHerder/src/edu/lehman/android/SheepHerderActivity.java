@@ -105,7 +105,7 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 	protected void onStart() {
 		super.onStart();
 		
-		new CountDownTimer (40 * 1000, 1* 1000) 
+		new CountDownTimer (200 * 1000, 1* 1000) 
 		{
 	        
 			TextView timerView = (TextView) findViewById(R.id.timer);

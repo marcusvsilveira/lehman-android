@@ -281,9 +281,11 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 							canvas.drawBitmap(foxBitmap, foxPosition.getX(), foxPosition.getY(), null);
 							if(!wasEating && fox.isEating()) {
 								//TODO take points out
+								Log.e(LOG_TAG, "Fox finished eating");
 							}
 						} else {
 							//TODO possibly count points here. You got the fox!
+							Log.e(LOG_TAG, "You got the fox");
 						}
 					} else {
 //						Log.e(LOG_TAG, "Fox is not visible, check if it can respawn");
@@ -294,6 +296,8 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 							fox.spawn(foxNewPos);
 							canvas.drawBitmap(foxBitmap, foxNewPos.getX(), foxNewPos.getY(), null);
 							Log.e(LOG_TAG, "Fox is now visible, position: "+ foxNewPos);
+						} else {
+							Log.e(LOG_TAG, "Fox is not visible and not ready to respawn");
 						}
 					}
 				}

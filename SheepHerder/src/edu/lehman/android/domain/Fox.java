@@ -44,7 +44,7 @@ public class Fox extends Animal {
 	}
 
 	public void move(Dog dog, List<Sheep> sheepList) {
-		if(isVisible) {
+//		if(isVisible) {
 			if(isEating) {
 				if(eatingClock > 0) {
 					Log.i(LOG_TAG, "FOX IS EATING");
@@ -75,7 +75,7 @@ public class Fox extends Animal {
 				Log.i(LOG_TAG, "FOX CHASING");
 				chaseClosest(sheepList);
 			} 
-		}
+//		}
 		
 	}
 	
@@ -192,18 +192,18 @@ public class Fox extends Animal {
 		
 		(getPosition()).setX(foxPos);
 		
-		if (foxPos < 0 || foxPos > visible_screen_boundaries.getScreenWidth());
-				setVisible(false); // Fox gets away
+//		if (foxPos < 0 || foxPos > visible_screen_boundaries.getScreenWidth());
+//				setVisible(false); // Fox gets away
 	}
 
 	@Override
 	public void moveY(int moveY) {
-		int foxPos = getPosition().getY();
+		int foxPos = getPosition().getY() + moveY;
 
 		(getPosition()).setY(foxPos);
 
-		if (foxPos < 0 || foxPos > visible_screen_boundaries.getScreenHeight())
-			setVisible(false); // Fox gets away
+//		if (foxPos < 0 || foxPos > visible_screen_boundaries.getScreenHeight())
+//			setVisible(false); // Fox gets away
 	}
 
 	/**

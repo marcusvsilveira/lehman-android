@@ -46,11 +46,11 @@ public abstract class Animal {
 		final Position animalPosition = animal.getPosition();
 		final int RADIUS;
 
-		if (animal instanceof Fox)
-			RADIUS = 40;
-		else if (animal instanceof Sheep)
-			RADIUS = 100;
-		else
+//		if (animal instanceof Fox)
+//			RADIUS = 40;
+//		else if (animal instanceof Sheep)
+//			RADIUS = 100;
+//		else
 			RADIUS = 40;
 
 		return Math.abs(position.getX() - animalPosition.getX()) < RADIUS

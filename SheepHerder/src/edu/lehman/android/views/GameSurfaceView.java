@@ -263,8 +263,8 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 					dog.moveTo(dogDirectionX, dogDirectionY);
 				}
 				Position dogPosition = dog.getPosition();
-				canvas.drawBitmap(dogBitmap, dogPosition.getX(),
-						dogPosition.getY(), null);
+				canvas.drawBitmap(dogBitmap, dogPosition.getX() - dogBitmap.getWidth()/2,
+						dogPosition.getY() - dogBitmap.getHeight()/2, null);
 			}
 
 			private void moveFox() {
@@ -277,7 +277,7 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 						
 						if( fox.isVisible()) { //still visible, still in the game
 							foxPosition = fox.getPosition();
-							canvas.drawBitmap(foxBitmap, foxPosition.getX(), foxPosition.getY(), null);
+							canvas.drawBitmap(foxBitmap, foxPosition.getX() - foxBitmap.getWidth()/2, foxPosition.getY() - foxBitmap.getHeight()/2, null);
 							if(!wasEating && fox.isEating()) {
 								Log.e(LOG_TAG, "Fox started to eat");
 							} else if( wasEating && !fox.isEating()) {
@@ -287,6 +287,7 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 						} else {
 							//TODO possibly count points here. You got the fox!
 							// TODO -> also give move time for the game as a bonus!!
+							//increase fox speed (more difficult) or add more foxes - just don't go over the speed limit :-)
 							Log.e(LOG_TAG, "You got the fox");
 						}
 					} else {
@@ -296,7 +297,7 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 							Position foxNewPos = spawnFox(locationGenerator, Fox.NUM_EDGES,
 									Fox.OFF_SCREEN_FOX_RANGE, Fox.FOX_STARTING_POINT);
 							fox.spawn(foxNewPos);
-							canvas.drawBitmap(foxBitmap, foxNewPos.getX(), foxNewPos.getY(), null);
+							canvas.drawBitmap(foxBitmap, foxNewPos.getX() - foxBitmap.getWidth()/2, foxNewPos.getY() - foxBitmap.getHeight()/2, null);
 							Log.e(LOG_TAG, "Fox is now visible, position: "+ foxNewPos);
 						} else {
 //							Log.e(LOG_TAG, "Fox is not visible and not ready to respawn");
@@ -325,7 +326,7 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 							}
 							sheepPosition = sheep.getPosition();
 							canvas.drawBitmap(currentSheepBitmap,
-									sheepPosition.getX(), sheepPosition.getY(),
+									sheepPosition.getX() - currentSheepBitmap.getWidth()/2, sheepPosition.getY() - currentSheepBitmap.getHeight()/2,
 									null);
 						}
 					}

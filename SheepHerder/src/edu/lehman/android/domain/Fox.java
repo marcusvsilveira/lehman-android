@@ -15,6 +15,8 @@ public class Fox extends Animal {
 	public static final int OUT_OF_RANGE_RADIUS = 100000;
 	public static final int RANGE_OF_WAITING_TIME = 30; // time for the fox to wait in
 													// seconds
+	public static final int DOG_AWARENESS_RANGE = 40;
+	
 	public static final int NUM_EDGES = 4;
 	public static final int OFF_SCREEN_FOX_RANGE = 20;
 	public static final int FOX_STARTING_POINT = 100;
@@ -44,7 +46,10 @@ public class Fox extends Animal {
 	}
 
 	public void move(Dog dog, List<Sheep> sheepList) {
-//		if(isVisible) {
+		if (dog.collidesWith(this)) {
+			Log.i(LOG_TAG, "FOX WAS CAUGHT");
+			caught(sheepList);
+		} else {
 			if(isEating) {
 				if(eatingClock > 0) {
 					Log.i(LOG_TAG, "FOX IS EATING");
@@ -65,17 +70,14 @@ public class Fox extends Animal {
 				}
 			}
 			
-			if (dog.collidesWith(this)) {
-				Log.i(LOG_TAG, "FOX WAS CAUGHT");
-				caught(sheepList);
-			} else if (dog.closeTo(this)) {
+			if (dog.closeTo(this, DOG_AWARENESS_RANGE)) {
 				Log.i(LOG_TAG, "FOX EVADE");
 				evade(dog);
 			} else {
 				Log.i(LOG_TAG, "FOX CHASING");
 				chaseClosest(sheepList);
 			} 
-//		}
+		}
 		
 	}
 	
@@ -168,7 +170,7 @@ public class Fox extends Animal {
 		int fox_x = getPosition().getX();
 		int fox_y = getPosition().getY();
 
-		while (closeTo(dog)) {
+		while (dog.closeTo(this, DOG_AWARENESS_RANGE)) {
 			float dx = Math.abs(dog_position.getX() - fox_x);
 			float dy = Math.abs(dog_position.getY() - fox_y);
 

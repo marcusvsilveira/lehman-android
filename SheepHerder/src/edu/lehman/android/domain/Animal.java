@@ -42,19 +42,10 @@ public abstract class Animal {
 	/**
 	 * Determines if one animal is close to another animal
 	 */
-	public boolean closeTo(final Animal animal) {
+	public boolean closeTo(final Animal animal, int radius) {
 		final Position animalPosition = animal.getPosition();
-		final int RADIUS;
-
-//		if (animal instanceof Fox)
-//			RADIUS = 40;
-//		else if (animal instanceof Sheep)
-//			RADIUS = 100;
-//		else
-			RADIUS = 40;
-
-		return Math.abs(position.getX() - animalPosition.getX()) < RADIUS
-				&& Math.abs(position.getY() - animalPosition.getY()) < RADIUS;
+		return Math.abs(position.getX() - animalPosition.getX()) < radius
+				&& Math.abs(position.getY() - animalPosition.getY()) < radius;
 	}
 	
 	/**

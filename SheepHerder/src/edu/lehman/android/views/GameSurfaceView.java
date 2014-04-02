@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import edu.lehman.android.R;
 import edu.lehman.android.domain.Dog;
 import edu.lehman.android.domain.Fox;
 import edu.lehman.android.domain.Position;
@@ -13,6 +14,7 @@ import edu.lehman.android.factory.AnimalType;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.Log;
@@ -63,6 +65,7 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 	private Bitmap dogBitmap;
 	private Bitmap foxBitmap;
 	private Bitmap sheepBitmap;
+	private Bitmap sheepBeingEatenBitmap;
 
 	private SurfaceHolder surfaceHolder;
 	private Thread gameThread;
@@ -87,13 +90,10 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 
 
 	public GameSurfaceView(Context context,
-			final Bitmap dogBitmap, final Bitmap foxBitmap,
-			final Bitmap sheepBitmap, final int NUM_FOX, final int NUM_SHEEP,
+			final int NUM_FOX, final int NUM_SHEEP,
 			final int DOG_SPEED, final int FOX_SPEED, final int SHEEP_SPEED) {
 		super(context);
-		this.dogBitmap = dogBitmap;
-		this.foxBitmap = foxBitmap;
-		this.sheepBitmap = sheepBitmap;
+		
 		this.NUM_FOX = NUM_FOX;
 		this.NUM_SHEEP = NUM_SHEEP;
 		this.DOG_SPEED = DOG_SPEED;
@@ -168,14 +168,13 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 
 			@Override
 			public void run() {
+				dogBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.gamedog);
+				foxBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.gamefox);
+				sheepBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.gamesheep);
+				sheepBeingEatenBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.gamesheepeaten);
 				
 				int loc_x, loc_y;
 
-				// TODO
-				// initialize dog, fox, and sheep objects and get some info from
-				// the sharedPreferences (possibly to be passed by parameter
-				// here)
-				// we need to make sure it gets created
 				dog = (Dog) AnimalFactory.createAnimal(AnimalType.DOG, 0, 0,
 						DOG_SPEED, dogBitmap.getWidth(), dogBitmap.getHeight(),
 						surfaceBoundaries);
@@ -280,11 +279,14 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 							foxPosition = fox.getPosition();
 							canvas.drawBitmap(foxBitmap, foxPosition.getX(), foxPosition.getY(), null);
 							if(!wasEating && fox.isEating()) {
+								Log.e(LOG_TAG, "Fox started to eat");
+							} else if( wasEating && !fox.isEating()) {
 								//TODO take points out
 								Log.e(LOG_TAG, "Fox finished eating");
 							}
 						} else {
 							//TODO possibly count points here. You got the fox!
+							// TODO -> also give move time for the game as a bonus!!
 							Log.e(LOG_TAG, "You got the fox");
 						}
 					} else {
@@ -297,7 +299,7 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 							canvas.drawBitmap(foxBitmap, foxNewPos.getX(), foxNewPos.getY(), null);
 							Log.e(LOG_TAG, "Fox is now visible, position: "+ foxNewPos);
 						} else {
-							Log.e(LOG_TAG, "Fox is not visible and not ready to respawn");
+//							Log.e(LOG_TAG, "Fox is not visible and not ready to respawn");
 						}
 					}
 				}
@@ -312,14 +314,19 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 						//TODO show score
 						running = false;
 					} else {
+						Bitmap currentSheepBitmap;
 						for (Sheep sheep : sheepList) {
+							
 							if (!sheep.isBeingEaten()) {
 								sheep.move(foxList, dog);
-								sheepPosition = sheep.getPosition();
-								canvas.drawBitmap(sheepBitmap,
-										sheepPosition.getX(), sheepPosition.getY(),
-										null);
+								currentSheepBitmap = sheepBitmap;
+							} else {
+								currentSheepBitmap = sheepBeingEatenBitmap;
 							}
+							sheepPosition = sheep.getPosition();
+							canvas.drawBitmap(currentSheepBitmap,
+									sheepPosition.getX(), sheepPosition.getY(),
+									null);
 						}
 					}
 				}

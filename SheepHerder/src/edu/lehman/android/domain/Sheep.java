@@ -12,7 +12,7 @@ import edu.lehman.android.views.GameSurfaceView.Boundaries;
  *
  */
 public class Sheep extends Animal {
-	public static final float FOX_AWARENESS_RANGE = 200;
+	public static final int FOX_AWARENESS_RANGE = 200;
 
 	private boolean isBeingEaten = false;
 	private int direction = 0;
@@ -20,10 +20,7 @@ public class Sheep extends Animal {
 	/*
 	 * The directions a sheep can move in
 	 */
-	private final int UP = 0;
-	private final int DOWN = 1;
-	private final int LEFT = 2;
-	private final int RIGHT = 3;
+	
 
 	private Fox closestFox;
 
@@ -156,6 +153,4 @@ public class Sheep extends Animal {
 		if (direction == RIGHT)
 			moveX(speed);
 	}
-	
-	
 }

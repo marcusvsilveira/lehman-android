@@ -1,6 +1,5 @@
 package edu.lehman.android;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -36,6 +35,18 @@ public class MainActivity extends Activity {
 		startGame = (Button) findViewById(R.id.startButton);
 		quitButton = (Button) findViewById(R.id.quitButton);
 
+		Log.i(LOG_TAG, "MainActivity.onCreate()");
+	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		Log.i(LOG_TAG, "MainActivity.onRestart()");
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
 		// setup listeners
 		quitButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -63,19 +74,6 @@ public class MainActivity extends Activity {
 				startActivity(startGameIntent);
 			}
 		});
-
-		Log.i(LOG_TAG, "MainActivity.onCreate()");
-	}
-
-	@Override
-	protected void onRestart() {
-		super.onRestart();
-		Log.i(LOG_TAG, "MainActivity.onRestart()");
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
 		Log.i(LOG_TAG, "MainActivity.onStart()");
 	}
 

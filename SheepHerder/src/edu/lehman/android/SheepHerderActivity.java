@@ -1,7 +1,7 @@
 package edu.lehman.android;
 
 import edu.lehman.android.views.GameSurfaceView;
-import interfaces.SettingsInterface;
+import interfaces.Settings;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.app.Activity;
@@ -23,7 +23,7 @@ import android.widget.TextView;
  * 
  * 
  */
-public class SheepHerderActivity extends Activity implements SettingsInterface {
+public class SheepHerderActivity extends Activity implements Settings {
 	private static final String LOG_TAG = "SheepHerderActivity";
 
 	private int DOG_SPEED;
@@ -86,11 +86,12 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 		SHEEP_SPEED = settings.getInt(SHEEP_SPEED_PREFS, DEFAULT_SHEEP_SPEED);
 		FOX_SPEED = settings.getInt(FOX_SPEED_PREFS, DEFAULT_FOX_SPEED);
 
-		Log.i(LOG_TAG, "Dog speed: " + DOG_SPEED);
+		/*Log.i(LOG_TAG, "Dog speed: " + DOG_SPEED);
 		Log.i(LOG_TAG, "# Sheep: " + NUM_SHEEP);
 		Log.i(LOG_TAG, "# Foxes: " + NUM_FOXES);
 		Log.i(LOG_TAG, "Sheep speed: " + SHEEP_SPEED);
 		Log.i(LOG_TAG, "Fox speed: " + FOX_SPEED);
+		*/
 	}
 
 	@Override
@@ -104,25 +105,21 @@ public class SheepHerderActivity extends Activity implements SettingsInterface {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		
-		new CountDownTimer (200 * 1000, 1* 1000) 
-		{
-	        
+		final int MILLIS_IN_FUTURE = 20000;
+		final int INTERVAL = 1000;
+
+		new CountDownTimer(MILLIS_IN_FUTURE, INTERVAL) {
+
 			TextView timerView = (TextView) findViewById(R.id.timer);
-			
-			
-	        public  void onTick(long millisUntilFinished) 
-	        {
-				timerView.setText("Time-Left :" + millisUntilFinished / 1000);
-		
+
+			public void onTick(long millisUntilFinished) {
+				timerView.setText("Time-Left :" + millisUntilFinished / INTERVAL);
 			}
-	        
-			public void onFinish() 
-			{	
-				timerView.setText("Time-up  :   Your Score =" );
-                onStop();
-                   
-			}	
+
+			public void onFinish() {
+				timerView.setText("Time-up  :   Your Score =");
+				onStop();
+			}
 		}.start();
 		
 		Log.i(LOG_TAG, "SheepHerderActivity.onStart()");

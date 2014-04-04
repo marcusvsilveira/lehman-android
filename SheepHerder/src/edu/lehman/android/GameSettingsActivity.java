@@ -1,6 +1,6 @@
 package edu.lehman.android;
 
-import interfaces.SettingsInterface;
+import interfaces.Settings;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -26,7 +26,7 @@ import android.widget.TextView;
  * @author Prince Oladimeji
  * @revisionhistory 3/01/2014 - Adding logs to each lifecycle state for later
  *                  use on integration tests 3/1/2014 - A new interface,
- *                  SettingsInterface, is implemented so that this class can
+ *                  Settings, is implemented so that this class can
  *                  work with the default preferences file and their own
  *                  user-created preferences file. The settings from the
  *                  preferences file are reflected in the initial positions of
@@ -43,8 +43,38 @@ import android.widget.TextView;
  * 
  *                  2/4/2014 - File created
  */
-public class GameSettingsActivity extends Activity implements SettingsInterface {
+public class GameSettingsActivity extends Activity implements Settings {
 
+	private class RadioListener implements RadioGroup.OnCheckedChangeListener {	
+		
+		@Override
+		public void onCheckedChanged(RadioGroup group, int checkedId) {
+			switch(checkedId) {
+				case R.id.oneFoxButton: 
+					NUM_FOXES = 1;
+					break;
+				case R.id.three_foxes: 
+					NUM_FOXES = 3;
+					break;
+				case R.id.five_foxes: 
+					NUM_FOXES = 5;
+					break;
+				case R.id.five_sheeps: 
+					NUM_SHEEP = 5;
+					break;
+				case R.id.ten_sheeps: 
+					NUM_SHEEP = 10;
+					break;
+				case R.id.fifteen_sheeps: 
+					NUM_SHEEP = 15;
+					break;
+			}
+			
+			//Log.i(LOG_TAG, "sheep count: "+ NUM_SHEEP);
+			//Log.i(LOG_TAG, "fox count: "+ NUM_FOXES);
+		}
+	}
+	
 	private static final String LOG_TAG = "GameSettingsActivity";
 
 	private SeekBar dogSpeedSeekBar, foxSpeedSeekBar, sheepSpeedSeekBar;
@@ -80,123 +110,7 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 		foxRadioGroup = (RadioGroup) findViewById(R.id.fox_radios);
 		sheepRadioGroup = (RadioGroup) findViewById(R.id.sheep_radios);
 		
-		// Implement actionlisteners and tie actionlisteners to the
-		// variables that hold the preferences in the background thread
-		backButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				finish();
-			}
-		});
-
-		//radio buttons
-		radioListener = new RadioListener();
-		foxRadioGroup.setOnCheckedChangeListener(radioListener);
-		sheepRadioGroup.setOnCheckedChangeListener(radioListener);
-		
-		dogSpeedSeekBar
-				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
-					@Override
-					public void onProgressChanged(SeekBar seekBar,
-							int progressValue, boolean fromUser) {
-						DOG_SPEED = progressValue;
-
-					}
-
-					public void onStartTrackingTouch(SeekBar seekBar) {
-						// Do something here if you want to do anything at
-						// the start of touching the seekbar
-					}
-
-					@Override
-					public void onStopTrackingTouch(SeekBar seekBar) {
-						// Display the value in textview
-
-						textView1.setText(DOG_SPEED + "/"
-								+ dogSpeedSeekBar.getMax());
-
-					}
-				});
-
-		foxSpeedSeekBar
-				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
-					@Override
-					public void onProgressChanged(SeekBar seekBar,
-							int progressValue, boolean fromUser) {
-						FOX_SPEED = progressValue;
-
-					}
-
-					@Override
-					public void onStartTrackingTouch(SeekBar seekBar) {
-						// Do something here if you want to do anything at
-						// the start
-						// of touching the seekbar
-					}
-
-					public void onStopTrackingTouch(SeekBar seekBar) {
-						// Display the value in textview
-
-						textView2.setText(FOX_SPEED + "/"
-								+ foxSpeedSeekBar.getMax());
-
-					}
-				});
-
-		sheepSpeedSeekBar
-				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
-					public void onProgressChanged(SeekBar seekBar,
-							int progressValue, boolean fromUser) {
-						SHEEP_SPEED = progressValue;
-
-					}
-
-					public void onStartTrackingTouch(SeekBar seekBar) {
-						// Do something here if you want to do anything at
-						// the start
-						// of touching the seekbar
-					}
-
-					public void onStopTrackingTouch(SeekBar seekBar) {
-						// Display the value in textview
-						textView3.setText(SHEEP_SPEED + "/"
-								+ sheepSpeedSeekBar.getMax());
-
-					}
-				});
-
 		Log.i(LOG_TAG, "GameSettingsActivity.onCreate()");
-	}
-
-	private class RadioListener implements RadioGroup.OnCheckedChangeListener {	
-		@Override
-		public void onCheckedChanged(RadioGroup group, int checkedId) {
-			switch(checkedId) {
-				case R.id.oneFoxButton: 
-					NUM_FOXES = 1;
-					break;
-				case R.id.three_foxes: 
-					NUM_FOXES = 3;
-					break;
-				case R.id.five_foxes: 
-					NUM_FOXES = 5;
-					break;
-				case R.id.five_sheeps: 
-					NUM_SHEEP = 5;
-					break;
-				case R.id.ten_sheeps: 
-					NUM_SHEEP = 10;
-					break;
-				case R.id.fifteen_sheeps: 
-					NUM_SHEEP = 15;
-					break;
-			}
-			Log.i(LOG_TAG, "sheep count: "+ NUM_SHEEP);
-			Log.i(LOG_TAG, "fox count: "+ NUM_FOXES);
-		}
 	}
 	
 	@Override
@@ -278,6 +192,94 @@ public class GameSettingsActivity extends Activity implements SettingsInterface 
 	@Override
 	protected void onStart() {
 		super.onStart();
+		
+		// Implement actionlisteners and tie actionlisteners to the
+				// variables that hold the preferences in the background thread
+				backButton.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View arg0) {
+						finish();
+					}
+				});
+
+				//radio buttons
+				radioListener = new RadioListener();
+				foxRadioGroup.setOnCheckedChangeListener(radioListener);
+				sheepRadioGroup.setOnCheckedChangeListener(radioListener);
+				
+				dogSpeedSeekBar
+						.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+							@Override
+							public void onProgressChanged(SeekBar seekBar,
+									int progressValue, boolean fromUser) {
+								DOG_SPEED = progressValue;
+
+							}
+
+							public void onStartTrackingTouch(SeekBar seekBar) {
+								// Do something here if you want to do anything at
+								// the start of touching the seekbar
+							}
+
+							@Override
+							public void onStopTrackingTouch(SeekBar seekBar) {
+								// Display the value in textview
+
+								textView1.setText(DOG_SPEED + "/"
+										+ dogSpeedSeekBar.getMax());
+
+							}
+						});
+
+				foxSpeedSeekBar
+						.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+							@Override
+							public void onProgressChanged(SeekBar seekBar,
+									int progressValue, boolean fromUser) {
+								FOX_SPEED = progressValue;
+
+							}
+
+							@Override
+							public void onStartTrackingTouch(SeekBar seekBar) {
+								// Do something here if you want to do anything at
+								// the start
+								// of touching the seekbar
+							}
+
+							public void onStopTrackingTouch(SeekBar seekBar) {
+								// Display the value in textview
+
+								textView2.setText(FOX_SPEED + "/"
+										+ foxSpeedSeekBar.getMax());
+
+							}
+						});
+
+				sheepSpeedSeekBar
+						.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+							public void onProgressChanged(SeekBar seekBar,
+									int progressValue, boolean fromUser) {
+								SHEEP_SPEED = progressValue;
+
+							}
+
+							public void onStartTrackingTouch(SeekBar seekBar) {
+								// Do something here if you want to do anything at
+								// the start
+								// of touching the seekbar
+							}
+
+							public void onStopTrackingTouch(SeekBar seekBar) {
+								// Display the value in textview
+								textView3.setText(SHEEP_SPEED + "/"
+										+ sheepSpeedSeekBar.getMax());
+
+							}
+						});
 
 		// Set up the action listeners for the components
 		loadPreferences();

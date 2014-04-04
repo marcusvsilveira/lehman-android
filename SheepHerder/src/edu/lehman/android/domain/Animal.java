@@ -1,5 +1,6 @@
 package edu.lehman.android.domain;
 
+import interfaces.Orientable;
 import android.util.Log;
 import edu.lehman.android.factory.AnimalType;
 import edu.lehman.android.views.GameSurfaceView.Boundaries;
@@ -11,7 +12,7 @@ import edu.lehman.android.views.GameSurfaceView.Boundaries;
  * @author Marcos Davila
  *
  */
-public abstract class Animal {
+public abstract class Animal implements Orientable {
 
 	protected int speed;
 	protected Position position;
@@ -43,18 +44,10 @@ public abstract class Animal {
 	 * Determines if one animal is close to another animal
 	 */
 	public boolean closeTo(final Animal animal) {
-		final Position animalPosition = animal.getPosition();
-		final int RADIUS;
+		final int RADIUS = 40;
 
-//		if (animal instanceof Fox)
-//			RADIUS = 40;
-//		else if (animal instanceof Sheep)
-//			RADIUS = 100;
-//		else
-			RADIUS = 40;
-
-		return Math.abs(position.getX() - animalPosition.getX()) < RADIUS
-				&& Math.abs(position.getY() - animalPosition.getY()) < RADIUS;
+		return Math.abs(position.x - animal.position.x) < RADIUS
+				&& Math.abs(position.y - animal.position.y) < RADIUS;
 	}
 	
 	/**
@@ -66,15 +59,13 @@ public abstract class Animal {
 	 * @param y the y coordinate to move towards
 	 */
 	public void moveTo(final int x, final int y) {
-		final int PACE = getSpeed();
-		Position p = getPosition();
-		int oldX = p.getX();
-		int oldY = p.getY();
+		final int oldX = position.x;
+		final int oldY = position.y;
 		int newX = 0, newY = 0;
-		final int posXDir = oldX+PACE;
-		final int negXDir = oldX-PACE;
-		final int posYDir = oldY+PACE;
-		final int negYDir = oldY-PACE;
+		final int posXDir = oldX+speed;
+		final int negXDir = oldX-speed;
+		final int posYDir = oldY+speed;
+		final int negYDir = oldY-speed;
 		final int screenWidth = visible_screen_boundaries.getScreenWidth();
 		final int screenHeight = visible_screen_boundaries.getScreenHeight();
 		
@@ -95,7 +86,7 @@ public abstract class Animal {
 				newX = 0;
 			}
 			
-			position.setX(newX);
+			position.x = newX;
 		}
 		
 		if (oldY != y || oldY == screenHeight || oldY == 0){
@@ -111,7 +102,7 @@ public abstract class Animal {
 				newY = 0;
 			}
 			 
-			position.setY(newY);
+			position.y = newY;
 		}
 	}
 	
@@ -123,8 +114,7 @@ public abstract class Animal {
 	// Sheeps only care about moving in one direction at a time, so 
 	// create these methods to call moveTo methods much more easily
 	public void moveX(int moveX){
-		Position p = getPosition();
-		moveTo(p.getX() + moveX, p.getY());
+		moveTo(position.x + moveX, position.y);
 	}
 	
 	/**
@@ -133,8 +123,7 @@ public abstract class Animal {
 	 * @param moveY the speed and direction to move in
 	 */
 	public void moveY(int moveY){
-		Position p = getPosition();
-		moveTo(p.getX(), p.getY() + moveY);
+		moveTo(position.x, position.y + moveY);
 	}
 	
 	/**
@@ -146,15 +135,15 @@ public abstract class Animal {
 	public boolean collidesWith (Animal anotherAnimal) {
 		if(anotherAnimal == null) return false;
 	     
-		float x1min = position.getX();
-		float y1min = position.getY();
-		float x1max = position.getX() + width;
-		float y1max = position.getY() + height;
+		int x1min = position.x;
+		int y1min = position.x;
+		int x1max = position.y + width;
+		int y1max = position.y + height;
 		
-		float x2min = anotherAnimal.getPosition().getX();
-		float y2min = anotherAnimal.getPosition().getY();
-		float x2max = anotherAnimal.position.getX() + anotherAnimal.getWidth();
-		float y2max = anotherAnimal.position.getX() + anotherAnimal.getHeight();
+		int x2min = anotherAnimal.position.x;
+		int y2min = anotherAnimal.position.y;
+		int x2max = anotherAnimal.position.x + anotherAnimal.height;
+		int y2max = anotherAnimal.position.x + anotherAnimal.height;
 
  		return (
 		    (x1min <= x2max) &&

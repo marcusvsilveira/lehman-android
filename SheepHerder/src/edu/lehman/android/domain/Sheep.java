@@ -12,7 +12,9 @@ import edu.lehman.android.views.GameSurfaceView.Boundaries;
  *
  */
 public class Sheep extends Animal {
-	public static final int FOX_AWARENESS_RANGE = 200;
+
+	public static final int FOX_AWARENESS_RANGE = 40;
+	public static final int DOG_AWARENESS_RANGE = 40;
 
 	private boolean isBeingEaten = false;
 	private int direction = 0;
@@ -52,9 +54,9 @@ public class Sheep extends Animal {
 	public void move(List<Fox> foxList, Dog dog) {
 		if (!isBeingEaten) {
 			if (sees(foxList)) {
-				evade(closestFox);
-			} else if (dog.closeTo(this)) {
-				evade(dog);
+				evade(closestFox, dog);
+			} else if (dog.closeTo(this, DOG_AWARENESS_RANGE)) {
+				evade(closestFox, dog);
 			} else {
 				graze();
 			}
@@ -83,17 +85,50 @@ public class Sheep extends Animal {
 	 * sheep.
 	 * @param animal the fox or dog entity that the sheep should run away from
 	 */
-	public void evade(Animal animal) {
-		int animalX = animal.getPosition().getX();
-		int animalY = animal.getPosition().getY();
-
+	public void evade(Fox fox, Dog dog) {
+		int animalX = 0;
+		int animalY = 0;
+		
+		int dogX = dog.getPosition().getX();
+		int dogY = dog.getPosition().getY();
+		
 		int x = position.getX();
 		int y = position.getY();
 
-		int dx = Math.abs(animalX - x);
-		int dy = Math.abs(animalY - y);
+		int dxDog = Math.abs(dogX - x);
+		int dyDog = Math.abs(dogY - y);
+		
+		if( fox != null && fox.isVisible() ) {
+			int foxX = fox.getPosition().getX();
+			int foxY = fox.getPosition().getY();
+	
+			int dxFox = Math.abs(foxX - x);
+			int dyFox = Math.abs(foxY - y);
+			//who's closer?
+			if( (dxFox + dyFox) > (dxDog + dyDog) ) {
+				//dog is closer
+				//evade from dog
+				animalX = dogX;
+				animalY = dogY;
+			} else {
+				//fox is closer
+				//evade from fox
+				animalX = foxX;
+				animalY = foxY;
+			}
+		} else {
+			//evade from dog
+			animalX = dogX;
+			animalY = dogY;
+		}
+		
+		//TODO this could be a little more intelligent to avoid moving into the other direction where the other animal might be
+		//also, this could work better if we consider the speed of both (or accelaration)
+		evade(x, y, animalX, animalY);
+	}
 
-		if (dx > dy) {
+	private void evade(int x, int y, int animalX, int animalY) {
+		if(animalX > animalY) {
 			if (animalX > x) {
 				moveX(-speed);
 				direction = LEFT;
@@ -123,12 +158,16 @@ public class Sheep extends Animal {
 	public boolean sees(List<Fox> foxList) {
 		boolean sees = false;
 
+		Fox fox;
 		for (int i = 0; i < foxList.size(); i++) {
-			sees = this.closeTo(foxList.get(i));
-
-			if (sees) {
-				closestFox = foxList.get(i);
-				break;
+			fox = foxList.get(i);
+			if(fox.isVisible()) {
+				sees = this.closeTo(fox, FOX_AWARENESS_RANGE);
+	
+				if (sees) {
+					closestFox = foxList.get(i);
+					break;
+				}
 			}
 		}
 

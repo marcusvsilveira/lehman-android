@@ -168,25 +168,25 @@
 	        android:text="# of Sheep" />
 	
 	        <RadioButton
-	         android:id="@+id/five_sheeps"
+	         android:id="@+id/ten_sheeps"
 	         android:layout_width="wrap_content"
 	         android:layout_height="wrap_content"
 	         android:gravity="right"
-	         android:text="five" />
+	         android:text="ten" />
 	        
 	        <RadioButton
-	        android:id="@+id/ten_sheeps"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:gravity="right"
-	        android:text="ten" />
-	         
-	       <RadioButton
 	        android:id="@+id/fifteen_sheeps"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:gravity="right"
 	        android:text="fifteen" />
+	         
+	       <RadioButton
+	        android:id="@+id/twenty_sheeps"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:gravity="right"
+	        android:text="twenty" />
 	
 	    </RadioGroup>
 	    
@@ -210,22 +210,22 @@
 	        android:text="# of fox" />
 	
 	        <RadioButton
-	         android:id="@+id/oneFoxButton"
+	         android:id="@+id/five_foxes"
 	         android:layout_width="wrap_content"
 	         android:layout_height="wrap_content"
-	         android:text="one" />
+	         android:text="five" />
 	        
 	        <RadioButton
-	        android:id="@+id/three_foxes"
+	        android:id="@+id/eight_foxes"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="three" />
+	        android:text="eight" />
 	         
 	       <RadioButton
-	        android:id="@+id/five_foxes"
+	        android:id="@+id/twelve_foxes"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="five" />
+	        android:text="twelve" />
 	
 	    </RadioGroup>
 	

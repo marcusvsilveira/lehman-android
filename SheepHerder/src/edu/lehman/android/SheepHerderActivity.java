@@ -57,9 +57,6 @@ public class SheepHerderActivity extends Activity implements Settings {
 		});
 		loadPreferences();
 		this.surfaceView = new GameSurfaceView(getApplicationContext(), 
-				BitmapFactory.decodeResource(getResources(), R.drawable.gamedog),
-				BitmapFactory.decodeResource(getResources(), R.drawable.gamefox),
-				BitmapFactory.decodeResource(getResources(), R.drawable.gamesheep), 
 				NUM_FOXES, NUM_SHEEP, DOG_SPEED, FOX_SPEED, SHEEP_SPEED );
 		this.surfaceLayout.addView(this.surfaceView); //touch events will already be handled by the surfaceView
 				

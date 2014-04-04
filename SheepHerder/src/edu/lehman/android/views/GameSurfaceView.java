@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import edu.lehman.android.R;
 import edu.lehman.android.domain.Dog;
 import edu.lehman.android.domain.Fox;
 import edu.lehman.android.domain.Position;
@@ -15,6 +16,7 @@ import edu.lehman.android.factory.AnimalType;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Process;
@@ -66,6 +68,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 	private Bitmap dogBitmap;
 	private Bitmap foxBitmap;
 	private Bitmap sheepBitmap;
+	private Bitmap sheepBeingEatenBitmap;
 
 	private SurfaceHolder surfaceHolder;
 	private Thread gameThread;
@@ -88,14 +91,11 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 	private static int GAME_SPEED = 17;
 	private static final String LOG_TAG = "GameSurfaceView";
 
-	public GameSurfaceView(Context context, final Bitmap dogBitmap,
-			final Bitmap foxBitmap, final Bitmap sheepBitmap,
-			final int NUM_FOX, final int NUM_SHEEP, final int DOG_SPEED,
-			final int FOX_SPEED, final int SHEEP_SPEED) {
+	public GameSurfaceView(Context context,
+			final int NUM_FOX, final int NUM_SHEEP,
+			final int DOG_SPEED, final int FOX_SPEED, final int SHEEP_SPEED) {
 		super(context);
-		this.dogBitmap = dogBitmap;
-		this.foxBitmap = foxBitmap;
-		this.sheepBitmap = sheepBitmap;
+		
 		this.NUM_FOX = NUM_FOX;
 		this.NUM_SHEEP = NUM_SHEEP;
 		this.DOG_SPEED = DOG_SPEED;
@@ -288,7 +288,12 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 			public void run() {
 				// Run this thread in the background
 				Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
-
+				
+				dogBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.gamedog);
+				foxBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.gamefox);
+				sheepBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.gamesheep);
+				sheepBeingEatenBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.gamesheepeaten);
+				
 				int loc_x, loc_y;
 
 				// TODO
@@ -340,7 +345,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 		canvas = surfaceHolder.lockCanvas();
 		canvas.drawColor(Color.GREEN);
 		surfaceHolder.unlockCanvasAndPost(canvas);
-
+		
 		try {
 			initializeObjects.join(); // ready to start when initializatino is
 										// done

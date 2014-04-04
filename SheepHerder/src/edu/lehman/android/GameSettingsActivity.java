@@ -46,32 +46,30 @@ import android.widget.TextView;
 public class GameSettingsActivity extends Activity implements Settings {
 
 	private class RadioListener implements RadioGroup.OnCheckedChangeListener {	
-		
 		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
 			switch(checkedId) {
-				case R.id.oneFoxButton: 
-					NUM_FOXES = 1;
-					break;
-				case R.id.three_foxes: 
-					NUM_FOXES = 3;
-					break;
-				case R.id.five_foxes: 
-					NUM_FOXES = 5;
-					break;
-				case R.id.five_sheeps: 
-					NUM_SHEEP = 5;
-					break;
-				case R.id.ten_sheeps: 
-					NUM_SHEEP = 10;
-					break;
-				case R.id.fifteen_sheeps: 
-					NUM_SHEEP = 15;
-					break;
+			case R.id.five_foxes: 
+				NUM_FOXES = 5;
+				break;
+			case R.id.eight_foxes: 
+				NUM_FOXES = 8;
+				break;
+			case R.id.twelve_foxes: 
+				NUM_FOXES = 12;
+				break;
+			case R.id.ten_sheeps: 
+				NUM_SHEEP = 10;
+				break;
+			case R.id.fifteen_sheeps: 
+				NUM_SHEEP = 15;
+				break;
+			case R.id.twenty_sheeps: 
+				NUM_SHEEP = 20;
+				break;
 			}
-			
-			//Log.i(LOG_TAG, "sheep count: "+ NUM_SHEEP);
-			//Log.i(LOG_TAG, "fox count: "+ NUM_FOXES);
+			Log.i(LOG_TAG, "sheep count: "+ NUM_SHEEP);
+			Log.i(LOG_TAG, "fox count: "+ NUM_FOXES);
 		}
 	}
 	
@@ -142,20 +140,20 @@ public class GameSettingsActivity extends Activity implements Settings {
 		foxSpeedSeekBar.setProgress(FOX_SPEED);
 		sheepSpeedSeekBar.setProgress(SHEEP_SPEED);
 		
-		if (NUM_SHEEP == 5){
-			sheepRadioGroup.check(R.id.five_sheeps);
-		} else if (NUM_SHEEP == 10){
+		if (NUM_SHEEP == 10){
 			sheepRadioGroup.check(R.id.ten_sheeps);
-		} else {
+		} else if (NUM_SHEEP == 15){
 			sheepRadioGroup.check(R.id.fifteen_sheeps);
+		} else {
+			sheepRadioGroup.check(R.id.twenty_sheeps);
 		}
 		
-		if (NUM_FOXES == 1){
-			foxRadioGroup.check(R.id.oneFoxButton);
-		} else if (NUM_FOXES == 3){
-			foxRadioGroup.check(R.id.three_foxes);
-		} else {
+		if (NUM_FOXES == 5){
 			foxRadioGroup.check(R.id.five_foxes);
+		} else if (NUM_FOXES == 8){
+			foxRadioGroup.check(R.id.eight_foxes);
+		} else {
+			foxRadioGroup.check(R.id.twelve_foxes);
 		}
 
 		// Initialize the textview with '0'

@@ -43,9 +43,7 @@ public abstract class Animal implements Orientable {
 	/**
 	 * Determines if one animal is close to another animal
 	 */
-	public boolean closeTo(final Animal animal) {
-		final int RADIUS = 40;
-
+	public boolean closeTo(final Animal animal, int RADIUS) {
 		return Math.abs(position.x - animal.position.x) < RADIUS
 				&& Math.abs(position.y - animal.position.y) < RADIUS;
 	}

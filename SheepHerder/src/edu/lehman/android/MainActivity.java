@@ -13,18 +13,15 @@ import android.widget.Button;
  * start a new game (both new activities)
  * 
  * @author Marcos Davila, Marcus Silveira
- * @revisionhistory 3/01/2014 - Adding logs to each lifecycle state for later
- *                  use on integration tests 2/11/2014 - Creating main layout
- *                  and navigation. Setting up button listeners (settings, start
- *                  game, and quit) 2/4/2014 - OnClickListener implemented so
- *                  this activity listens for taps 2/1/2014 - Project Created
- * 
  */
 public class MainActivity extends Activity {
 
 	private static final String LOG_TAG = "MainActivity";
 	private Button settings, startGame, quitButton;
 
+	/**
+	 * Identify buttons with their ID's when the app is started
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,12 +35,10 @@ public class MainActivity extends Activity {
 		Log.i(LOG_TAG, "MainActivity.onCreate()");
 	}
 
-	@Override
-	protected void onRestart() {
-		super.onRestart();
-		Log.i(LOG_TAG, "MainActivity.onRestart()");
-	}
-
+	/**
+	 * Register action listeners with the buttons when the app is
+	 * started
+	 */
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -77,6 +72,16 @@ public class MainActivity extends Activity {
 		Log.i(LOG_TAG, "MainActivity.onStart()");
 	}
 
+	/*
+	 * Unused callbacks
+	 */
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		Log.i(LOG_TAG, "MainActivity.onRestart()");
+	}
+	
 	@Override
 	protected void onResume() {
 		super.onResume();

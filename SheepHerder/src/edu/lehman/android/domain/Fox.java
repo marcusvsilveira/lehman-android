@@ -77,8 +77,7 @@ public class Fox extends Animal {
 				Log.i(LOG_TAG, "FOX CHASING");
 				chaseClosest(sheepList);
 			} 
-		}
-		
+		}	
 	}
 	
 	public void caught(List<Sheep> sheepList){
@@ -165,7 +164,6 @@ public class Fox extends Animal {
 	}
 
 	public void evade(Dog dog) {
-
 		Position dog_position = dog.getPosition();
 		int fox_x = position.getX();
 		int fox_y = position.getY();
@@ -188,27 +186,31 @@ public class Fox extends Animal {
 		}
 	}
 
+	/**
+	 * Moves the fox only along the x-axis. Checks to see if the fox leaves
+	 * the boundaries of the screen.
+	 */
 	@Override
 	public void moveX(int moveX) {
-		int foxPos = position.getX() + moveX;
+		super.moveX(moveX);
 		
-		position.setX(foxPos);
-		
-		if (foxPos < 0 || foxPos > visible_screen_boundaries.getScreenWidth()) {
-				isVisible = false;
-				isEating = false;
+		if (position.x < 0 || position.x > screenWidth) { 
+			isVisible = false; //fox gets away (evade)
+			isEating = false;
 		}
 	}
 
+	/**
+	 * Moves the fox only along the y-axis. Checks to see if the fox leaves
+	 * the boundaries of the screen.
+	 */
 	@Override
 	public void moveY(int moveY) {
-		int foxPos = position.getY() + moveY;
+		super.moveY(moveY);
 
-		position.setY(foxPos);
-
-		if (foxPos < 0 || foxPos > visible_screen_boundaries.getScreenHeight()) {
-				isVisible = false;
-				isEating = false;
+		if (position.y < 0 || position.y > screenHeight) {
+			isVisible = false; //fox gets away (evade)
+			isEating = false;
 		}
 	}
 
@@ -218,8 +220,8 @@ public class Fox extends Animal {
 	 * @return distance between fox and sheep
 	 */
 	private int findSheep(Sheep sheeps) {
-		return Math.abs(sheeps.getPosition().getX() - position.getX())
-				+ Math.abs(sheeps.getPosition().getY() - position.getY());
+		return Math.abs(sheeps.position.x - position.x)
+				+ Math.abs(sheeps.position.y - position.y);
 	}
 
 	private void eat(Sheep sheep) {

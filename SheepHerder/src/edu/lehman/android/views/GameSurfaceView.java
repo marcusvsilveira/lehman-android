@@ -38,7 +38,11 @@ import android.view.SurfaceView;
 public class GameSurfaceView extends SurfaceView implements Callback, Runnable, Orientable {
 
 	/**
-	 * A class to hold the width and height of the phone
+	 * A class to hold the width and height of the phone's touchscreen. This is 
+	 * used in determining the location of the animals on the screen so the 
+	 * animals know not to move to a location where they are not completely visible
+	 * on the screen. An instance of this class is passed into all animal objects
+	 * when they are created.
 	 * 
 	 * @author Marcos Davila
 	 *
@@ -91,6 +95,17 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 	private static int GAME_SPEED = 17;
 	private static final String LOG_TAG = "GameSurfaceView";
 
+	/**
+	 * Sets the number of foxes, dogs, and sheeps and also initializes
+	 * holders and callbacks for the surface
+	 * 
+	 * @param context application context
+	 * @param NUM_FOX number of foxes to be created
+	 * @param NUM_SHEEP number of sheeps to be created
+	 * @param DOG_SPEED how fast the dog should move
+	 * @param FOX_SPEED how fast foxes should move
+	 * @param SHEEP_SPEED how fast sheep should move
+	 */
 	public GameSurfaceView(Context context,
 			final int NUM_FOX, final int NUM_SHEEP,
 			final int DOG_SPEED, final int FOX_SPEED, final int SHEEP_SPEED) {
@@ -108,7 +123,10 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 	}
 	
 	/**
-	 * Starts the game thread
+	 * Starts the game thread. The game thread runs continuously in a loop
+	 * until the game is over or until it is interrupted. The game thread
+	 * continuously updates the position of all the animals on the screen
+	 * every 1/60th of a second.
 	 */
 	@Override
 	public void run() {
@@ -133,15 +151,16 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 				Log.e(LOG_TAG, "Game loop was interrupted");
 			}
 		}
-
-		gameThread.interrupt();
 	}
 
+	/*
+	 * Helper method that details how a dog should be moved
+	 * according to a long press. The dog is locked so that
+	 * only one press event is recorded at a time.
+	 */
 	private void moveDog() {
 		if (isDogLocked()) {
 			locksDog(false);
-			// Otherwise no new movement was recorded
-			// and nothing needs to be changed
 		}
 
 		if (isLongPressing()) {
@@ -153,6 +172,20 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 				dogPosition.getY(), null);
 	}
 
+	/*
+	 * Helper method that details how a fox should be moved
+	 * according to logic. A fox can be in two states: visible
+	 * or not visible. An invisible fox cannot be interacted
+	 * with. If the fox is visible, it continuously checks to 
+	 * see if the dog is nearby and if sheep are nearby. The fox
+	 * runs if the dog is too close and the fox eats a sheep if it
+	 * can catch one.
+	 * 
+	 * If the fox successfully eats a sheep, he continues to try
+	 * to eat another one. The player loses a point if the fox
+	 * succeeds at his goal. If the fox is caught, it disappears 
+	 * and the player gets a point.
+	 */
 	private void moveFox() {
 		Position foxPosition;
 		boolean wasEating = false;
@@ -199,6 +232,11 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 		}
 	}
 
+	/*
+	 * Helper method that details how a sheep should move according to logic.
+	 * Sheeps are fine with grazing until a dog or a fox gets too close to 
+	 * them, in which case they run.
+	 */
 	private void moveSheep() {
 		Position sheepPosition;
 		if (sheepList != null) {
@@ -214,13 +252,13 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 					if (!sheep.isBeingEaten()) {
 						sheep.move(foxList, dog);
 						currentSheepBitmap = sheepBitmap;
-					 } else {
-						 currentSheepBitmap = sheepBeingEatenBitmap;
-					 }
-					 sheepPosition = sheep.getPosition();
-					 canvas.drawBitmap(currentSheepBitmap,
-					 sheepPosition.getX() - currentSheepBitmap.getWidth()/2, sheepPosition.getY() - currentSheepBitmap.getHeight()/2,
-					 null);
+					} else {
+						currentSheepBitmap = sheepBeingEatenBitmap;
+					}
+					sheepPosition = sheep.getPosition();
+					canvas.drawBitmap(currentSheepBitmap,
+							sheepPosition.getX(), sheepPosition.getY(),
+							null);
 				}
 			}
 		}
@@ -239,33 +277,56 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 		// surfaceBoundaries.printBoundaries();
 	}
 
+	@Override
 	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {
 		// TODO Auto-generated method stub
 
 	}
 
+	/*
+	 * Locks access to the dog instance so that only one touch event
+	 * corresponds to movement of the dog to a specific location on
+	 * the screen.
+	 */
 	private synchronized void locksDog(boolean value) {
 		this.dogMovementLock = value;
 	}
 
+	/*
+	 * Check to see if the dog attribute is locked
+	 */
 	private synchronized boolean isDogLocked() {
 		return this.dogMovementLock;
 	}
 
+	/*
+	 * Stops the view from recognizing a long press touch event
+	 */
 	private synchronized void stopLongPress() {
 		this.isLongPressing = false;
 	}
 
+	/*
+	 * Allows the view to recognize a long press event at a given
+	 * (x,y) coordinate on the screen
+	 */
 	private synchronized void longPress(int x, int y) {
 		this.isLongPressing = true;
 		this.dogDirectionX = x;
 		this.dogDirectionY = y;
 	}
 
+	/*
+	 * Returns whether the view is currently processing a
+	 * long press touch event
+	 */
 	private synchronized boolean isLongPressing() {
 		return this.isLongPressing;
 	}
 
+	/**
+	 * Processes touch events on the screen
+	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent me) {
 		int action = me.getAction();
@@ -280,14 +341,14 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 				|| action == MotionEvent.ACTION_CANCEL) {
 			this.stopLongPress();
 		}
+		
 		return true;
-
 	}
 
-	/*
-	 * Initializes the game thread and the surface properties when the surface
-	 * is created
+	/**
+	 * Initializes the game thread and the surface properties
 	 */
+	@Override
 	public void surfaceCreated(SurfaceHolder arg0) {
 
 		Thread initializeObjects = new Thread(new Runnable() {
@@ -304,11 +365,8 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 				
 				int loc_x, loc_y;
 
-				// TODO
-				// initialize dog, fox, and sheep objects and get some info from
-				// the sharedPreferences (possibly to be passed by parameter
-				// here)
-				// we need to make sure it gets created
+				// Initialize dog, fox, and sheep objects and create as many of
+				// these objects as is specified in the shared preferences
 				dog = (Dog) AnimalFactory.createAnimal(AnimalType.DOG,
 						dogBitmap.getWidth(), dogBitmap.getHeight(), DOG_SPEED,
 						dogBitmap.getWidth(), dogBitmap.getHeight(),
@@ -355,7 +413,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 		surfaceHolder.unlockCanvasAndPost(canvas);
 		
 		try {
-			initializeObjects.join(); // ready to start when initializatino is done
+			initializeObjects.join(); // ready to start when initialization is done
 		} catch (Exception e) {
 			// TODO : Handle if there is an error loading all materials.
 			Log.e(LOG_TAG, "Uncaught exception in loading all materials.");
@@ -364,6 +422,10 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 		gameThread.start();
 	}
 
+	/*
+	 * Sets all foxes starting locations to one of the four outside boundaries
+	 * of the screen.
+	 */
 	private Position spawnFox(Random locationGenerator, final int NUM_EDGES,
 			int OFF_SCREEN_FOX_RANGE, final int FOX_STARTING_POINT) {
 		int loc_x;
@@ -395,16 +457,6 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 		return new Position(loc_x, loc_y);
 	}
 
-	/*
-	 * Stop all threads and remove all handlers when the surface is destroyed
-	 * 
-	 * @see android.view.SurfaceHolder.Callback#surfaceDestroyed(android.view.
-	 * SurfaceHolder)
-	 */
-	public void surfaceDestroyed(SurfaceHolder arg0) {
-		
-	}
-
 	public boolean getRunning() {
 		return running;
 	}
@@ -421,5 +473,21 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 	 */
 	public void restart() {
 		running = true;
+	}
+
+	/**
+	 * Kill the game loop and join all running threads before
+	 * the surface is destroyed.
+	 */
+	@Override
+	public void surfaceDestroyed(SurfaceHolder holder) {
+		running = false;
+		
+		try {
+			// Wait for the game thread to finish up on resources
+			gameThread.join();
+		} catch (InterruptedException e){
+			// ignore because the game is ending
+		}
 	}
 }

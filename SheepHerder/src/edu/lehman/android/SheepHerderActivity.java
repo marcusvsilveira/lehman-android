@@ -101,19 +101,21 @@ public class SheepHerderActivity extends Activity implements Settings {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		final int MILLIS_IN_FUTURE = 1000 * 60 * 2; /* 2 minutes */
-		final int INTERVAL = 1000;
-
+		final int MILLIS_IN_FUTURE = 45 * 20000;
+		final int INTERVAL = 1*1000;
 		new CountDownTimer(MILLIS_IN_FUTURE, INTERVAL) {
-
+			
+			int cpuTime= (MILLIS_IN_FUTURE / INTERVAL);
 			TextView timerView = (TextView) findViewById(R.id.timer);
-
+             
 			public void onTick(long millisUntilFinished) {
-				timerView.setText("Time-Left :" + millisUntilFinished / INTERVAL);
+			    
+			    timerView.setText("Time Left:" +  cpuTime/60 + ":" + cpuTime%60);  
+			    cpuTime--;   
 			}
 
 			public void onFinish() {
-				timerView.setText("Time-up  :   Your Score =");
+				timerView.setText("Time-up  :   Final Score =  ");
 				onStop();
 			}
 		}.start();

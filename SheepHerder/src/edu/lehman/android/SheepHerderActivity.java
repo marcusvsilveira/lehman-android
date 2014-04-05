@@ -46,7 +46,6 @@ public class SheepHerderActivity extends Activity implements Settings {
 	private CountDownTimer countDownTimer = new CountDownTimer(MILLIS_IN_FUTURE, INTERVAL) {
 		
 		int totalTime = (MILLIS_IN_FUTURE / INTERVAL);
-		TextView timerView = (TextView) findViewById(R.id.timer);
          
 		// Update the time left every tick
 		public void onTick(long millisUntilFinished) {

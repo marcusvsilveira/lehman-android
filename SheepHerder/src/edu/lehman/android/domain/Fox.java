@@ -165,8 +165,8 @@ public class Fox extends Animal {
 
 	public void evade(Dog dog) {
 		Position dog_position = dog.getPosition();
-		int fox_x = getPosition().getX();
-		int fox_y = getPosition().getY();
+		int fox_x = position.getX();
+		int fox_y = position.getY();
 
 		while (dog.closeTo(this, DOG_AWARENESS_RANGE)) {
 			float dx = Math.abs(dog_position.getX() - fox_x);
@@ -194,8 +194,10 @@ public class Fox extends Animal {
 	public void moveX(int moveX) {
 		super.moveX(moveX);
 		
-		if (position.x < 0 || position.x > screenWidth);
-				setVisible(false); // Fox gets away
+		if (position.x < 0 || position.x > screenWidth) { 
+			isVisible = false; //fox gets away (evade)
+			isEating = false;
+		}
 	}
 
 	/**
@@ -206,8 +208,10 @@ public class Fox extends Animal {
 	public void moveY(int moveY) {
 		super.moveY(moveY);
 
-		if (position.y < 0 || position.y > screenHeight)
-			setVisible(false); // Fox gets away
+		if (position.y < 0 || position.y > screenHeight) {
+			isVisible = false; //fox gets away (evade)
+			isEating = false;
+		}
 	}
 
 	/**

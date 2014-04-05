@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -17,11 +16,13 @@ import android.widget.TextView;
 
 /**
  * 
- * Hosts the game screen.
+ * Hosts the surface view where the game takes place. The sheep herder
+ * activity is responsible for managing a place for this view to be
+ * active, as well as keeping track of the remaining time and the
+ * score of the player. It also maintains a back button if the user
+ * wishes to quit the game early.
  * 
- * @author Marcos Davila, Marcus Silveira
- * 
- * 
+ * @author Marcos Davila, Marcus Silveira, Prince Oladimeji
  */
 public class SheepHerderActivity extends Activity implements Settings {
 	private static final String LOG_TAG = "SheepHerderActivity";
@@ -36,9 +37,36 @@ public class SheepHerderActivity extends Activity implements Settings {
 	private GameSurfaceView surfaceView;
 	private RelativeLayout surfaceLayout;
 	
-	// A reference to this object so that the surface view can query
-	// the width and height of the phone
+	// The timer placed at the top of the activity, plus some instance
+	// variables to represent the total amount of time that can be played
+	// and the interval this timer counts down in. Currently, the user has
+	// 15 minutes of playtime measured in seconds
+	final int MILLIS_IN_FUTURE = 45 * 20000;
+	final int INTERVAL = 1*1000;
+	private CountDownTimer countDownTimer = new CountDownTimer(MILLIS_IN_FUTURE, INTERVAL) {
+		
+		int totalTime = (MILLIS_IN_FUTURE / INTERVAL);
+		TextView timerView = (TextView) findViewById(R.id.timer);
+         
+		// Update the time left every tick
+		public void onTick(long millisUntilFinished) {
+		    timerView.setText("Time Left: " +  totalTime/60 + ":" + String.format("%02d", totalTime%60));  
+		    totalTime--;   
+		}
+
+		// Show the user their final score and then stop the timer.
+		public void onFinish() {
+			timerView.setText("Time-up  :   Final Score =  ");
+			onStop();
+		}
+	};
 	
+	/*
+	 * On creation, buttons and views are associated with their
+	 * IDs, preferences are loaded in from shared preferences
+	 * and those values are recorded into field instances,
+	 * and the surface view is created. 
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,25 +83,32 @@ public class SheepHerderActivity extends Activity implements Settings {
 				finish();
 			}
 		});
+		
 		loadPreferences();
+		
 		this.surfaceView = new GameSurfaceView(getApplicationContext(), 
 				NUM_FOXES, NUM_SHEEP, DOG_SPEED, FOX_SPEED, SHEEP_SPEED );
-		this.surfaceLayout.addView(this.surfaceView); //touch events will already be handled by the surfaceView
+		this.surfaceLayout.addView(this.surfaceView);
 				
 		Log.i(LOG_TAG, "SheepHerderActivity.onCreate()");
 	}
 
+	/**
+	 * Inflates the menu and adds items to the action bar if it is present
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.sheep_herder, menu);
 		return true;
 	}
-
+	
+	/**
+	 * Reads values from shared preferences pertaining to the number
+	 * and speed of dogs, foxes, and sheeps on the screen. If there
+	 * are no such values, default values are used instead.
+	 */
 	@Override
 	public void loadPreferences() {
-		//Restore preferences and set default values if no such
-		// preference exists
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME,
 				MODE_PRIVATE);
 
@@ -82,85 +117,77 @@ public class SheepHerderActivity extends Activity implements Settings {
 		NUM_FOXES = settings.getInt(NUM_FOXES_PREFS, DEFAULT_NUM_FOXES);
 		SHEEP_SPEED = settings.getInt(SHEEP_SPEED_PREFS, DEFAULT_SHEEP_SPEED);
 		FOX_SPEED = settings.getInt(FOX_SPEED_PREFS, DEFAULT_FOX_SPEED);
-
-		/*Log.i(LOG_TAG, "Dog speed: " + DOG_SPEED);
-		Log.i(LOG_TAG, "# Sheep: " + NUM_SHEEP);
-		Log.i(LOG_TAG, "# Foxes: " + NUM_FOXES);
-		Log.i(LOG_TAG, "Sheep speed: " + SHEEP_SPEED);
-		Log.i(LOG_TAG, "Fox speed: " + FOX_SPEED);
-		*/
 	}
 
+	/*
+	 * On restart, restart the game thread in the surface view
+	 */
 	@Override
 	protected void onRestart() {
 		super.onRestart();
 		surfaceView.restart();
+		countDownTimer.start();
 
 		Log.i(LOG_TAG, "SheepHerderActivity.onRestart()");
 	}
 
+	/*
+	 * Start the timer when the game begins
+	 */
 	@Override
 	protected void onStart() {
 		super.onStart();
-		final int MILLIS_IN_FUTURE = 45 * 20000;
-		final int INTERVAL = 1*1000;
-		new CountDownTimer(MILLIS_IN_FUTURE, INTERVAL) {
-			
-			int cpuTime= (MILLIS_IN_FUTURE / INTERVAL);
-			TextView timerView = (TextView) findViewById(R.id.timer);
-             
-			public void onTick(long millisUntilFinished) {
-			    
-			    timerView.setText("Time Left:" +  cpuTime/60 + ":" + cpuTime%60);  
-			    cpuTime--;   
-			}
-
-			public void onFinish() {
-				timerView.setText("Time-up  :   Final Score =  ");
-				onStop();
-			}
-		}.start();
+		countDownTimer.start();
 		
 		Log.i(LOG_TAG, "SheepHerderActivity.onStart()");
 	}
 
+	/*
+	 * Start the timer when the game resumes
+	 */
 	@Override
 	protected void onResume() {
 		super.onResume();
+		countDownTimer.start();
 		
-
-					
 		Log.i(LOG_TAG, "SheepHerderActivity.onResume()");
 	}
 
+	/*
+	 * Pause the game thread running in the surface view as well
+	 * as the timer
+	 */
 	@Override
 	protected void onPause() {
 		super.onPause();
-		// The game thread is running in the GameSurfaceView. We must
-		// notify that object to stop running
-		
 		this.surfaceView.stop();
 		//resetting layout to add the game again later. This would have to change if you want to handle "pausing the game"
 		this.surfaceLayout.removeAllViews();
+		countDownTimer.cancel();
+		
 		Log.i(LOG_TAG, "SheepHerderActivity.onPause()");
 	}
 
+	/*
+	 * Pause the game thread running in the surface view as well as the timer.
+	 */
 	@Override
 	protected void onStop() {
 		super.onStop();
-		// The game thread is running in the GameSurfaceView. We must
-		// notify that object to stop running
 		surfaceView.stop();
+		countDownTimer.cancel();
 
 		Log.i(LOG_TAG, "SheepHerderActivity.onStop()");
 	}
 
+	/*
+	 * Pause the game thread running in the surface view as well as the timer.
+	 */
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		// The game thread is running in the GameSurfaceView. We must
-		// notify that object to stop running
 		surfaceView.stop();
+		countDownTimer.cancel();
 
 		Log.i(LOG_TAG, "SheepHerderActivity.onDestroy()");
 	}

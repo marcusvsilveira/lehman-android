@@ -1,6 +1,7 @@
 package edu.lehman.android.domain;
 
 import java.util.List;
+import java.util.Random;
 
 import edu.lehman.android.factory.AnimalType;
 import edu.lehman.android.views.GameSurfaceView.Boundaries;
@@ -59,11 +60,14 @@ public class Sheep extends Animal {
 	public void move(List<Fox> foxList, Dog dog) {
 		if (!isBeingEaten) {
 			if (sees(foxList)) {
-				evade(closestFox, dog);
+				// Evade the closest fox
+				evade(position.x, position.y, closestFox.position.x,
+						closestFox.position.y);
 			} else if (dog.closeTo(this, DOG_AWARENESS_RANGE)) {
-				evade(closestFox, dog);
+				// Run away from the dog
+				evade(position.x, position.y, dog.position.x, dog.position.y);
 			} else {
-				graze();
+				graze( );
 			}
 		}
 	}
@@ -76,7 +80,7 @@ public class Sheep extends Animal {
 	public boolean isBeingEaten() {
 		return isBeingEaten;
 	}
-
+	
 	/**
 	 * A method to signify if the sheep has changed state from being eaten to
 	 * not being eaten (and vice versa)
@@ -88,68 +92,21 @@ public class Sheep extends Animal {
 		this.isBeingEaten = isBeingEaten;
 	}
 
-	/**
-	 * Logic the sheep should take to avoid any animal that is not another
-	 * sheep.
-	 * 
-	 * @param animal
-	 *            the fox or dog entity that the sheep should run away from
-	 */
-	public void evade(Fox fox, Dog dog) {
-		int animalX = 0;
-		int animalY = 0;
-
-		int dogX = dog.getPosition().getX();
-		int dogY = dog.getPosition().getY();
-
-		int x = position.getX();
-		int y = position.getY();
-
-		int dxDog = Math.abs(dogX - x);
-		int dyDog = Math.abs(dogY - y);
-
-		if (fox != null && fox.isVisible()) {
-			int foxX = fox.getPosition().getX();
-			int foxY = fox.getPosition().getY();
-
-			int dxFox = Math.abs(foxX - x);
-			int dyFox = Math.abs(foxY - y);
-			// who's closer?
-			if ((dxFox + dyFox) > (dxDog + dyDog)) {
-				// dog is closer
-				// evade from dog
-				animalX = dogX;
-				animalY = dogY;
-			} else {
-				// fox is closer
-				// evade from fox
-				animalX = foxX;
-				animalY = foxY;
-			}
-		} else {
-			// evade from dog
-			animalX = dogX;
-			animalY = dogY;
-		}
-
-		// TODO this could be a little more intelligent to avoid moving into the
-		// other direction where the other animal might be
-		// also, this could work better if we consider the speed of both (or
-		// accelaration)
-		evade(x, y, animalX, animalY);
-	}
-
 	/*
-	 * Specialized evade subroutine to
-	 * TODO: What does this method do?
+	 * Specialized evade subroutine that takes this animal's
+	 * coordinates and the animal to avoid's coordinates and
+	 * then moves away from the animal accordingly.
 	 */
 	private void evade(int x, int y, int animalX, int animalY) {
-		if (animalX > animalY) {
+		int dx = Math.abs(animalX - x);
+		int dy = Math.abs(animalY - y);
+		
+		if (dx > dy){
 			if (animalX > x) {
 				moveX(-speed);
 				direction = LEFT;
 			}
-			if (animalX < x) {
+			if (animalX <= x) {
 				moveX(speed);
 				direction = RIGHT;
 			}
@@ -158,7 +115,7 @@ public class Sheep extends Animal {
 				moveY(-speed);
 				direction = UP;
 			}
-			if (animalY < y) {
+			if (animalY <= y) {
 				moveY(speed);
 				direction = DOWN;
 			}

@@ -166,12 +166,17 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 					foxPosition = fox.getPosition();
 					canvas.drawBitmap(foxBitmap, foxPosition.getX(),
 							foxPosition.getY(), null);
-					if (!wasEating && fox.isEating()) {
-						// TODO take points out
+					canvas.drawBitmap(foxBitmap, foxPosition.getX() - foxBitmap.getWidth()/2, foxPosition.getY() - foxBitmap.getHeight()/2, null);
+					if(!wasEating && fox.isEating()) {
+						Log.e(LOG_TAG, "Fox started to eat");
+					} else if( wasEating && !fox.isEating()) {
+						//TODO take points out
 						Log.e(LOG_TAG, "Fox finished eating");
 					}
 				} else {
-					// TODO possibly count points here. You got the fox!
+					//TODO possibly count points here. You got the fox!
+					// TODO -> also give move time for the game as a bonus!!
+					//increase fox speed (more difficult) or add more foxes - just don't go over the speed limit :-)
 					Log.e(LOG_TAG, "You got the fox");
 				}
 			} else {
@@ -183,8 +188,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 							Fox.NUM_EDGES, Fox.OFF_SCREEN_FOX_RANGE,
 							Fox.FOX_STARTING_POINT);
 					fox.spawn(foxNewPos);
-					canvas.drawBitmap(foxBitmap, foxNewPos.getX(),
-							foxNewPos.getY(), null);
+					canvas.drawBitmap(foxBitmap, foxNewPos.getX() - foxBitmap.getWidth()/2, foxNewPos.getY() - foxBitmap.getHeight()/2, null);
 					Log.e(LOG_TAG, "Fox is now visible, position: "
 							+ foxNewPos);
 				} else {
@@ -205,14 +209,18 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 				// TODO show score
 				running = false;
 			} else {
+				Bitmap currentSheepBitmap;
 				for (Sheep sheep : sheepList) {
 					if (!sheep.isBeingEaten()) {
 						sheep.move(foxList, dog);
-						sheepPosition = sheep.getPosition();
-						canvas.drawBitmap(sheepBitmap,
-								sheepPosition.getX(),
-								sheepPosition.getY(), null);
-					}
+						currentSheepBitmap = sheepBitmap;
+					 } else {
+						 currentSheepBitmap = sheepBeingEatenBitmap;
+					 }
+					 sheepPosition = sheep.getPosition();
+					 canvas.drawBitmap(currentSheepBitmap,
+					 sheepPosition.getX() - currentSheepBitmap.getWidth()/2, sheepPosition.getY() - currentSheepBitmap.getHeight()/2,
+					 null);
 				}
 			}
 		}
@@ -347,8 +355,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 		surfaceHolder.unlockCanvasAndPost(canvas);
 		
 		try {
-			initializeObjects.join(); // ready to start when initializatino is
-										// done
+			initializeObjects.join(); // ready to start when initializatino is done
 		} catch (Exception e) {
 			// TODO : Handle if there is an error loading all materials.
 			Log.e(LOG_TAG, "Uncaught exception in loading all materials.");

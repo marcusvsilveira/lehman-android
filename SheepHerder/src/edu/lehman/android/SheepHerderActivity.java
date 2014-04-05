@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -102,7 +101,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		final int MILLIS_IN_FUTURE = 20000;
+		final int MILLIS_IN_FUTURE = 1000 * 60 * 2; /* 2 minutes */
 		final int INTERVAL = 1000;
 
 		new CountDownTimer(MILLIS_IN_FUTURE, INTERVAL) {

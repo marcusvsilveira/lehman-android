@@ -109,8 +109,8 @@ public class SheepHerderActivity extends Activity implements Settings {
 			TextView timerView = (TextView) findViewById(R.id.timer);
              
 			public void onTick(long millisUntilFinished) {
-			    
-			    timerView.setText("Time Left:" +  cpuTime/60 + ":" + cpuTime%60);  
+			    int secs = cpuTime%60;
+			    timerView.setText("Time Left:" +  cpuTime/60 + ":" + ((secs < 10)?"0"+secs:secs));  
 			    cpuTime--;   
 			}
 

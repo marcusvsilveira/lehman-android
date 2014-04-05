@@ -137,28 +137,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 	@Override
 	protected void onStart() {
 		super.onStart();
-<<<<<<< HEAD
 		countDownTimer.start();
-=======
-		final int MILLIS_IN_FUTURE = 45 * 20000;
-		final int INTERVAL = 1*1000;
-		new CountDownTimer(MILLIS_IN_FUTURE, INTERVAL) {
-			
-			int cpuTime= (MILLIS_IN_FUTURE / INTERVAL);
-			TextView timerView = (TextView) findViewById(R.id.timer);
-             
-			public void onTick(long millisUntilFinished) {
-			    int secs = cpuTime%60;
-			    timerView.setText("Time Left:" +  cpuTime/60 + ":" + ((secs < 10)?"0"+secs:secs));  
-			    cpuTime--;   
-			}
-
-			public void onFinish() {
-				timerView.setText("Time-up  :   Final Score =  ");
-				onStop();
-			}
-		}.start();
->>>>>>> 5a581ae18a2e1158c8ecd161c5924af142e8b60d
 		
 		Log.i(LOG_TAG, "SheepHerderActivity.onStart()");
 	}

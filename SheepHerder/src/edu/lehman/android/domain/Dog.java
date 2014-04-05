@@ -25,5 +25,4 @@ public class Dog extends Animal {
 			final int height, Boundaries b) {
 		super(AnimalType.DOG, x, y, speed, width, height, b);
 	}
-
 }

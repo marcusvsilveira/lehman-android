@@ -64,7 +64,9 @@ public abstract class Animal implements Orientable {
 		final int negXDir = oldX-speed;
 		final int posYDir = oldY+speed;
 		final int negYDir = oldY-speed;
-			
+		final int halfHeight = height/2;
+		final int halfWidth = width/2;
+		
 		// If the dog is not told to move to where it already is, it calculates
 		// the direction that it needs to move in and then moves one unit in that 
 		// direction
@@ -75,14 +77,15 @@ public abstract class Animal implements Orientable {
 				newX = (negXDir <= x) ? x : negXDir;
 			}
 					
-			if (newX + width >= screenWidth){
-				newX = screenWidth - width;
-			} else if (newX < 0){
-				newX = 0;
+			if ((newX + halfWidth) >= screenWidth){
+				newX = screenWidth - halfWidth;
+			} else if ((newX - halfWidth) < 0){
+				newX = 0 + halfWidth;
 			}
 			
 			position.x = newX;
 		}
+		
 		
 		if (oldY != y || oldY == screenHeight || oldY == 0){
 			if (oldY <= y){
@@ -91,10 +94,10 @@ public abstract class Animal implements Orientable {
 				newY = (negYDir <= y) ? y : negYDir;
 			}
 			
-			if (newY + height >= screenHeight) {
-				newY = screenHeight - height;
-			} else if (newY < 0){
-				newY = 0;
+			if ((newY + halfHeight) >= screenHeight) {
+				newY = screenHeight - halfHeight;
+			} else if ((newY - halfHeight) < 0){
+				newY = 0 + halfHeight;
 			}
 			 
 			position.y = newY;
@@ -130,15 +133,15 @@ public abstract class Animal implements Orientable {
 	public boolean collidesWith (Animal anotherAnimal) {
 		if(anotherAnimal == null) return false;
 	     
-		int x1min = position.x;
-		int y1min = position.x;
-		int x1max = position.y + width;
-		int y1max = position.y + height;
+		int x1min = position.x - width/2;
+		int y1min = position.y - height/2;
+		int x1max = position.x + width/2;
+		int y1max = position.y + height/2;
 		
-		int x2min = anotherAnimal.position.x;
-		int y2min = anotherAnimal.position.y;
-		int x2max = anotherAnimal.position.x + anotherAnimal.height;
-		int y2max = anotherAnimal.position.x + anotherAnimal.height;
+		int x2min = anotherAnimal.position.x - anotherAnimal.width/2;
+		int y2min = anotherAnimal.position.y - anotherAnimal.height/2;
+		int x2max = anotherAnimal.position.x + anotherAnimal.width/2;
+		int y2max = anotherAnimal.position.y + anotherAnimal.height/2;
 
  		return (
 		    (x1min <= x2max) &&

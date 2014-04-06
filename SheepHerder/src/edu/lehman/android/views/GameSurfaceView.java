@@ -76,13 +76,14 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 
 	private SurfaceHolder surfaceHolder;
 	private Thread gameThread;
+	
+	private int NUM_FOX, NUM_SHEEP, DOG_SPEED, FOX_SPEED, SHEEP_SPEED;
 
 	private Dog dog;
 	private List<Fox> foxList;
 	private List<Sheep> sheepList;
 	private Canvas canvas;
 	private boolean running = true;
-	private int NUM_FOX, NUM_SHEEP, DOG_SPEED, FOX_SPEED, SHEEP_SPEED;
 	private Boundaries surfaceBoundaries;
 	private static final Random locationGenerator = new Random();
 
@@ -110,13 +111,12 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 			final int NUM_FOX, final int NUM_SHEEP,
 			final int DOG_SPEED, final int FOX_SPEED, final int SHEEP_SPEED) {
 		super(context);
-		
 		this.NUM_FOX = NUM_FOX;
 		this.NUM_SHEEP = NUM_SHEEP;
 		this.DOG_SPEED = DOG_SPEED;
 		this.FOX_SPEED = FOX_SPEED;
 		this.SHEEP_SPEED = SHEEP_SPEED;
-
+		
 		surfaceHolder = getHolder();
 		surfaceHolder.addCallback(this);
 		gameThread = new Thread(this);
@@ -168,8 +168,9 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 		}
 		
 		Position dogPosition = dog.getPosition();
-		canvas.drawBitmap(dogBitmap, dogPosition.getX(),
-				dogPosition.getY(), null);
+		// removes half of width and height because the user touched where the center of the dog should be
+		canvas.drawBitmap(dogBitmap, dogPosition.getX() - dogBitmap.getWidth()/2,
+				dogPosition.getY() - dogBitmap.getHeight()/2, null); 
 	}
 
 	/*
@@ -197,8 +198,6 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 				if (fox.isVisible()) { // still visible, still in the
 										// game
 					foxPosition = fox.getPosition();
-					canvas.drawBitmap(foxBitmap, foxPosition.getX(),
-							foxPosition.getY(), null);
 					canvas.drawBitmap(foxBitmap, foxPosition.getX() - foxBitmap.getWidth()/2, foxPosition.getY() - foxBitmap.getHeight()/2, null);
 					if(!wasEating && fox.isEating()) {
 						Log.e(LOG_TAG, "Fox started to eat");
@@ -257,7 +256,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 					}
 					sheepPosition = sheep.getPosition();
 					canvas.drawBitmap(currentSheepBitmap,
-							sheepPosition.getX(), sheepPosition.getY(),
+							sheepPosition.getX() - currentSheepBitmap.getWidth()/2, sheepPosition.getY() - currentSheepBitmap.getHeight()/2,
 							null);
 				}
 			}
@@ -350,7 +349,6 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 	 */
 	@Override
 	public void surfaceCreated(SurfaceHolder arg0) {
-
 		Thread initializeObjects = new Thread(new Runnable() {
 
 			@Override
@@ -390,8 +388,6 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 				Position foxPos;
 				for (int i = 0; i < NUM_FOX; i++) {
 
-					// TODO create logic to start fox anywhere outside
-					// range of screen
 					foxPos = spawnFox(locationGenerator, Fox.NUM_EDGES,
 							Fox.OFF_SCREEN_FOX_RANGE, Fox.FOX_STARTING_POINT);
 
@@ -406,7 +402,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 		});
 
 		initializeObjects.start();
-
+		
 		// Background should only be drawn green once
 		canvas = surfaceHolder.lockCanvas();
 		canvas.drawColor(Color.GREEN);

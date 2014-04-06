@@ -54,7 +54,7 @@ public class Fox extends Animal {
 				if(eatingClock > 0) {
 					Log.i(LOG_TAG, "FOX IS EATING");
 					eatingClock--;
-					return;
+					return; //can't move
 				} else {
 					isEating = false;
 					eatingClock = Fox.EATING_TIME;
@@ -75,7 +75,10 @@ public class Fox extends Animal {
 				evade(dog);
 			} else {
 				Log.i(LOG_TAG, "FOX CHASING");
-				chaseClosest(sheepList);
+				boolean chasing = chaseClosest(sheepList);
+				if(!chasing) {
+					//TODO move around randomly
+				}
 			} 
 		}	
 	}
@@ -111,9 +114,13 @@ public class Fox extends Animal {
 		this.isEating = false;
 	}
 	
-	public void chaseClosest(List<Sheep> sheepList) {
+	public boolean chaseClosest(List<Sheep> sheepList) {
 		Sheep closest = findClosest(sheepList);
 
+		if( closest == null) {
+			return false; //no sheep in range to chase
+		}
+		
 		float sheepx = closest.getPosition().getX();
 		float sheepy = closest.getPosition().getY();
 
@@ -143,7 +150,7 @@ public class Fox extends Animal {
 		if(closest.collidesWith(this)) {
 			eat(closest);
 		}
-
+		return true;
 	}
 
 	private Sheep findClosest(List<Sheep> sheepList) {

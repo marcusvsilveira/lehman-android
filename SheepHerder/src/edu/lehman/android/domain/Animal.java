@@ -19,6 +19,7 @@ public abstract class Animal implements Orientable {
 	protected int height;
 	protected AnimalType type;
 	protected int screenWidth, screenHeight;
+	protected int halfHeight, halfWidth;
 
 	/**
 	 * Constructs an animal object
@@ -38,6 +39,8 @@ public abstract class Animal implements Orientable {
 		this.height = height;
 		screenWidth = b.getScreenWidth();
 		screenHeight = b.getScreenHeight();
+		halfHeight = height/2;
+		halfWidth = width/2;
 	}
 	
 	/**
@@ -64,8 +67,6 @@ public abstract class Animal implements Orientable {
 		final int negXDir = oldX-speed;
 		final int posYDir = oldY+speed;
 		final int negYDir = oldY-speed;
-		final int halfHeight = height/2;
-		final int halfWidth = width/2;
 		
 		// If the dog is not told to move to where it already is, it calculates
 		// the direction that it needs to move in and then moves one unit in that 

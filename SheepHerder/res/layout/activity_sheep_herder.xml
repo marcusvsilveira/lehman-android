@@ -9,8 +9,7 @@
         android:id="@+id/topbar"
 	    android:layout_width="match_parent"
 	    android:layout_height="40dp"
-	    android:orientation="horizontal"
-	    android:background="@drawable/repeat">
+	    android:orientation="horizontal">
 	    
            <Button
 	        android:id="@+id/backButton"
@@ -25,12 +24,11 @@
 	          android:id="@+id/timer"
 	          android:layout_height="wrap_content" 
 	          android:layout_width="fill_parent"
-	          android:gravity="right" 
 	          android:textSize="14sp" 
 	          android:textColor="#E40045" 
 	          android:textStyle="bold"
 	          android:singleLine="true" 
-	          android:layout_marginLeft="60dp" />
+	          android:layout_marginLeft="30dp" />
 	         
 	         <!-- TODO  more info to be added here later (e.g. points and timer)  -->
     </LinearLayout>

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import android.util.Log;
+import edu.lehman.android.SheepHerderActivity;
 import edu.lehman.android.factory.AnimalType;
 import edu.lehman.android.views.GameSurfaceView.Boundaries;
 
@@ -65,6 +66,7 @@ public class Fox extends Animal {
 						sheep = it.next();
 						if(sheep.isBeingEaten() ) {
 							it.remove(); //sheep is now gone
+							SheepHerderActivity.score -=1;
 						}
 					}
 				}
@@ -92,7 +94,9 @@ public class Fox extends Animal {
 			if(sheep.isBeingEaten() ) {
 				sheep.setBeingEaten(false); // sheep was SAVED!
 			}
+			
 		}
+		SheepHerderActivity.score +=1;
 	}
 	
 	public boolean canRespawn() {

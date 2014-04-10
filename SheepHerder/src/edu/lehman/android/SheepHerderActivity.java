@@ -32,6 +32,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 	private int NUM_FOXES;
 	private int SHEEP_SPEED;
 	private int FOX_SPEED;
+	public static int score=0;
 	private Button backButton;
 	public TextView timerView;
 	private GameSurfaceView surfaceView;
@@ -41,23 +42,33 @@ public class SheepHerderActivity extends Activity implements Settings {
 	// variables to represent the total amount of time that can be played
 	// and the interval this timer counts down in. Currently, the user has
 	// 15 minutes of playtime measured in seconds
-	final int MILLIS_IN_FUTURE = 45 * 20000;
-	final int INTERVAL = 1*1000;
-	private CountDownTimer countDownTimer = new CountDownTimer(MILLIS_IN_FUTURE, INTERVAL) {
-		
-		int totalTime = (MILLIS_IN_FUTURE / INTERVAL);
-         
-		// Update the time left every tick
-		public void onTick(long millisUntilFinished) {
-		    timerView.setText("Time Left: " +  totalTime/60 + ":" + String.format("%02d", totalTime%60));  
-		    totalTime--;   
-		}
+	// 15 minutes of playtime measured in seconds
+		final int MILLIS_IN_FUTURE = 5 * 20000;
+		final int INTERVAL = 1*1000;
+		private CountDownTimer countDownTimer = new CountDownTimer(MILLIS_IN_FUTURE, INTERVAL) {
+			
+			int totalTime = (MILLIS_IN_FUTURE / INTERVAL);
+	         
+			// Update the time left every tick
+			public void onTick(long millisUntilFinished) {
+			    timerView.setText("Time Left: " +  totalTime/60 + ":" + String.format("%02d", totalTime%60) + "     Score : " + score);  
+			    totalTime--;   
+			    if (totalTime <=0) 
+			    {
+			    	
+			    	try {
+						wait(10000);
+					} catch (InterruptedException e) {}
+			        onFinish();
+			    }
+			}
 
-		// Show the user their final score and then stop the timer.
-		public void onFinish() {
-			timerView.setText("Time-up  :   Final Score =  ");
-			onStop();
-		}
+			// Show the user their final score and then stop the timer.
+			public void onFinish() {
+				timerView.setText("Time-up  :   Final Score = " + score );
+				onStop();
+			}
+
 	};
 	
 	/*

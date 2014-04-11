@@ -13,8 +13,9 @@
 	    
            <Button
 	        android:id="@+id/backButton"
-	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
+	        android:layout_width="0dp"
+	        android:layout_weight="1"
 	        android:textSize="12sp"
 	        android:padding="0dp"
 	        android:text="@string/back"
@@ -23,14 +24,27 @@
 	         <TextView 
 	          android:id="@+id/timer"
 	          android:layout_height="wrap_content" 
-	          android:layout_width="fill_parent"
+	          android:layout_width="0dp"
+	          android:layout_weight="2"
+	          android:gravity="center_horizontal"
 	          android:textSize="14sp" 
 	          android:textColor="#E40045" 
 	          android:textStyle="bold"
-	          android:singleLine="true" 
-	          android:layout_marginLeft="30dp" />
+	          android:singleLine="true" />
 	         
-	         <!-- TODO  more info to be added here later (e.g. points and timer)  -->
+	         <TextView
+	             android:id="@+id/score"
+	             android:layout_width="0dp"
+	             android:layout_height="wrap_content"
+	             android:gravity="left|center_vertical"
+	             android:layout_marginRight="5dp"
+	             android:layout_weight="1"
+	             android:minWidth="90dp"
+	             android:singleLine="true"
+	             android:textColor="#E40045"
+	             android:textSize="14sp"
+	             android:textStyle="bold" />
+	         
     </LinearLayout>
     
     <RelativeLayout android:id="@+id/gamelayout"

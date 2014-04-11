@@ -5,18 +5,17 @@ import java.util.List;
 import java.util.Random;
 
 import android.util.Log;
-import edu.lehman.android.SheepHerderActivity;
 import edu.lehman.android.factory.AnimalType;
 import edu.lehman.android.views.GameSurfaceView.Boundaries;
 
 public class Fox extends Animal {
 	public static final String LOG_TAG = "FOX";
-	public static final int EATING_TIME = 100; // 1 second
+	public static final int EATING_TIME = 30; 
 	public static final int DELAY = 10;
 	public static final int OUT_OF_RANGE_RADIUS = 100000;
 	public static final int RANGE_OF_WAITING_TIME = 30; // time for the fox to wait in
 													// seconds
-	public static final int DOG_AWARENESS_RANGE = 40;
+	public static final int DOG_AWARENESS_RANGE = 120;
 	
 	public static final int NUM_EDGES = 4;
 	public static final int OFF_SCREEN_FOX_RANGE = 20;
@@ -27,6 +26,7 @@ public class Fox extends Animal {
 	private int eatingClock = Fox.EATING_TIME;
 	private boolean isEating = false;
 	private boolean isVisible = false;
+	private boolean ranAway = false;
 
 	/**
 	 * Constructs a fox object and sets the rate at which the fox should appear
@@ -65,8 +65,7 @@ public class Fox extends Animal {
 					for(Iterator<Sheep> it = sheepList.iterator(); it.hasNext(); ) {
 						sheep = it.next();
 						if(sheep.isBeingEaten() ) {
-							it.remove(); //sheep is now gone
-							SheepHerderActivity.score -=1;
+							it.remove(); 
 						}
 					}
 				}
@@ -87,6 +86,7 @@ public class Fox extends Animal {
 	
 	public void caught(List<Sheep> sheepList){
 		isVisible = false;
+		ranAway = false;
 		isEating = false;
 		Sheep sheep = null;
 		for(Iterator<Sheep> it = sheepList.iterator(); it.hasNext(); ) {
@@ -96,7 +96,6 @@ public class Fox extends Animal {
 			}
 			
 		}
-		SheepHerderActivity.score +=1;
 	}
 	
 	public boolean canRespawn() {
@@ -115,6 +114,7 @@ public class Fox extends Animal {
 		this.position.setX(newPosition.getX());
 		this.position.setY(newPosition.getY());
 		this.isVisible = true;
+		this.ranAway = false;
 		this.isEating = false;
 	}
 	
@@ -125,14 +125,14 @@ public class Fox extends Animal {
 			return false; //no sheep in range to chase
 		}
 		
-		float sheepx = closest.getPosition().getX();
-		float sheepy = closest.getPosition().getY();
+		int sheepx = closest.getPosition().getX();
+		int sheepy = closest.getPosition().getY();
 
-		float x = position.getX();
-		float y = position.getY();
+		int x = position.getX();
+		int y = position.getY();
 
-		float dx = Math.abs(sheepx - x);
-		float dy = Math.abs(sheepy - y);
+		int dx = Math.abs(sheepx - x);
+		int dy = Math.abs(sheepy - y);
 
 		// TODO: check if dx or dy is less than speed, and mark sheep as being
 		// eaten, + move fox up to that position,
@@ -158,16 +158,16 @@ public class Fox extends Animal {
 	}
 
 	private Sheep findClosest(List<Sheep> sheepList) {
-		float distance = OUT_OF_RANGE_RADIUS; // out of range
+		int distance = OUT_OF_RANGE_RADIUS; // out of range
 		Sheep closest = null;
+	
 
 		for (Sheep sheep : sheepList) {
-			float temp = findSheep(sheep);
+			int temp = findSheep(sheep);
 			
 			if (temp < distance) {
 				distance = temp;
 				closest = sheep;
-				break;
 			}
 		}
 
@@ -179,21 +179,25 @@ public class Fox extends Animal {
 		int fox_x = position.getX();
 		int fox_y = position.getY();
 
-		while (dog.closeTo(this, DOG_AWARENESS_RANGE)) {
-			float dx = Math.abs(dog_position.getX() - fox_x);
-			float dy = Math.abs(dog_position.getY() - fox_y);
+		if (dog.closeTo(this, DOG_AWARENESS_RANGE)) {
+			this.surpassBoundaries = true; //enables going off the screen when moving
+			int dx = Math.abs(dog_position.getX() - fox_x);
+			int dy = Math.abs(dog_position.getY() - fox_y);
 
 			if (dx > dy) {
-				if (dog_position.getX() > fox_x)
+				if (dog_position.getX() > fox_x) {
 					moveX(-speed);
-				if (dog_position.getX() < fox_x)
+				} else if (dog_position.getX() < fox_x) {
 					moveX(speed);
+				}
 			} else {
-				if (dog_position.getY() > fox_y)
+				if (dog_position.getY() > fox_y) {
 					moveY(-speed);
-				if (dog_position.getY() < fox_y)
+				} else if (dog_position.getY() < fox_y) {
 					moveY(speed);
+				}
 			}
+			this.surpassBoundaries = false; //resets for the next movement
 		}
 	}
 
@@ -207,6 +211,7 @@ public class Fox extends Animal {
 		
 		if (position.x < 0 || position.x > screenWidth) { 
 			isVisible = false; //fox gets away (evade)
+			ranAway = true;
 			isEating = false;
 		}
 	}
@@ -221,6 +226,7 @@ public class Fox extends Animal {
 
 		if (position.y < 0 || position.y > screenHeight) {
 			isVisible = false; //fox gets away (evade)
+			ranAway = true;
 			isEating = false;
 		}
 	}
@@ -257,4 +263,9 @@ public class Fox extends Animal {
 	public void setVisible(boolean isVisible) {
 		this.isVisible = isVisible;
 	}
+
+	public boolean hasRunAway() {
+		return ranAway;
+	}
+	
 }

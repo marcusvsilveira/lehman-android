@@ -20,6 +20,7 @@ public abstract class Animal implements Orientable {
 	protected AnimalType type;
 	protected int screenWidth, screenHeight;
 	protected int halfHeight, halfWidth;
+	protected boolean surpassBoundaries;
 
 	/**
 	 * Constructs an animal object
@@ -78,9 +79,9 @@ public abstract class Animal implements Orientable {
 				newX = (negXDir <= x) ? x : negXDir;
 			}
 					
-			if ((newX + halfWidth) >= screenWidth){
+			if (((newX + halfWidth) >= screenWidth) && !surpassBoundaries){
 				newX = screenWidth - halfWidth;
-			} else if ((newX - halfWidth) < 0){
+			} else if (((newX - halfWidth) < 0) && !surpassBoundaries){
 				newX = 0 + halfWidth;
 			}
 			
@@ -95,9 +96,9 @@ public abstract class Animal implements Orientable {
 				newY = (negYDir <= y) ? y : negYDir;
 			}
 			
-			if ((newY + halfHeight) >= screenHeight) {
+			if (((newY + halfHeight) >= screenHeight) && !surpassBoundaries) {
 				newY = screenHeight - halfHeight;
-			} else if ((newY - halfHeight) < 0){
+			} else if (((newY - halfHeight) < 0) && !surpassBoundaries){
 				newY = 0 + halfHeight;
 			}
 			 

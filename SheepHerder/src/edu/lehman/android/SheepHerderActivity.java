@@ -35,6 +35,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 	public static int score=0;
 	private Button backButton;
 	public TextView timerView;
+	public TextView scoreView;
 	private GameSurfaceView surfaceView;
 	private RelativeLayout surfaceLayout;
 	
@@ -51,22 +52,19 @@ public class SheepHerderActivity extends Activity implements Settings {
 	         
 			// Update the time left every tick
 			public void onTick(long millisUntilFinished) {
-			    timerView.setText("Time Left: " +  totalTime/60 + ":" + String.format("%02d", totalTime%60) + "     Score : " + score);  
+			    timerView.setText(String.format("%02d", totalTime/60) + ":" + String.format("%02d", totalTime%60));  
+			    scoreView.setText("Score = " + score);
 			    totalTime--;   
-			    if (totalTime <=0) 
-			    {
-			    	
-			    	try {
-						wait(10000);
-					} catch (InterruptedException e) {}
-			        onFinish();
-			    }
+			    if (totalTime <=0) {
+			    	cancel();
+				}
 			}
 
 			// Show the user their final score and then stop the timer.
 			public void onFinish() {
-				timerView.setText("Time-up  :   Final Score = " + score );
-				onStop();
+				timerView.setText("Time's up!");
+				scoreView.setText("Score = " + score);
+				surfaceView.stop();
 			}
 
 	};
@@ -81,8 +79,10 @@ public class SheepHerderActivity extends Activity implements Settings {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sheep_herder);
+		score=0;
 		surfaceLayout = (RelativeLayout) findViewById(R.id.gamelayout);
 		timerView = (TextView) findViewById(R.id.timer);
+		scoreView = (TextView) findViewById(R.id.score);
 		
 		// Creates the UI on the UI thread and the handler
 		// creates the surface on another
@@ -136,7 +136,6 @@ public class SheepHerderActivity extends Activity implements Settings {
 	protected void onRestart() {
 		super.onRestart();
 		surfaceView.restart();
-		countDownTimer.start();
 
 		Log.i(LOG_TAG, "SheepHerderActivity.onRestart()");
 	}
@@ -147,8 +146,6 @@ public class SheepHerderActivity extends Activity implements Settings {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		countDownTimer.start();
-		
 		Log.i(LOG_TAG, "SheepHerderActivity.onStart()");
 	}
 
@@ -159,6 +156,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 	protected void onResume() {
 		super.onResume();
 		countDownTimer.start();
+		this.surfaceView.restart();
 		
 		Log.i(LOG_TAG, "SheepHerderActivity.onResume()");
 	}
@@ -170,10 +168,8 @@ public class SheepHerderActivity extends Activity implements Settings {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		this.surfaceView.stop();
-		//resetting layout to add the game again later. This would have to change if you want to handle "pausing the game"
-		this.surfaceLayout.removeAllViews();
 		countDownTimer.cancel();
+		this.surfaceView.stop();
 		
 		Log.i(LOG_TAG, "SheepHerderActivity.onPause()");
 	}
@@ -184,9 +180,6 @@ public class SheepHerderActivity extends Activity implements Settings {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		surfaceView.stop();
-		countDownTimer.cancel();
-
 		Log.i(LOG_TAG, "SheepHerderActivity.onStop()");
 	}
 
@@ -196,8 +189,6 @@ public class SheepHerderActivity extends Activity implements Settings {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		surfaceView.stop();
-		countDownTimer.cancel();
 
 		Log.i(LOG_TAG, "SheepHerderActivity.onDestroy()");
 	}

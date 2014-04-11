@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import edu.lehman.android.R;
+import edu.lehman.android.SheepHerderActivity;
 import edu.lehman.android.domain.Dog;
 import edu.lehman.android.domain.Fox;
 import edu.lehman.android.domain.Position;
@@ -36,7 +37,9 @@ import android.view.SurfaceView;
 
 @SuppressLint("ViewConstructor")
 public class GameSurfaceView extends SurfaceView implements Callback, Runnable, Orientable {
-
+	public static final int POINTS_LOSE_SHEEP = 5;
+	public static final int POINTS_FOX_RUN_AWAY = 5;
+	public static final int POINTS_CATCH_FOX = 10;
 	/**
 	 * A class to hold the width and height of the phone's touchscreen. This is 
 	 * used in determining the location of the animals on the screen so the 
@@ -83,7 +86,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 	private List<Fox> foxList;
 	private List<Sheep> sheepList;
 	private Canvas canvas;
-	private boolean running = true;
+	private static boolean running = true;
 	private Boundaries surfaceBoundaries;
 	private static final Random locationGenerator = new Random();
 
@@ -136,15 +139,12 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 			// they get duplicated when they move
 			canvas.drawColor(Color.GREEN);
 
-			// TODO: check screen boundaries. Sheep and dog shouldn't be
-			// allowed to go out of screen
 			moveDog();
 			moveSheep();
 			moveFox();
 			surfaceHolder.unlockCanvasAndPost(canvas);
 
 			// Control the frame rate of the game
-			// TODO we might want to update a clock on the top here
 			try {
 				Thread.sleep(GAME_SPEED);
 			} catch (InterruptedException e) {
@@ -202,14 +202,21 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 					if(!wasEating && fox.isEating()) {
 						Log.e(LOG_TAG, "Fox started to eat");
 					} else if( wasEating && !fox.isEating()) {
-						//TODO take points out
 						Log.e(LOG_TAG, "Fox finished eating");
+						SheepHerderActivity.score -= POINTS_LOSE_SHEEP;
 					}
 				} else {
-					//TODO possibly count points here. You got the fox!
-					// TODO -> also give move time for the game as a bonus!!
-					//increase fox speed (more difficult) or add more foxes - just don't go over the speed limit :-)
-					Log.e(LOG_TAG, "You got the fox");
+					if(fox.hasRunAway()) {
+						// TODO -> possibly give move time for the game as a bonus!!
+						//increase fox speed (more difficult) or add more foxes - just don't go over the speed limit :-)
+						Log.e(LOG_TAG, "You scared the fox away");
+						SheepHerderActivity.score += POINTS_FOX_RUN_AWAY;
+					} else {
+						// TODO -> possibly give move time for the game as a bonus!!
+						//increase fox speed (more difficult) or add more foxes - just don't go over the speed limit :-)
+						Log.e(LOG_TAG, "You got the fox");
+						SheepHerderActivity.score += POINTS_CATCH_FOX;
+					}
 				}
 			} else {
 				// Log.e(LOG_TAG,

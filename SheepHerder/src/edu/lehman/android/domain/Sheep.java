@@ -1,7 +1,6 @@
 package edu.lehman.android.domain;
 
 import java.util.List;
-import java.util.Random;
 
 import edu.lehman.android.factory.AnimalType;
 import edu.lehman.android.views.GameSurfaceView.Boundaries;

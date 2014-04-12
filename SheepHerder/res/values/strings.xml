@@ -15,7 +15,7 @@
 	<string name="dogSpeed">Dog Speed</string>
 	<string name="sheepSpeed">Sheep Speed</string>
 	<string name="foxSpeed">Fox Speed</string>
-	<string name="numSheeps">Number of Sheeps</string>
+	<string name="numSheeps">Number of Sheep</string>
 	<string name="numFoxes">Number of Foxes</string>
 	<string name="maxSpeed">Max</string>
 	<string name="minSpeed">Min</string>

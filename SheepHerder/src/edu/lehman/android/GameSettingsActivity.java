@@ -23,37 +23,6 @@ import android.widget.TextView;
  * @author Prince Oladimeji
  */
 public class GameSettingsActivity extends Activity implements Settings {
-
-	/*
-	 * A RadioGroup that allows a user to select the number of foxes and the
-	 * number of sheep that are supposed to be in the game
-	 */
-	private class RadioListener implements RadioGroup.OnCheckedChangeListener {
-		@Override
-		public void onCheckedChanged(RadioGroup group, int checkedId) {
-			switch (checkedId) {
-			case R.id.five_foxes:
-				NUM_FOXES = 5;
-				break;
-			case R.id.eight_foxes:
-				NUM_FOXES = 8;
-				break;
-			case R.id.twelve_foxes:
-				NUM_FOXES = 12;
-				break;
-			case R.id.ten_sheeps:
-				NUM_SHEEP = 10;
-				break;
-			case R.id.fifteen_sheeps:
-				NUM_SHEEP = 15;
-				break;
-			case R.id.twenty_sheeps:
-				NUM_SHEEP = 20;
-				break;
-			}
-		}
-	}
-
 	private static final String LOG_TAG = "GameSettingsActivity";
 
 	private SeekBar dogSpeedSeekBar, foxSpeedSeekBar, sheepSpeedSeekBar;
@@ -179,7 +148,6 @@ public class GameSettingsActivity extends Activity implements Settings {
 	@Override
 	protected void onRestart() {
 		super.onRestart();
-		loadPreferences();
 		Log.i(LOG_TAG, "GameSettingsActivity.onRestart()");
 	}
 
@@ -277,9 +245,6 @@ public class GameSettingsActivity extends Activity implements Settings {
 					}
 				});
 
-		// Set up the action listeners for the components
-		loadPreferences();
-
 		Log.i(LOG_TAG, "GameSettingsActivity.onStart()");
 	}
 
@@ -303,15 +268,42 @@ public class GameSettingsActivity extends Activity implements Settings {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		storePreferences();
 		Log.i(LOG_TAG, "GameSettingsActivity.onStop()");
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		storePreferences();
 		Log.i(LOG_TAG, "GameSettingsActivity.onDestroy()");
 	}
 
+	/*
+	 * A RadioGroup that allows a user to select the number of foxes and the
+	 * number of sheep that are supposed to be in the game
+	 */
+	private class RadioListener implements RadioGroup.OnCheckedChangeListener {
+		@Override
+		public void onCheckedChanged(RadioGroup group, int checkedId) {
+			switch (checkedId) {
+			case R.id.five_foxes:
+				NUM_FOXES = 5;
+				break;
+			case R.id.eight_foxes:
+				NUM_FOXES = 8;
+				break;
+			case R.id.twelve_foxes:
+				NUM_FOXES = 12;
+				break;
+			case R.id.ten_sheeps:
+				NUM_SHEEP = 10;
+				break;
+			case R.id.fifteen_sheeps:
+				NUM_SHEEP = 15;
+				break;
+			case R.id.twenty_sheeps:
+				NUM_SHEEP = 20;
+				break;
+			}
+		}
+	}
 }

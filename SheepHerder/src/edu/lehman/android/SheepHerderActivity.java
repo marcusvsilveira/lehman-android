@@ -67,9 +67,11 @@ public class SheepHerderActivity extends Activity implements Settings {
 
 		// Show the user their final score and then stop the timer.
 		public void onFinish() {
-			if(!prematureFinish) {
+			if(prematureFinish) {
+				timerView.setText("Game Over!");
+			} else {
 				surfaceView.stop();
-				timerView.setText("Time's up!");
+				timerView.setText("Time's Up!");
 			}
 			scoreView.setText("Score = " + score);
 		}

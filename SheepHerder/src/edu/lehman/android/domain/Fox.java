@@ -10,7 +10,7 @@ import edu.lehman.android.views.GameSurfaceView.Boundaries;
 
 public class Fox extends Animal {
 	public static final String LOG_TAG = "FOX";
-	public static final int EATING_TIME = 30; 
+	public static final int EATING_TIME = 50; 
 	public static final int DELAY = 10;
 	public static final int OUT_OF_RANGE_RADIUS = 100000;
 	public static final int RANGE_OF_WAITING_TIME = 30; // time for the fox to wait in

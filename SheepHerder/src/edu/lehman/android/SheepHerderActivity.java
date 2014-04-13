@@ -5,6 +5,8 @@ import interfaces.Settings;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.Menu;
@@ -38,6 +40,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 	public TextView scoreView;
 	private GameSurfaceView surfaceView;
 	private RelativeLayout surfaceLayout;
+	private AlertDialog.Builder alert;
 	
 	// The timer placed at the top of the activity, plus some instance
 	// variables to represent the total amount of time that can be played
@@ -99,6 +102,22 @@ public class SheepHerderActivity extends Activity implements Settings {
 		this.surfaceView = new GameSurfaceView(getApplicationContext(), 
 				NUM_FOXES, NUM_SHEEP, DOG_SPEED, FOX_SPEED, SHEEP_SPEED );
 		this.surfaceLayout.addView(this.surfaceView);
+		
+		alert = new AlertDialog.Builder( this );
+		// Display a modal screen on how to play the game and wait for user to tap
+		// the screen before starting the game thread
+		alert.setTitle("Instructions");
+	    alert.setMessage("Tap the screen to move the dog!");
+
+	    alert.setPositiveButton("Start", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int whichButton) {
+	            surfaceView.start();
+	            countDownTimer.start();
+	        }
+	    });
+
+	    alert.setCancelable(false);
+	    alert.show();
 				
 		Log.i(LOG_TAG, "SheepHerderActivity.onCreate()");
 	}
@@ -155,7 +174,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		countDownTimer.start();
+		//countDownTimer.start();
 		this.surfaceView.restart();
 		
 		Log.i(LOG_TAG, "SheepHerderActivity.onResume()");
@@ -168,7 +187,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		countDownTimer.cancel();
+		//countDownTimer.cancel();
 		this.surfaceView.stop();
 		
 		Log.i(LOG_TAG, "SheepHerderActivity.onPause()");

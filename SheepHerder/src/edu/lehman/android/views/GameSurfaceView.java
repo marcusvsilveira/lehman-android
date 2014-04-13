@@ -15,7 +15,9 @@ import edu.lehman.android.domain.Sheep;
 import edu.lehman.android.factory.AnimalFactory;
 import edu.lehman.android.factory.AnimalType;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -88,6 +90,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 	private Canvas canvas;
 	private static boolean running = true;
 	private Boundaries surfaceBoundaries;
+	private Context context;
 	private static final Random locationGenerator = new Random();
 
 	private boolean dogMovementLock = false;
@@ -114,6 +117,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 			final int NUM_FOX, final int NUM_SHEEP,
 			final int DOG_SPEED, final int FOX_SPEED, final int SHEEP_SPEED) {
 		super(context);
+		this.context = context;
 		this.NUM_FOX = NUM_FOX;
 		this.NUM_SHEEP = NUM_SHEEP;
 		this.DOG_SPEED = DOG_SPEED;
@@ -122,7 +126,6 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 		
 		surfaceHolder = getHolder();
 		surfaceHolder.addCallback(this);
-		gameThread = new Thread(this);
 	}
 	
 	/**
@@ -421,8 +424,6 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 			// TODO : Handle if there is an error loading all materials.
 			Log.e(LOG_TAG, "Uncaught exception in loading all materials.");
 		}
-		
-		gameThread.start();
 	}
 
 	/*
@@ -488,9 +489,17 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 		
 		try {
 			// Wait for the game thread to finish up on resources
-			gameThread.join();
+			if (gameThread != null){
+				gameThread.join();
+			}
 		} catch (InterruptedException e){
 			// ignore because the game is ending
 		}
+	}
+
+	public void start() {
+		running = true;
+		gameThread = new Thread(this);
+		gameThread.start();
 	}
 }

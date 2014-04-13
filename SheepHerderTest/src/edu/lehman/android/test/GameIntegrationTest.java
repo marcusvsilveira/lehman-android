@@ -22,7 +22,6 @@ import android.widget.SeekBar;
  */
 public class GameIntegrationTest extends ActivityInstrumentationTestCase2<MainActivity> {
 	private Solo solo;
-	private Button settings, startGame, quitButton;
 	private MainActivity activity;
 	
 	public GameIntegrationTest() {
@@ -33,17 +32,10 @@ public class GameIntegrationTest extends ActivityInstrumentationTestCase2<MainAc
 		super.setUp();
 		//sets up Robotium
 		solo = new Solo(getInstrumentation());
-		//creates activity using instrumentation
-		getActivity();
 		
         // Getting a reference to the MainActivity of the target application
         activity = (MainActivity)getActivity();
-        
-	    settings = (Button) activity.findViewById(R.id.settingsButton);
-		startGame = (Button) activity.findViewById(R.id.startButton);
-		quitButton = (Button) activity.findViewById(R.id.quitButton);
-		
-	}
+     }
 	
 	public void tearDown() throws Exception {
 		solo.finishOpenedActivities();

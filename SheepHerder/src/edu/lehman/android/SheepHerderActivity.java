@@ -47,28 +47,37 @@ public class SheepHerderActivity extends Activity implements Settings {
 	// and the interval this timer counts down in. Currently, the user has
 	// 15 minutes of playtime measured in seconds
 	// 15 minutes of playtime measured in seconds
-		final int MILLIS_IN_FUTURE = 5 * 20000;
-		final int INTERVAL = 1*1000;
-		private CountDownTimer countDownTimer = new CountDownTimer(MILLIS_IN_FUTURE, INTERVAL) {
-			
-			int totalTime = (MILLIS_IN_FUTURE / INTERVAL);
-	         
-			// Update the time left every tick
-			public void onTick(long millisUntilFinished) {
-			    timerView.setText(String.format("%02d", totalTime/60) + ":" + String.format("%02d", totalTime%60));  
-			    scoreView.setText("Score = " + score);
-			    totalTime--;   
-			    if (totalTime <=0) {
-			    	cancel();
-				}
+	final int MILLIS_IN_FUTURE = 5 * 20000;
+	final int INTERVAL = 1*1000;
+	private CountDownTimer countDownTimer = new CountDownTimer(MILLIS_IN_FUTURE, INTERVAL) {
+		
+		private int totalTime = (MILLIS_IN_FUTURE / INTERVAL);
+        private boolean prematureFinish;
+        
+		// Update the time left every tick
+		public void onTick(long millisUntilFinished) {
+		    timerView.setText(String.format("%02d", totalTime/60) + ":" + String.format("%02d", totalTime%60));  
+		    scoreView.setText("Score = " + score);
+		    totalTime--;
+		    
+		    if (totalTime <=0) {
+		    	cancel();
+			} else if(!surfaceView.isRunning()) {
+				prematureFinish = true;
+				cancel();
 			}
+		}
 
-			// Show the user their final score and then stop the timer.
-			public void onFinish() {
-				timerView.setText("Time's up!");
-				scoreView.setText("Score = " + score);
+		// Show the user their final score and then stop the timer.
+		public void onFinish() {
+			if(prematureFinish) {
+				timerView.setText("Game Over!");
+			} else {
 				surfaceView.stop();
+				timerView.setText("Time's Up!");
 			}
+			scoreView.setText("Score = " + score);
+		}
 
 	};
 	

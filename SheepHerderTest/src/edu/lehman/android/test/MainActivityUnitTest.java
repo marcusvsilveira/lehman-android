@@ -25,6 +25,7 @@ public class MainActivityUnitTest extends ActivityUnitTestCase<MainActivity> {
         startActivity(new Intent(getInstrumentation().getTargetContext(), MainActivity.class), null, null);
         // Getting a reference to the MainActivity of the target application
         activity = (MainActivity)getActivity();
+        getInstrumentation().callActivityOnStart(activity); //required for these tests in order to have the listeners set up 
         
 	    settingsButton = (Button) activity.findViewById(R.id.settingsButton);
 		startGameButton = (Button) activity.findViewById(R.id.startButton);

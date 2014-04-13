@@ -3,9 +3,7 @@ package edu.lehman.android.test;
 import edu.lehman.android.GameSettingsActivity;
 import edu.lehman.android.R;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.test.ActivityUnitTestCase;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -33,6 +31,7 @@ public class GameSettingsActivityUnitTest extends ActivityUnitTestCase<GameSetti
         startActivity(new Intent(getInstrumentation().getTargetContext(), GameSettingsActivity.class), null, null);
         // Getting a reference to the MainActivity of the target application
         activity = (GameSettingsActivity)getActivity();
+        getInstrumentation().callActivityOnStart(activity); //required for these tests in order to have the listeners set up 
         
         seekBarDogSpeed = (SeekBar) activity.findViewById(R.id.dogSpeed);
         seekBarFoxSpeed = (SeekBar) activity.findViewById(R.id.foxSpeed);
@@ -45,7 +44,7 @@ public class GameSettingsActivityUnitTest extends ActivityUnitTestCase<GameSetti
 		backButton = (Button) activity.findViewById(R.id.backButton);
 	}
 	
-	public void testSeekBarsAndTextViews() throws Throwable {
+	public void testSeekBarsAndTextViews() {
 		//verify presence
 		assertNotNull(this.seekBarDogSpeed);
 		assertNotNull(this.seekBarFoxSpeed);

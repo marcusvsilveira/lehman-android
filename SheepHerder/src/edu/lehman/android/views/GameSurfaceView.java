@@ -20,7 +20,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.os.Process;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -37,41 +36,17 @@ import android.view.SurfaceView;
 
 @SuppressLint("ViewConstructor")
 public class GameSurfaceView extends SurfaceView implements Callback, Runnable, Orientable {
-	public static final int POINTS_LOSE_SHEEP = 5;
+	public static final int POINTS_LOSE_SHEEP = 10;
+	public static final int POINTS_START_LOSING_SHEEP = 5;
 	public static final int POINTS_FOX_RUN_AWAY = 5;
 	public static final int POINTS_CATCH_FOX = 10;
-	/**
-	 * A class to hold the width and height of the phone's touchscreen. This is 
-	 * used in determining the location of the animals on the screen so the 
-	 * animals know not to move to a location where they are not completely visible
-	 * on the screen. An instance of this class is passed into all animal objects
-	 * when they are created.
-	 * 
-	 * @author Marcos Davila
-	 *
-	 */
-	public class Boundaries {
-		private int WIDTH, HEIGHT;
-
-		// Sets width and height to predetermined values w and h
-		public Boundaries(int w, int h) {
-			WIDTH = w;
-			HEIGHT = h;
-		}
-
-		public int getScreenWidth() {
-			return WIDTH;
-		}
-
-		public int getScreenHeight() {
-			return HEIGHT;
-		}
-
-		public void printBoundaries() {
-			Log.i("Boundaries: ", WIDTH + "x" + HEIGHT);
-		}
-	}
-
+	//starting with a higher number so that if you don't play and fox starts eating sheep, the score doesn't go negative
+	public static final int POINTS_AT_START = 500; 
+	
+	// Approximates 1/60 of a second. The game runs at 60 FPS
+	private static int GAME_SPEED = 17;
+	private static final String LOG_TAG = "GameSurfaceView";
+	
 	private Bitmap dogBitmap;
 	private Bitmap foxBitmap;
 	private Bitmap sheepBitmap;
@@ -95,10 +70,6 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 	private int dogDirectionY;
 	private int dogDirectionX;
 
-	// Approximates 1/60 of a second. The game runs at 60 FPS
-	private static int GAME_SPEED = 17;
-	private static final String LOG_TAG = "GameSurfaceView";
-
 	/**
 	 * Sets the number of foxes, dogs, and sheeps and also initializes
 	 * holders and callbacks for the surface
@@ -120,6 +91,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 		this.FOX_SPEED = FOX_SPEED;
 		this.SHEEP_SPEED = SHEEP_SPEED;
 		
+		SheepHerderActivity.score = POINTS_AT_START;
 		surfaceHolder = getHolder();
 		surfaceHolder.addCallback(this);
 		gameThread = new Thread(this);
@@ -201,6 +173,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 					canvas.drawBitmap(foxBitmap, foxPosition.getX() - foxBitmap.getWidth()/2, foxPosition.getY() - foxBitmap.getHeight()/2, null);
 					if(!wasEating && fox.isEating()) {
 						Log.e(LOG_TAG, "Fox started to eat");
+						SheepHerderActivity.score -= POINTS_START_LOSING_SHEEP;
 					} else if( wasEating && !fox.isEating()) {
 						Log.e(LOG_TAG, "Fox finished eating");
 						SheepHerderActivity.score -= POINTS_LOSE_SHEEP;
@@ -251,6 +224,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 				// TODO create interstitial screen with GAME OVER
 				// message, with option to restart
 				// TODO show score
+				Log.i(LOG_TAG, "No more sheep available - all gone!");
 				running = false;
 			} else {
 				Bitmap currentSheepBitmap;
@@ -356,70 +330,46 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 	 */
 	@Override
 	public void surfaceCreated(SurfaceHolder arg0) {
-		Thread initializeObjects = new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				// Run this thread in the background
-				Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
-				
-				dogBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.gamedog);
-				foxBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.gamefox);
-				sheepBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.gamesheep);
-				sheepBeingEatenBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.gamesheepeaten);
-				
-				int loc_x, loc_y;
-
-				// Initialize dog, fox, and sheep objects and create as many of
-				// these objects as is specified in the shared preferences
-				dog = (Dog) AnimalFactory.createAnimal(AnimalType.DOG,
-						dogBitmap.getWidth(), dogBitmap.getHeight(), DOG_SPEED,
-						dogBitmap.getWidth(), dogBitmap.getHeight(),
-						surfaceBoundaries);
-
-				sheepList = new ArrayList<Sheep>(NUM_SHEEP);
-
-				for (int i = 0; i < NUM_SHEEP; i++) {
-					loc_x = locationGenerator.nextInt(surfaceBoundaries.WIDTH
-							- sheepBitmap.getWidth());
-					loc_y = locationGenerator.nextInt(surfaceBoundaries.HEIGHT
-							- sheepBitmap.getHeight());
-
-					sheepList.add((Sheep) AnimalFactory.createAnimal(
-							AnimalType.SHEEP, loc_x, loc_y, SHEEP_SPEED,
-							sheepBitmap.getWidth(), sheepBitmap.getHeight(),
-							surfaceBoundaries));
-				}
-
-				foxList = new ArrayList<Fox>(NUM_FOX);
-				Position foxPos;
-				for (int i = 0; i < NUM_FOX; i++) {
-
-					foxPos = spawnFox(locationGenerator, Fox.NUM_EDGES,
-							Fox.OFF_SCREEN_FOX_RANGE, Fox.FOX_STARTING_POINT);
-
-					foxList.add((Fox) AnimalFactory.createAnimal(
-							AnimalType.FOX, foxPos.getX(), foxPos.getY(),
-							FOX_SPEED, foxBitmap.getWidth(),
-							foxBitmap.getHeight(), surfaceBoundaries));
-				}
-
-			}
-
-		});
-
-		initializeObjects.start();
+		// Run this thread in the background
+		dogBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.gamedog);
+		foxBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.gamefox);
+		sheepBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.gamesheep);
+		sheepBeingEatenBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.gamesheepeaten);
 		
-		// Background should only be drawn green once
-		canvas = surfaceHolder.lockCanvas();
-		canvas.drawColor(Color.GREEN);
-		surfaceHolder.unlockCanvasAndPost(canvas);
-		
-		try {
-			initializeObjects.join(); // ready to start when initialization is done
-		} catch (Exception e) {
-			// TODO : Handle if there is an error loading all materials.
-			Log.e(LOG_TAG, "Uncaught exception in loading all materials.");
+		int loc_x, loc_y;
+
+		// Initialize dog, fox, and sheep objects and create as many of
+		// these objects as is specified in the shared preferences
+		dog = (Dog) AnimalFactory.createAnimal(AnimalType.DOG,
+				dogBitmap.getWidth(), dogBitmap.getHeight(), DOG_SPEED,
+				dogBitmap.getWidth(), dogBitmap.getHeight(),
+				surfaceBoundaries);
+
+		sheepList = new ArrayList<Sheep>(NUM_SHEEP);
+
+		for (int i = 0; i < NUM_SHEEP; i++) {
+			loc_x = locationGenerator.nextInt(surfaceBoundaries.WIDTH
+					- sheepBitmap.getWidth());
+			loc_y = locationGenerator.nextInt(surfaceBoundaries.HEIGHT
+					- sheepBitmap.getHeight());
+
+			sheepList.add((Sheep) AnimalFactory.createAnimal(
+					AnimalType.SHEEP, loc_x, loc_y, SHEEP_SPEED,
+					sheepBitmap.getWidth(), sheepBitmap.getHeight(),
+					surfaceBoundaries));
+		}
+
+		foxList = new ArrayList<Fox>(NUM_FOX);
+		Position foxPos;
+		for (int i = 0; i < NUM_FOX; i++) {
+
+			foxPos = spawnFox(locationGenerator, Fox.NUM_EDGES,
+					Fox.OFF_SCREEN_FOX_RANGE, Fox.FOX_STARTING_POINT);
+
+			foxList.add((Fox) AnimalFactory.createAnimal(
+					AnimalType.FOX, foxPos.getX(), foxPos.getY(),
+					FOX_SPEED, foxBitmap.getWidth(),
+					foxBitmap.getHeight(), surfaceBoundaries));
 		}
 		
 		gameThread.start();
@@ -460,7 +410,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 		return new Position(loc_x, loc_y);
 	}
 
-	public boolean getRunning() {
+	public boolean isRunning() {
 		return running;
 	}
 
@@ -491,6 +441,38 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable, 
 			gameThread.join();
 		} catch (InterruptedException e){
 			// ignore because the game is ending
+		}
+	}
+	
+	/**
+	 * A class to hold the width and height of the phone's touchscreen. This is 
+	 * used in determining the location of the animals on the screen so the 
+	 * animals know not to move to a location where they are not completely visible
+	 * on the screen. An instance of this class is passed into all animal objects
+	 * when they are created.
+	 * 
+	 * @author Marcos Davila
+	 *
+	 */
+	public class Boundaries {
+		private int WIDTH, HEIGHT;
+
+		// Sets width and height to predetermined values w and h
+		public Boundaries(int w, int h) {
+			WIDTH = w;
+			HEIGHT = h;
+		}
+
+		public int getScreenWidth() {
+			return WIDTH;
+		}
+
+		public int getScreenHeight() {
+			return HEIGHT;
+		}
+
+		public void printBoundaries() {
+			Log.i("Boundaries: ", WIDTH + "x" + HEIGHT);
 		}
 	}
 }

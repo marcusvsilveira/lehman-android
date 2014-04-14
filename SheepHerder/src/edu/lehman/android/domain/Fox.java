@@ -1,6 +1,5 @@
 package edu.lehman.android.domain;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -27,6 +26,7 @@ public class Fox extends Animal {
 	private boolean isEating = false;
 	private boolean isVisible = false;
 	private boolean ranAway = false;
+	private Sheep meal = null;
 
 	/**
 	 * Constructs a fox object and sets the rate at which the fox should appear
@@ -57,17 +57,11 @@ public class Fox extends Animal {
 					eatingClock--;
 					return; //can't move
 				} else {
-					isEating = false;
 					eatingClock = Fox.EATING_TIME;
 					//ready to move again
-					
-					Sheep sheep = null;
-					for(Iterator<Sheep> it = sheepList.iterator(); it.hasNext(); ) {
-						sheep = it.next();
-						if(sheep.isBeingEaten() ) {
-							it.remove(); 
-						}
-					}
+					isEating = false;
+					sheepList.remove(this.meal);
+					this.meal = null;
 				}
 			}
 			
@@ -78,7 +72,7 @@ public class Fox extends Animal {
 				Log.i(LOG_TAG, "FOX CHASING");
 				boolean chasing = chaseClosest(sheepList);
 				if(!chasing) {
-					//TODO move around randomly
+					//TODO move around randomly?
 				}
 			} 
 		}	
@@ -88,13 +82,9 @@ public class Fox extends Animal {
 		isVisible = false;
 		ranAway = false;
 		isEating = false;
-		Sheep sheep = null;
-		for(Iterator<Sheep> it = sheepList.iterator(); it.hasNext(); ) {
-			sheep = it.next();
-			if(sheep.isBeingEaten() ) {
-				sheep.setBeingEaten(false); // sheep was SAVED!
-			}
-			
+		if(this.meal != null) {
+			this.meal.setBeingEaten(false); // sheep was SAVED!
+			this.meal = null;
 		}
 	}
 	
@@ -245,6 +235,7 @@ public class Fox extends Animal {
 		Log.i(LOG_TAG, "FOX CAUGHT A SHEEP");
 		//fox is eating now
 		isEating = true;
+		this.meal = sheep;
 		sheep.setBeingEaten(true);
 	}
 

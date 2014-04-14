@@ -65,7 +65,6 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 	private Canvas canvas;
 	private static boolean running = true;
 	private Boundaries surfaceBoundaries;
-	private Context context;
 	private static final Random locationGenerator = new Random();
 
 	private boolean dogMovementLock = false;
@@ -94,7 +93,6 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 			final int NUM_SHEEP, final int DOG_SPEED, final int FOX_SPEED,
 			final int SHEEP_SPEED) {
 		super(context);
-		this.context = context;
 		this.NUM_FOX = NUM_FOX;
 		this.NUM_SHEEP = NUM_SHEEP;
 		this.DOG_SPEED = DOG_SPEED;

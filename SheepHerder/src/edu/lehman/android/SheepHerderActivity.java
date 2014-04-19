@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -18,11 +19,10 @@ import android.widget.TextView;
 
 /**
  * 
- * Hosts the surface view where the game takes place. The sheep herder
- * activity is responsible for managing a place for this view to be
- * active, as well as keeping track of the remaining time and the
- * score of the player. It also maintains a back button if the user
- * wishes to quit the game early.
+ * Hosts the surface view where the game takes place. The sheep herder activity
+ * is responsible for managing a place for this view to be active, as well as
+ * keeping track of the remaining time and the score of the player. It also
+ * maintains a back button if the user wishes to quit the game early.
  * 
  * @author Marcos Davila, Marcus Silveira, Prince Oladimeji
  */
@@ -34,35 +34,38 @@ public class SheepHerderActivity extends Activity implements Settings {
 	private int NUM_FOXES;
 	private int SHEEP_SPEED;
 	private int FOX_SPEED;
-	public static int score=0;
+	private int HIGHEST_SCORE;
+	public static int score = 0;
 	private Button backButton;
 	public TextView timerView;
 	public TextView scoreView;
 	private GameSurfaceView surfaceView;
 	private RelativeLayout surfaceLayout;
-	private AlertDialog.Builder alert;
-	
+	private static AlertDialog.Builder alert;
+
 	// The timer placed at the top of the activity, plus some instance
 	// variables to represent the total amount of time that can be played
 	// and the interval this timer counts down in. Currently, the user has
 	// 15 minutes of playtime measured in seconds
 	// 15 minutes of playtime measured in seconds
-	final int MILLIS_IN_FUTURE = 5 * 20000;
-	final int INTERVAL = 1*1000;
-	private CountDownTimer countDownTimer = new CountDownTimer(MILLIS_IN_FUTURE, INTERVAL) {
-		
+	final int MILLIS_IN_FUTURE = 1 * 20000;
+	final int INTERVAL = 1 * 1000;
+	private CountDownTimer countDownTimer = new CountDownTimer(
+			MILLIS_IN_FUTURE, INTERVAL) {
+
 		private int totalTime = (MILLIS_IN_FUTURE / INTERVAL);
-        private boolean prematureFinish;
-        
+		private boolean prematureFinish;
+
 		// Update the time left every tick
 		public void onTick(long millisUntilFinished) {
-		    timerView.setText(String.format("%02d", totalTime/60) + ":" + String.format("%02d", totalTime%60));  
-		    scoreView.setText("Score = " + score);
-		    totalTime--;
-		    
-		    if (totalTime <=0) {
-		    	cancel();
-			} else if(!surfaceView.isRunning()) {
+			timerView.setText(String.format("%02d", totalTime / 60) + ":"
+					+ String.format("%02d", totalTime % 60));
+			scoreView.setText("Score = " + score);
+			totalTime--;
+
+			if (totalTime <= 0) {
+				cancel();
+			} else if (!surfaceView.isRunning()) {
 				prematureFinish = true;
 				cancel();
 			}
@@ -70,32 +73,77 @@ public class SheepHerderActivity extends Activity implements Settings {
 
 		// Show the user their final score and then stop the timer.
 		public void onFinish() {
-			if(prematureFinish) {
+			if (prematureFinish) {
 				timerView.setText("Game Over!");
 			} else {
 				surfaceView.stop();
 				timerView.setText("Time's Up!");
 			}
-			scoreView.setText("Score = " + score);
-		}
 
+			scoreView.setText("Score = " + score);
+			
+			
+
+			alert.setTitle("Test");
+			alert.setMessage("Test");
+
+			alert.setPositiveButton("Play Again",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,
+								int whichButton) {
+							totalTime = (MILLIS_IN_FUTURE / INTERVAL); // reset timer
+							
+							if (score > HIGHEST_SCORE){
+								storePreferences();
+							}
+
+							score = 0;
+							surfaceView.start();
+							countDownTimer.start();
+						}
+					});
+
+			alert.setNegativeButton("Return to Main Menu",
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							finish(); // exit
+						}
+					});
+			
+			alert.show();
+		}
 	};
 	
 	/*
-	 * On creation, buttons and views are associated with their
-	 * IDs, preferences are loaded in from shared preferences
-	 * and those values are recorded into field instances,
-	 * and the surface view is created. 
+	 * Saves the score of the user if the user has a new high score
+	 */
+	private void storePreferences() {
+		// We need an Editor object to make preference changes.
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME,
+				MODE_PRIVATE);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putInt(HIGHEST_SCORE_EVER, score);
+
+		// Commit the edits!
+		editor.commit();
+	}
+
+	/*
+	 * On creation, buttons and views are associated with their IDs, preferences
+	 * are loaded in from shared preferences and those values are recorded into
+	 * field instances, and the surface view is created.
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sheep_herder);
-		score=0;
+		score = 0;
 		surfaceLayout = (RelativeLayout) findViewById(R.id.gamelayout);
 		timerView = (TextView) findViewById(R.id.timer);
 		scoreView = (TextView) findViewById(R.id.score);
-		
+
 		// Creates the UI on the UI thread and the handler
 		// creates the surface on another
 		backButton = (Button) findViewById(R.id.backButton);
@@ -105,30 +153,42 @@ public class SheepHerderActivity extends Activity implements Settings {
 				finish();
 			}
 		});
-		
+
 		loadPreferences();
-		
-		this.surfaceView = new GameSurfaceView(getApplicationContext(), 
-				NUM_FOXES, NUM_SHEEP, DOG_SPEED, FOX_SPEED, SHEEP_SPEED );
-		this.surfaceLayout.addView(this.surfaceView);
-		
-		alert = new AlertDialog.Builder( this );
-		// Display a modal screen on how to play the game and wait for user to tap
-		// the screen before starting the game thread
-		alert.setTitle("Instructions");
-	    alert.setMessage("Tap the screen to move the dog!");
 
-	    alert.setPositiveButton("Start", new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int whichButton) {
-	            surfaceView.start();
-	            countDownTimer.start();
-	        }
-	    });
+		createSurface();
+		
+		alert = new AlertDialog.Builder(this);
+		
+		this.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {	
+				// Display a modal screen on how to play the game and wait for
+				// user to tap the screen before starting the game thread
+				alert.setTitle("Instructions");
+				alert.setMessage("Tap the screen to move the dog!");
 
-	    alert.setCancelable(false);
-	    alert.show();
-				
+				alert.setPositiveButton("Start",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								surfaceView.start();
+								countDownTimer.start();
+							}
+						});
+
+				alert.setCancelable(false);
+				alert.show();
+			}
+		});
+
 		Log.i(LOG_TAG, "SheepHerderActivity.onCreate()");
+	}
+
+	private void createSurface() {
+		surfaceView = new GameSurfaceView(getApplicationContext(), NUM_FOXES,
+				NUM_SHEEP, DOG_SPEED, FOX_SPEED, SHEEP_SPEED);
+		surfaceLayout.addView(surfaceView);
 	}
 
 	/**
@@ -139,11 +199,11 @@ public class SheepHerderActivity extends Activity implements Settings {
 		getMenuInflater().inflate(R.menu.sheep_herder, menu);
 		return true;
 	}
-	
+
 	/**
-	 * Reads values from shared preferences pertaining to the number
-	 * and speed of dogs, foxes, and sheeps on the screen. If there
-	 * are no such values, default values are used instead.
+	 * Reads values from shared preferences pertaining to the number and speed
+	 * of dogs, foxes, and sheeps on the screen. If there are no such values,
+	 * default values are used instead.
 	 */
 	@Override
 	public void loadPreferences() {
@@ -155,6 +215,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 		NUM_FOXES = settings.getInt(NUM_FOXES_PREFS, DEFAULT_NUM_FOXES);
 		SHEEP_SPEED = settings.getInt(SHEEP_SPEED_PREFS, DEFAULT_SHEEP_SPEED);
 		FOX_SPEED = settings.getInt(FOX_SPEED_PREFS, DEFAULT_FOX_SPEED);
+		HIGHEST_SCORE = settings.getInt(HIGHEST_SCORE_EVER, DEFAULT_SCORE);
 	}
 
 	/*
@@ -183,22 +244,20 @@ public class SheepHerderActivity extends Activity implements Settings {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		//countDownTimer.start();
-		this.surfaceView.restart();
-		
+		surfaceView.restart();
+
 		Log.i(LOG_TAG, "SheepHerderActivity.onResume()");
 	}
 
 	/*
-	 * Pause the game thread running in the surface view as well
-	 * as the timer
+	 * Pause the game thread running in the surface view as well as the timer
 	 */
 	@Override
 	protected void onPause() {
 		super.onPause();
-		//countDownTimer.cancel();
+		countDownTimer.cancel();
 		this.surfaceView.stop();
-		
+
 		Log.i(LOG_TAG, "SheepHerderActivity.onPause()");
 	}
 
@@ -208,6 +267,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 	@Override
 	protected void onStop() {
 		super.onStop();
+		countDownTimer.cancel();
 		Log.i(LOG_TAG, "SheepHerderActivity.onStop()");
 	}
 
@@ -216,6 +276,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 	 */
 	@Override
 	protected void onDestroy() {
+		countDownTimer.cancel();
 		super.onDestroy();
 
 		Log.i(LOG_TAG, "SheepHerderActivity.onDestroy()");

@@ -1,5 +1,7 @@
 package edu.lehman.android;
 
+import com.google.android.gms.ads.AdView;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 /**
  * MainActivity initializes the main page with options to control settings or
@@ -18,6 +21,8 @@ public class MainActivity extends Activity {
 
 	private static final String LOG_TAG = "MainActivity";
 	private Button settings, startGame, quitButton;
+	private LinearLayout topLevelLayout;
+	private AdView mAdView;
 
 	/**
 	 * Identify buttons with their ID's when the app is started
@@ -31,7 +36,10 @@ public class MainActivity extends Activity {
 		settings = (Button) findViewById(R.id.settingsButton);
 		startGame = (Button) findViewById(R.id.startButton);
 		quitButton = (Button) findViewById(R.id.quitButton);
-
+		topLevelLayout = (LinearLayout) findViewById(R.id.topLevelLayout);
+		
+		mAdView = (AdView) findViewById(R.id.adView);
+        AdsHelper.showAds(mAdView, topLevelLayout);
 		Log.i(LOG_TAG, "MainActivity.onCreate()");
 	}
 
@@ -85,11 +93,13 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		mAdView.resume();
 		Log.i(LOG_TAG, "MainActivity.onResume()");
 	}
 
 	@Override
 	protected void onPause() {
+		mAdView.pause();
 		super.onPause();
 		Log.i(LOG_TAG, "MainActivity.onPause()");
 	}
@@ -102,6 +112,7 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
+		mAdView.destroy();
 		super.onDestroy();
 		Log.i(LOG_TAG, "MainActivity.onDestroy()");
 	}

@@ -1,5 +1,9 @@
 package edu.lehman.android;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+
 import edu.lehman.android.views.GameSurfaceView;
 import interfaces.Settings;
 import android.os.Bundle;
@@ -14,6 +18,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,6 +46,8 @@ public class SheepHerderActivity extends Activity implements Settings {
 	public TextView scoreView;
 	private GameSurfaceView surfaceView;
 	private RelativeLayout surfaceLayout;
+	private LinearLayout topLevelLayout;
+	private AdView mAdView;
 	private static AlertDialog.Builder alert;
 
 	// The timer placed at the top of the activity, plus some instance
@@ -81,9 +88,11 @@ public class SheepHerderActivity extends Activity implements Settings {
 			}
 
 			scoreView.setText("Score = " + score);
-			
-			
 
+			showGameOverModal();
+		}
+
+		private void showGameOverModal() {
 			alert.setTitle("Test");
 			alert.setMessage("Test");
 
@@ -138,12 +147,17 @@ public class SheepHerderActivity extends Activity implements Settings {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.activity_sheep_herder);
 		score = 0;
 		surfaceLayout = (RelativeLayout) findViewById(R.id.gamelayout);
+		topLevelLayout = (LinearLayout) findViewById(R.id.topLevelLayout);
 		timerView = (TextView) findViewById(R.id.timer);
 		scoreView = (TextView) findViewById(R.id.score);
 
+		mAdView = (AdView) findViewById(R.id.adView);
+        AdsHelper.showAds(mAdView, topLevelLayout);
+		
 		// Creates the UI on the UI thread and the handler
 		// creates the surface on another
 		backButton = (Button) findViewById(R.id.backButton);
@@ -160,29 +174,28 @@ public class SheepHerderActivity extends Activity implements Settings {
 		
 		alert = new AlertDialog.Builder(this);
 		
-		this.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {	
-				// Display a modal screen on how to play the game and wait for
-				// user to tap the screen before starting the game thread
-				alert.setTitle("Instructions");
-				alert.setMessage("Tap the screen to move the dog!");
-
-				alert.setPositiveButton("Start",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								surfaceView.start();
-								countDownTimer.start();
-							}
-						});
-
-				alert.setCancelable(false);
-				alert.show();
-			}
-		});
+		showInstructionsModal();
 
 		Log.i(LOG_TAG, "SheepHerderActivity.onCreate()");
+	}
+
+	private void showInstructionsModal() {
+		// Display a modal screen on how to play the game and wait for
+		// user to tap the screen before starting the game thread
+		alert.setTitle("Instructions");
+		alert.setMessage("Tap the screen to move the dog!");
+
+		alert.setPositiveButton("Start",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,
+							int whichButton) {
+						surfaceView.start();
+						countDownTimer.start();
+					}
+				});
+
+		alert.setCancelable(false);
+		alert.show();
 	}
 
 	private void createSurface() {
@@ -245,7 +258,9 @@ public class SheepHerderActivity extends Activity implements Settings {
 	protected void onResume() {
 		super.onResume();
 		surfaceView.restart();
-
+		// Resume the AdView.
+        mAdView.resume();
+        
 		Log.i(LOG_TAG, "SheepHerderActivity.onResume()");
 	}
 
@@ -254,6 +269,9 @@ public class SheepHerderActivity extends Activity implements Settings {
 	 */
 	@Override
 	protected void onPause() {
+		// Pause the AdView.
+        mAdView.pause();
+
 		super.onPause();
 		countDownTimer.cancel();
 		this.surfaceView.stop();
@@ -277,6 +295,9 @@ public class SheepHerderActivity extends Activity implements Settings {
 	@Override
 	protected void onDestroy() {
 		countDownTimer.cancel();
+		// Destroy the AdView.
+        mAdView.destroy();
+
 		super.onDestroy();
 
 		Log.i(LOG_TAG, "SheepHerderActivity.onDestroy()");

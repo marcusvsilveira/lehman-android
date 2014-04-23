@@ -1,5 +1,7 @@
 package edu.lehman.android;
 
+import com.google.android.gms.ads.AdView;
+
 import interfaces.Settings;
 import android.os.Bundle;
 import android.app.Activity;
@@ -9,6 +11,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -25,6 +28,9 @@ import android.widget.TextView;
 public class GameSettingsActivity extends Activity implements Settings {
 	private static final String LOG_TAG = "GameSettingsActivity";
 
+	private AdView mAdView;
+	private LinearLayout topLevelLayout;
+	
 	private SeekBar dogSpeedSeekBar, foxSpeedSeekBar, sheepSpeedSeekBar;
 	private TextView textView1, textView2, textView3;
 	private Button backButton;
@@ -61,6 +67,11 @@ public class GameSettingsActivity extends Activity implements Settings {
 		foxRadioGroup = (RadioGroup) findViewById(R.id.fox_radios);
 		sheepRadioGroup = (RadioGroup) findViewById(R.id.sheep_radios);
 
+		topLevelLayout = (LinearLayout) findViewById(R.id.topLevelLayout);
+		
+		mAdView = (AdView) findViewById(R.id.adView);
+        AdsHelper.showAds(mAdView, topLevelLayout);
+		
 		Log.i(LOG_TAG, "GameSettingsActivity.onCreate()");
 	}
 
@@ -254,14 +265,16 @@ public class GameSettingsActivity extends Activity implements Settings {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		mAdView.resume();
 		loadPreferences();
 		Log.i(LOG_TAG, "GameSettingsActivity.onResume()");
 	}
 
 	@Override
 	protected void onPause() {
-		super.onPause();
+		mAdView.pause();
 		storePreferences();
+		super.onPause();
 		Log.i(LOG_TAG, "GameSettingsActivity.onPause()");
 	}
 
@@ -273,6 +286,7 @@ public class GameSettingsActivity extends Activity implements Settings {
 
 	@Override
 	protected void onDestroy() {
+		mAdView.destroy();
 		super.onDestroy();
 		Log.i(LOG_TAG, "GameSettingsActivity.onDestroy()");
 	}
@@ -284,25 +298,18 @@ public class GameSettingsActivity extends Activity implements Settings {
 	private class RadioListener implements RadioGroup.OnCheckedChangeListener {
 		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
-			switch (checkedId) {
-			case R.id.five_foxes:
+			if (checkedId == R.id.five_foxes) {
 				NUM_FOXES = 5;
-				break;
-			case R.id.eight_foxes:
+			} else if (checkedId == R.id.eight_foxes) {
 				NUM_FOXES = 8;
-				break;
-			case R.id.twelve_foxes:
+			} else if (checkedId == R.id.twelve_foxes) {
 				NUM_FOXES = 12;
-				break;
-			case R.id.ten_sheeps:
+			} else if (checkedId == R.id.ten_sheeps) {
 				NUM_SHEEP = 10;
-				break;
-			case R.id.fifteen_sheeps:
+			} else if (checkedId == R.id.fifteen_sheeps) {
 				NUM_SHEEP = 15;
-				break;
-			case R.id.twenty_sheeps:
+			} else if (checkedId == R.id.twenty_sheeps) {
 				NUM_SHEEP = 20;
-				break;
 			}
 		}
 	}

@@ -234,9 +234,6 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 		if (sheepList != null) {
 			if (sheepList.isEmpty()) {
 				// GAME IS OVER!
-				// TODO create interstitial screen with GAME OVER
-				// message, with option to restart
-				// TODO show score
 				Log.i(LOG_TAG, "No more sheep available - all gone!");
 				running = false;
 			} else {

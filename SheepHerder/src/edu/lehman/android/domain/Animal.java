@@ -158,7 +158,7 @@ public abstract class Animal implements Orientable {
 	 * @return the speed of the animal
 	 */
 	public int getSpeed() {
-		return speed * 3; //make speed more significant because it will use to be rendered (pixels)
+		return speed * 6; //make speed more significant because it will use to be rendered (pixels)
 	}
 
 	/**

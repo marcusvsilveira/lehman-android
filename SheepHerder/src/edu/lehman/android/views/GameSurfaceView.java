@@ -20,6 +20,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Shader.TileMode;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -53,6 +55,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 	private Bitmap foxBitmap;
 	private Bitmap sheepBitmap;
 	private Bitmap sheepBeingEatenBitmap;
+	private BitmapDrawable backgroundBitmapDrawable;
 
 	private SurfaceHolder surfaceHolder;
 	private Thread gameThread;
@@ -116,8 +119,10 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 			canvas = surfaceHolder.lockCanvas();
 			// reset canvas so that objects can be redrawn. Otherwise,
 			// they get duplicated when they move
-			canvas.drawColor(Color.GREEN);
-
+//			canvas.drawColor(Color.GREEN);
+			
+			//draw background before moving objects, so that there is no "trailing movement"
+			backgroundBitmapDrawable.draw(canvas);
 			moveDog();
 			moveSheep();
 			moveFox();
@@ -235,7 +240,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 			if (sheepList.isEmpty()) {
 				// GAME IS OVER!
 				Log.i(LOG_TAG, "No more sheep available - all gone!");
-				running = false;
+				stop();
 			} else {
 				Bitmap currentSheepBitmap;
 				for (Sheep sheep : sheepList) {
@@ -267,6 +272,9 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 	protected void onSizeChanged(int xNew, int yNew, int xOld, int yOld) {
 		super.onSizeChanged(xNew, yNew, xOld, yOld);
 		surfaceBoundaries = new Boundaries(xNew, yNew);
+		if(backgroundBitmapDrawable != null) {
+			backgroundBitmapDrawable.setBounds(0, 0, surfaceBoundaries.getScreenWidth(), surfaceBoundaries.getScreenHeight());
+		}
 		// surfaceBoundaries.printBoundaries();
 	}
 
@@ -350,7 +358,13 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 				R.drawable.gamesheep);
 		sheepBeingEatenBitmap = BitmapFactory.decodeResource(getResources(),
 				R.drawable.gamesheepeaten);
-
+		
+		//background tile
+		backgroundBitmapDrawable = new BitmapDrawable(getResources(), BitmapFactory.decodeResource(getResources(), R.drawable.grass)); 
+		backgroundBitmapDrawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
+		backgroundBitmapDrawable.setBounds(0, 0, surfaceBoundaries.getScreenWidth(), surfaceBoundaries.getScreenHeight());
+		//
+		
 		int loc_x, loc_y;
 
 		// Initialize dog, fox, and sheep objects and create as many of
@@ -445,7 +459,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 	 */
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		running = false;
+		stop();
 
 		try {
 			// Wait for the game thread to finish up on resources
@@ -454,6 +468,21 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 			}
 		} catch (InterruptedException e) {
 			// ignore because the game is ending
+		}
+		if(this.backgroundBitmapDrawable != null) {
+			this.backgroundBitmapDrawable.getBitmap().recycle();
+		}
+		if(this.dogBitmap != null) {
+			this.dogBitmap.recycle();
+		}
+		if(this.foxBitmap != null) {
+			this.foxBitmap.recycle();
+		}
+		if(this.sheepBeingEatenBitmap != null) {
+			this.sheepBeingEatenBitmap.recycle();
+		}
+		if(this.sheepBitmap != null) {
+			this.sheepBitmap.recycle();
 		}
 	}
 

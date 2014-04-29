@@ -120,7 +120,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 		// Display a modal screen on how to play the game and wait for
 		// user to tap the screen before starting the game thread
 		alert.setTitle("Instructions");
-		alert.setMessage("Tap the screen to move the dog!");
+		alert.setMessage("Tap the screen to move the dog and keep the sheep away from the foxes!");
 
 		alert.setPositiveButton("Start",
 				new DialogInterface.OnClickListener() {
@@ -189,14 +189,14 @@ public class SheepHerderActivity extends Activity implements Settings {
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						int hse = Integer.parseInt(HIGHEST_SCORE_EVER);
+						int hse = HIGHEST_SCORE;
 						alert.setTitle("Game Over!");
 						
 						if (score > hse){
 							hse = score;
 						}
 						
-						alert.setMessage("Your score: " + score + "/nHighest score: " + hse);
+						alert.setMessage("Your score: " + score + "\nHighest score: " + hse);
 
 						alert.setPositiveButton("Play Again",
 								new DialogInterface.OnClickListener() {

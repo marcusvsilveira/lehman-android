@@ -18,7 +18,7 @@ public class Fox extends Animal {
 	
 	public static final int NUM_EDGES = 4;
 	public static final int OFF_SCREEN_FOX_RANGE = 20;
-	public static final int FOX_STARTING_POINT = 100;
+	public static final int FOX_STARTING_POINT = 70;
 	
 	private Random foxRandomAppearance = new Random();
 	private int foxAppearanceRate;

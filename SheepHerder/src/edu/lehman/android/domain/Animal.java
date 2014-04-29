@@ -35,7 +35,7 @@ public abstract class Animal implements Orientable {
 	 */
 	public Animal(AnimalType type, int x, int y, int speed, int width, int height, Boundaries b){
 		this.position = new Position(x, y);
-		this.speed = speed;
+		this.speed = getSpeed(speed);
 		this.width = width;
 		this.height = height;
 		screenWidth = b.getScreenWidth();
@@ -157,8 +157,8 @@ public abstract class Animal implements Orientable {
 	 * Returns the rate at which the animal moves
 	 * @return the speed of the animal
 	 */
-	public int getSpeed() {
-		return speed * 6; //make speed more significant because it will use to be rendered (pixels)
+	private int getSpeed(int speed) {
+		return (int) Math.log1p(speed * 10) + 1; //make speed more significant because it will use to be rendered (pixels)
 	}
 
 	/**

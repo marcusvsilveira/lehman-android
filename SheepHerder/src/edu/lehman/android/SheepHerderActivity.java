@@ -235,7 +235,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 	}
 	
 	private void restartSurface() {
-		surfaceView.start();	
+		surfaceView.restart();	
 		startTimer();
 	}
 

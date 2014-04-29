@@ -3,7 +3,7 @@ package edu.lehman.android;
 import android.widget.LinearLayout;
 
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
+//import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
 /**

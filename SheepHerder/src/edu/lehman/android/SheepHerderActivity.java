@@ -304,12 +304,17 @@ public class SheepHerderActivity extends Activity implements Settings {
 	@Override
 	protected void onPause() {
 		// Pause the AdView.
-        mAdView.pause();
+        if( mAdView != null) {
+        	mAdView.pause();
+        }
 
 		super.onPause();
-		countdownTimer.cancel();
-		this.surfaceView.stop();
-
+		if(countdownTimer != null) {
+			countdownTimer.cancel();
+		}
+		if(this.surfaceView != null) {
+			this.surfaceView.stop();
+		}
 		Log.i(LOG_TAG, "SheepHerderActivity.onPause()");
 	}
 

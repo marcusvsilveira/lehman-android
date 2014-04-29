@@ -19,4 +19,5 @@
 	<string name="numFoxes">Number of Foxes</string>
 	<string name="maxSpeed">Max</string>
 	<string name="minSpeed">Min</string>
+	<string name="start">Start</string>
 </resources>

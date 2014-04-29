@@ -6,12 +6,8 @@ import edu.lehman.android.GameSettingsActivity;
 import edu.lehman.android.MainActivity;
 import edu.lehman.android.R;
 import edu.lehman.android.SheepHerderActivity;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.ActivityUnitTestCase;
-import android.widget.Button;
 import android.widget.SeekBar;
 
 /**
@@ -80,16 +76,19 @@ public class GameIntegrationTest extends ActivityInstrumentationTestCase2<MainAc
 		SeekBar dogSpeed = (SeekBar)solo.getCurrentActivity().findViewById(R.id.dogSpeed);
 		solo.waitForView(dogSpeed.getId());
 		solo.setProgressBar(dogSpeed, 1);
+		solo.waitForView(dogSpeed.getId());
 		assertEquals("Dog Speed", dogSpeed.getProgress(), 1);
 		
 		SeekBar foxSpeed = (SeekBar)solo.getCurrentActivity().findViewById(R.id.foxSpeed);
 		solo.waitForView(foxSpeed.getId());
 		solo.setProgressBar(foxSpeed, 1);
+		solo.waitForView(foxSpeed.getId());
 		assertEquals("Fox Speed", foxSpeed.getProgress(), 1);
 		
 		SeekBar sheepSpeed = (SeekBar)solo.getCurrentActivity().findViewById(R.id.sheepSpeed);
 		solo.waitForView(sheepSpeed.getId());
 		solo.setProgressBar(sheepSpeed, 10);
+		solo.waitForView(sheepSpeed.getId());
 		assertEquals("Sheep Speed", sheepSpeed.getProgress(), 10);
 		
 		solo.waitForView(R.id.backButton);
@@ -109,6 +108,9 @@ public class GameIntegrationTest extends ActivityInstrumentationTestCase2<MainAc
 		//validates Game started
 		assertTrue("edu.lehman.android.SheepHerderActivity is not found!", solo.waitForActivity(SheepHerderActivity.class));
 	
+		//start the game
+		solo.clickOnView(solo.getView(android.R.id.button1));
+		
 		//go back
 		solo.waitForView(R.id.backButton);
 		solo.clickOnView(solo.getView(R.id.backButton));

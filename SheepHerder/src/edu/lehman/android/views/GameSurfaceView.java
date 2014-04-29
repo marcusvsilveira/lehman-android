@@ -19,7 +19,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
+//import android.graphics.Color;
 import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
@@ -43,9 +43,6 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 	public static final int POINTS_START_LOSING_SHEEP = 5;
 	public static final int POINTS_FOX_RUN_AWAY = 5;
 	public static final int POINTS_CATCH_FOX = 10;
-	// starting with a higher number so that if you don't play and fox starts
-	// eating sheep, the score doesn't go negative
-	public static final int POINTS_AT_START = 500;
 
 	// Approximates 1/60 of a second. The game runs at 60 FPS
 	private static int GAME_SPEED = 17;
@@ -101,8 +98,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 		this.DOG_SPEED = DOG_SPEED;
 		this.FOX_SPEED = FOX_SPEED;
 		this.SHEEP_SPEED = SHEEP_SPEED;
-
-		SheepHerderActivity.score = POINTS_AT_START;
+		
 		surfaceHolder = getHolder();
 		surfaceHolder.addCallback(this);
 	}
@@ -349,6 +345,10 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 	 */
 	@Override
 	public void surfaceCreated(SurfaceHolder arg0) {
+		createObjects();
+	}
+
+	private void createObjects() {
 		// Run this thread in the background
 		dogBitmap = BitmapFactory.decodeResource(getResources(),
 				R.drawable.gamedog);
@@ -359,9 +359,16 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 		sheepBeingEatenBitmap = BitmapFactory.decodeResource(getResources(),
 				R.drawable.gamesheepeaten);
 		
+		if(surfaceBoundaries == null) {
+			surfaceBoundaries = new Boundaries(this.getWidth(), this.getHeight());
+		}
+		
 		//background tile
 		backgroundBitmapDrawable = new BitmapDrawable(getResources(), BitmapFactory.decodeResource(getResources(), R.drawable.grass)); 
 		backgroundBitmapDrawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
+		backgroundBitmapDrawable.setAntiAlias(false);
+		backgroundBitmapDrawable.setDither(false);
+		backgroundBitmapDrawable.setFilterBitmap(false);
 		backgroundBitmapDrawable.setBounds(0, 0, surfaceBoundaries.getScreenWidth(), surfaceBoundaries.getScreenHeight());
 		//
 		
@@ -370,7 +377,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 		// Initialize dog, fox, and sheep objects and create as many of
 		// these objects as is specified in the shared preferences
 		dog = (Dog) AnimalFactory.createAnimal(AnimalType.DOG,
-				dogBitmap.getWidth(), dogBitmap.getHeight(), DOG_SPEED,
+				dogBitmap.getWidth()/2, dogBitmap.getHeight()/2, DOG_SPEED,
 				dogBitmap.getWidth(), dogBitmap.getHeight(), surfaceBoundaries);
 
 		sheepList = new ArrayList<Sheep>(NUM_SHEEP);
@@ -412,24 +419,24 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 
 		if (location == UP) {
 			// constrained by x, y can be negative
-			loc_x = locationGenerator.nextInt(surfaceBoundaries.WIDTH);
-			loc_y = FOX_STARTING_POINT;
+			loc_x = locationGenerator.nextInt(surfaceBoundaries.WIDTH - foxBitmap.getWidth());
+			loc_y = FOX_STARTING_POINT - foxBitmap.getHeight();
 		} else if (location == DOWN) {
 			// constrained by x, y can be larger than screen
 			// height
-			loc_x = locationGenerator.nextInt(surfaceBoundaries.WIDTH);
-			loc_y = surfaceBoundaries.HEIGHT
+			loc_x = locationGenerator.nextInt(surfaceBoundaries.WIDTH - foxBitmap.getWidth());
+			loc_y = surfaceBoundaries.HEIGHT - foxBitmap.getHeight()
 					+ locationGenerator.nextInt(OFF_SCREEN_FOX_RANGE);
 		} else if (location == LEFT) {
 			// constrained by y, x can be negative
-			loc_x = FOX_STARTING_POINT;
-			loc_y = locationGenerator.nextInt(surfaceBoundaries.HEIGHT);
+			loc_x = FOX_STARTING_POINT - foxBitmap.getWidth();
+			loc_y = locationGenerator.nextInt(surfaceBoundaries.HEIGHT - foxBitmap.getHeight());
 		} else {
 			// constrained by y, x can be greater than
 			// screen height
-			loc_x = surfaceBoundaries.WIDTH
+			loc_x = surfaceBoundaries.WIDTH - foxBitmap.getWidth()
 					+ locationGenerator.nextInt(OFF_SCREEN_FOX_RANGE);
-			loc_y = locationGenerator.nextInt(surfaceBoundaries.HEIGHT);
+			loc_y = locationGenerator.nextInt(surfaceBoundaries.HEIGHT - foxBitmap.getHeight());
 		}
 
 		return new Position(loc_x, loc_y);
@@ -450,7 +457,8 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 	 * Tells the game thread to start again
 	 */
 	public void restart() {
-		running = true;
+		createObjects();
+		start();
 	}
 
 	/**

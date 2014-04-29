@@ -44,6 +44,9 @@ public class GameSettingsActivity extends Activity implements Settings {
 	private int NUM_FOXES;
 	private int SHEEP_SPEED;
 	private int FOX_SPEED;
+	
+	//for test purposes
+	public boolean adsEnabled = true;
 
 	/**
 	 * Associate seekbars, textviews, radio groups and buttons with their IDs
@@ -68,9 +71,6 @@ public class GameSettingsActivity extends Activity implements Settings {
 		sheepRadioGroup = (RadioGroup) findViewById(R.id.sheep_radios);
 
 		topLevelLayout = (LinearLayout) findViewById(R.id.topLevelLayout);
-		
-		mAdView = (AdView) findViewById(R.id.adView);
-        AdsHelper.showAds(mAdView, topLevelLayout);
 		
 		Log.i(LOG_TAG, "GameSettingsActivity.onCreate()");
 	}
@@ -170,6 +170,11 @@ public class GameSettingsActivity extends Activity implements Settings {
 	protected void onStart() {
 		super.onStart();
 		
+		if(adsEnabled) {
+			mAdView = (AdView) findViewById(R.id.adView);
+	        AdsHelper.showAds(mAdView, topLevelLayout);
+		}
+		
 		backButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -265,14 +270,18 @@ public class GameSettingsActivity extends Activity implements Settings {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		mAdView.resume();
+		if( adsEnabled ) { 
+			mAdView.resume();
+		}
 		loadPreferences();
 		Log.i(LOG_TAG, "GameSettingsActivity.onResume()");
 	}
 
 	@Override
 	protected void onPause() {
-		mAdView.pause();
+		if(adsEnabled) {
+			mAdView.pause();
+		}
 		storePreferences();
 		super.onPause();
 		Log.i(LOG_TAG, "GameSettingsActivity.onPause()");
@@ -286,7 +295,9 @@ public class GameSettingsActivity extends Activity implements Settings {
 
 	@Override
 	protected void onDestroy() {
-		mAdView.destroy();
+		if(adsEnabled) {
+			mAdView.destroy();
+		}
 		super.onDestroy();
 		Log.i(LOG_TAG, "GameSettingsActivity.onDestroy()");
 	}

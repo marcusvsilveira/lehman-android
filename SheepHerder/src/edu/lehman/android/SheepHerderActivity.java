@@ -9,7 +9,6 @@ import com.google.android.gms.ads.AdView;
 import edu.lehman.android.views.GameSurfaceView;
 import interfaces.Settings;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -41,7 +40,10 @@ public class SheepHerderActivity extends Activity implements Settings {
 	private int SHEEP_SPEED;
 	private int FOX_SPEED;
 	private int HIGHEST_SCORE;
-	public static int score = 0;
+	// starting with a higher number so that if you don't play and fox starts
+	// eating sheep, the score doesn't go negative
+	public static final int POINTS_AT_START = 500;
+	public static int score = POINTS_AT_START;
 	private Button backButton;
 	public TextView timerView;
 	public TextView scoreView;
@@ -56,6 +58,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 	// and the interval this timer counts down in. Currently, the user has
 	// 2 minutes of playtime measured in seconds
 	final int MILLIS_IN_FUTURE = 2 * 60 * 1000;
+//	final int MILLIS_IN_FUTURE = 10 * 1000; //10 seconds for test purposes
 	final int INTERVAL = 1 * 1000;
 	private TimerTask countdownTimer;
 	
@@ -83,7 +86,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_sheep_herder);
-		score = 0;
+		score = POINTS_AT_START;
 		surfaceLayout = (RelativeLayout) findViewById(R.id.gamelayout);
 		topLevelLayout = (LinearLayout) findViewById(R.id.topLevelLayout);
 		timerView = (TextView) findViewById(R.id.timer);
@@ -205,9 +208,9 @@ public class SheepHerderActivity extends Activity implements Settings {
 											storePreferences();
 										}
 
-										score = 0;
-										surfaceView.restart();
-										startTimer();
+										score = POINTS_AT_START;
+										updateText(totalTime+"", "Score = " + score);
+										restartSurface();
 									}
 								});
 
@@ -235,6 +238,11 @@ public class SheepHerderActivity extends Activity implements Settings {
 		surfaceView = new GameSurfaceView(getApplicationContext(), NUM_FOXES,
 				NUM_SHEEP, DOG_SPEED, FOX_SPEED, SHEEP_SPEED);
 		surfaceLayout.addView(surfaceView);
+	}
+	
+	private void restartSurface() {
+		surfaceView.restart();	
+		startTimer();
 	}
 
 	/**
@@ -290,7 +298,6 @@ public class SheepHerderActivity extends Activity implements Settings {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		surfaceView.restart();
 		// Resume the AdView.
         mAdView.resume();
         
@@ -303,12 +310,17 @@ public class SheepHerderActivity extends Activity implements Settings {
 	@Override
 	protected void onPause() {
 		// Pause the AdView.
-        mAdView.pause();
+        if( mAdView != null) {
+        	mAdView.pause();
+        }
 
 		super.onPause();
-		countdownTimer.cancel();
-		this.surfaceView.stop();
-
+		if(countdownTimer != null) {
+			countdownTimer.cancel();
+		}
+		if(this.surfaceView != null) {
+			this.surfaceView.stop();
+		}
 		Log.i(LOG_TAG, "SheepHerderActivity.onPause()");
 	}
 

@@ -31,6 +31,8 @@ public class GameSettingsActivityUnitTest extends ActivityUnitTestCase<GameSetti
         startActivity(new Intent(getInstrumentation().getTargetContext(), GameSettingsActivity.class), null, null);
         // Getting a reference to the MainActivity of the target application
         activity = (GameSettingsActivity)getActivity();
+        activity.adsEnabled = false;
+        
         getInstrumentation().callActivityOnStart(activity); //required for these tests in order to have the listeners set up 
         
         seekBarDogSpeed = (SeekBar) activity.findViewById(R.id.dogSpeed);

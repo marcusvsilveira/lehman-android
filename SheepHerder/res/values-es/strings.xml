@@ -12,4 +12,5 @@
     <string name="sheepHerder">Sheep Herder</string>
 	<string name="quit">Salir</string>
 	<string name="title">Pastor de ovejas</string>
+	<string name="start">Listo</string>
 </resources>

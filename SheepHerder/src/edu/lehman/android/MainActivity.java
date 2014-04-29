@@ -23,6 +23,7 @@ public class MainActivity extends Activity {
 	private Button settings, startGame, quitButton;
 	private LinearLayout topLevelLayout;
 	private AdView mAdView;
+	public boolean adsEnabled = true;
 
 	/**
 	 * Identify buttons with their ID's when the app is started
@@ -38,8 +39,6 @@ public class MainActivity extends Activity {
 		quitButton = (Button) findViewById(R.id.quitButton);
 		topLevelLayout = (LinearLayout) findViewById(R.id.topLevelLayout);
 		
-		mAdView = (AdView) findViewById(R.id.adView);
-        AdsHelper.showAds(mAdView, topLevelLayout);
 		Log.i(LOG_TAG, "MainActivity.onCreate()");
 	}
 
@@ -50,6 +49,12 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
+		
+		if(adsEnabled) {
+			mAdView = (AdView) findViewById(R.id.adView);
+	        AdsHelper.showAds(mAdView, topLevelLayout);
+		}
+		
 		// setup listeners
 		quitButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -93,13 +98,17 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		mAdView.resume();
+		if(adsEnabled) {
+			mAdView.resume();
+		}
 		Log.i(LOG_TAG, "MainActivity.onResume()");
 	}
 
 	@Override
 	protected void onPause() {
-		mAdView.pause();
+		if(adsEnabled) {
+			mAdView.pause();
+		}
 		super.onPause();
 		Log.i(LOG_TAG, "MainActivity.onPause()");
 	}
@@ -112,7 +121,9 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
-		mAdView.destroy();
+		if(adsEnabled) {
+			mAdView.destroy();
+		}
 		super.onDestroy();
 		Log.i(LOG_TAG, "MainActivity.onDestroy()");
 	}

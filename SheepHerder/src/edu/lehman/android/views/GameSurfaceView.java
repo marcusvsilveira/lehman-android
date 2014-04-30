@@ -218,8 +218,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 							foxNewPos.getY() - foxBitmap.getHeight() / 2, null);
 					Log.e(LOG_TAG, "Fox is now visible, position: " + foxNewPos);
 				} else {
-					Log.e(LOG_TAG,
-							"Fox is not visible and not ready to respawn");
+//					Log.e(LOG_TAG, "Fox is not visible and not ready to respawn");
 				}
 			}
 		}
@@ -364,7 +363,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 		}
 		
 		//background tile
-		backgroundBitmapDrawable = new BitmapDrawable(getResources(), BitmapFactory.decodeResource(getResources(), R.drawable.grass)); 
+		backgroundBitmapDrawable = new BitmapDrawable(getResources(), BitmapFactory.decodeResource(getResources(), R.drawable.greengrass)); 
 		backgroundBitmapDrawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
 		backgroundBitmapDrawable.setAntiAlias(false);
 		backgroundBitmapDrawable.setDither(false);

@@ -66,14 +66,17 @@ public class SheepHerderActivity extends Activity implements Settings {
 	 * Saves the score of the user if the user has a new high score
 	 */
 	private void storePreferences() {
-		// We need an Editor object to make preference changes.
-		SharedPreferences settings = getSharedPreferences(PREFS_NAME,
-				MODE_PRIVATE);
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putInt(HIGHEST_SCORE_EVER, score);
-
-		// Commit the edits!
-		editor.commit();
+		if (score > HIGHEST_SCORE 
+				&& !surfaceView.isRunning()){ //if it's still running, we can't save the score, because the game is not finished
+			// We need an Editor object to make preference changes.
+			SharedPreferences settings = getSharedPreferences(PREFS_NAME,
+					MODE_PRIVATE);
+			SharedPreferences.Editor editor = settings.edit();
+			editor.putInt(HIGHEST_SCORE_EVER, score);
+	
+			// Commit the edits!
+			editor.commit();
+		}
 	}
 
 	/*
@@ -204,10 +207,9 @@ public class SheepHerderActivity extends Activity implements Settings {
 											int whichButton) {
 										totalTime = (MILLIS_IN_FUTURE / INTERVAL); // reset timer
 										
-										if (score > HIGHEST_SCORE){
-											storePreferences();
-										}
-
+										//Store highest score if it's the case
+										storePreferences();
+									
 										score = POINTS_AT_START;
 										updateText(totalTime+"", "Score = " + score);
 										restartSurface();
@@ -315,6 +317,7 @@ public class SheepHerderActivity extends Activity implements Settings {
         }
 
 		super.onPause();
+		this.storePreferences(); //store highest score if they went to the main menu screen
 		if(countdownTimer != null) {
 			countdownTimer.cancel();
 		}

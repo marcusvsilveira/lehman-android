@@ -363,7 +363,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 		}
 		
 		//background tile
-		backgroundBitmapDrawable = new BitmapDrawable(getResources(), BitmapFactory.decodeResource(getResources(), R.drawable.greengrass)); 
+		backgroundBitmapDrawable = new BitmapDrawable(getResources(), BitmapFactory.decodeResource(getResources(), R.drawable.yellowgrass)); 
 		backgroundBitmapDrawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
 		backgroundBitmapDrawable.setAntiAlias(false);
 		backgroundBitmapDrawable.setDither(false);

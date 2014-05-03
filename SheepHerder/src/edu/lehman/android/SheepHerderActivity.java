@@ -189,14 +189,14 @@ public class SheepHerderActivity extends Activity implements Settings {
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						int hse = Integer.parseInt(HIGHEST_SCORE_EVER);
+						int hse = Integer.parseInt(HIGHEST_SCORE_EVER + "");
 						alert.setTitle("Game Over!");
 						
 						if (score > hse){
 							hse = score;
 						}
 						
-						alert.setMessage("Your score: " + score + "/nHighest score: " + hse);
+						alert.setMessage("Your score: " + score + "\nHighest score: " + hse);
 
 						alert.setPositiveButton("Play Again",
 								new DialogInterface.OnClickListener() {

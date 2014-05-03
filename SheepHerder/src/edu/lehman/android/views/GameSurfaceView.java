@@ -45,7 +45,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 	public static final int POINTS_CATCH_FOX = 10;
 
 	// Approximates 1/60 of a second. The game runs at 60 FPS
-	private static int GAME_SPEED = 17;
+	private static int GAME_SPEED = 200;
 	private static final String LOG_TAG = "GameSurfaceView";
 
 	private Bitmap dogBitmap;
@@ -456,8 +456,9 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 	 * Tells the game thread to start again
 	 */
 	public void restart() {
-		createObjects();
-		start();
+		//createObjects();
+		//start();
+		running = true;
 	}
 
 	/**

@@ -11,14 +11,14 @@
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:icon="@drawable/android_menu_icon"
+        android:label="@string/app_name">
          <meta-data android:name="com.google.android.gms.version"
                android:value="@integer/google_play_services_version"/> 
         <activity
             android:name="edu.lehman.android.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            android:theme="@android:style/Theme.Light.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,11 +27,13 @@
         </activity>
         <activity
             android:name="edu.lehman.android.GameSettingsActivity"
-            android:label="@string/title_activity_game_settings_panel" >
+            android:label="@string/title_activity_game_settings_panel" 
+            android:theme="@android:style/Theme.Light.NoTitleBar">
         </activity>
         <activity
             android:name="edu.lehman.android.SheepHerderActivity"
-            android:label="@string/title_activity_sheep_herder" >
+            android:label="@string/title_activity_sheep_herder" 
+            android:theme="@android:style/Theme.Light.NoTitleBar">
         </activity>
         
     	<activity android:name="com.google.android.gms.ads.AdActivity"

@@ -54,7 +54,8 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="0dp"
 	    android:layout_weight="9"
-	    android:background="#41DB00">
+	    android:background="#41DB00"
+	    android:hardwareAccelerated="true">
 	        
     </RelativeLayout>
      

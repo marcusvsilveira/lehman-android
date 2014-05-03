@@ -158,7 +158,20 @@ public abstract class Animal implements Orientable {
 	 * @return the speed of the animal
 	 */
 	private int getSpeed(int speed) {
-		return (int) Math.log1p(speed * 10) + 1; //make speed more significant because it will use to be rendered (pixels)
+//		return (int) Math.log1p(speed * 15) + 1; //make speed more significant because it will use to be rendered (pixels)
+		return (int) (speed + 5)/(speed + 1) + (speed * 2);
+		
+		//if 0= 5/1 = 5
+		//if 1= 6/2 + 2 =    5
+		//if 2= 7/3 + 4 =    6
+		//if 3= 8/4 + 6 =    8
+		//if 4= 9/5 + 8 =   10
+		//if 5= 10/6 + 10 = 12
+		//if 6= 11/7 + 12 = 13 or 14
+		//if 7= 12/8 + 14
+		//if 8= 13/9 + 16
+		//if 9= 14/10 + 18
+		//if 10= 15/11 + 20
 	}
 
 	/**

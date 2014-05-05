@@ -1,6 +1,6 @@
 package edu.lehman.android;
 
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
 
 import com.google.android.gms.ads.AdRequest;
 //import com.google.android.gms.ads.AdSize;
@@ -14,7 +14,7 @@ import com.google.android.gms.ads.AdView;
 public class AdsHelper {
 	private AdsHelper() {} /* all methos of this class should be static, so no instances should be created */
 	
-	public static void showAds(AdView mAdView, LinearLayout topLevelLayout) {
+	public static void showAds(AdView mAdView, ViewGroup topLevelLayout) {
 		// Create a banner ad. The ad size and ad unit ID must be set before calling loadAd.
 //        mAdView.setAdSize(AdSize.BANNER);
 //        mAdView.setAdUnitId("ca-app-pub-2245689993612349/6894665915");

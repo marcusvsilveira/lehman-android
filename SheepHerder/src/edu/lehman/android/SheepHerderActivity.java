@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -49,7 +50,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 	public TextView scoreView;
 	private GameSurfaceView surfaceView;
 	private RelativeLayout surfaceLayout;
-	private LinearLayout topLevelLayout;
+	private ViewGroup topLevelLayout;
 	private AdView mAdView;
 	private static AlertDialog.Builder alert;
 
@@ -98,7 +99,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 		setContentView(R.layout.activity_sheep_herder);
 		score = POINTS_AT_START;
 		surfaceLayout = (RelativeLayout) findViewById(R.id.gamelayout);
-		topLevelLayout = (LinearLayout) findViewById(R.id.topLevelLayout);
+		topLevelLayout = (ViewGroup) findViewById(R.id.topLevelLayout);
 		timerView = (TextView) findViewById(R.id.timer);
 		scoreView = (TextView) findViewById(R.id.score);
 

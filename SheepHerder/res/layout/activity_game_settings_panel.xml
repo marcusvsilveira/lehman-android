@@ -1,12 +1,11 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
+    android:layout_height="match_parent"
     tools:context=".GameSettingsActivity" 
     android:id="@+id/topLevelLayout">
-
+    
     <LinearLayout 
         android:id="@+id/topbar"
 	    android:layout_width="match_parent"
@@ -30,237 +29,245 @@
 	         
     </LinearLayout>
 
-	<RelativeLayout 
-	    android:id="@+id/settingsView"
+	
+    <ScrollView
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    tools:context=".GameSettingsActivity">
-	    
-	
-	    <TextView
-	        android:id="@+id/TextView04"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignBaseline="@+id/TextView02"
-	        android:layout_alignBottom="@+id/TextView02"
-	        android:layout_alignRight="@+id/dogSpeed"
-	        android:text="@string/maxSpeed" />
-	
-	    <TextView
-	        android:id="@+id/TextView02"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignLeft="@+id/dogSpeed"
-	        android:layout_below="@+id/dogSpeed"
-	        android:text="@string/minSpeed" />
-	
-	    <TextView
-	        android:id="@+id/TextView03"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignRight="@+id/foxSpeed"
-	        android:layout_below="@+id/foxSpeed"
-	        android:text="@string/maxSpeed" />
-	
-	    <TextView
-	        android:id="@+id/TextView01"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignLeft="@+id/foxSpeed"
-	        android:layout_alignTop="@+id/TextView03"
-	        android:text="@string/minSpeed" />
-	
-	    <TextView
-	        android:id="@+id/sheep_text2"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignBaseline="@+id/sheep_text"
-	        android:layout_alignBottom="@+id/sheep_text"
-	        android:layout_alignRight="@+id/sheepSpeed"
-	        android:text="@string/maxSpeed" />
-	
-	    <TextView
-	        android:id="@+id/sheep_text"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignLeft="@+id/sheepSpeed"
-	        android:layout_below="@+id/sheepSpeed"
-	        android:text="@string/minSpeed" />
-	
-	    <TextView
-	        android:id="@+id/textV06"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignRight="@+id/foxSpeed"
-	        android:layout_alignTop="@+id/foxSpeed"
-	        android:singleLine="true"
-	        android:textColor="#E40045" />
-	
-	    <TextView
-	        android:id="@+id/textV07"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignRight="@+id/sheepSpeed"
-	        android:layout_alignTop="@+id/sheepSpeed"
-	        android:singleLine="true"
-	        android:textColor="#E40045" >
-	    </TextView>
-	
-	    <TextView
-	        android:id="@+id/textV05"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignRight="@+id/dogSpeed"
-	        android:layout_alignTop="@+id/dogSpeed"
-	        android:singleLine="true"
-	        android:textColor="#E40045" />
-	
-	    <TextView
-	        android:id="@+id/TextView07"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignLeft="@+id/TextView01"
-	        android:layout_below="@+id/TextView01"
-	        android:layout_marginTop="25dp"
-	        android:text="@string/sheepSpeed"
-	        android:textColor="#E40045" 
-	        android:textStyle="bold"/>
-	
-	    <SeekBar
-	        android:id="@+id/sheepSpeed"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_alignLeft="@+id/TextView07"
-	        android:layout_below="@+id/TextView07"
-	        android:max="10" 
-	        android:textStyle="bold"/>
-	
-	    <SeekBar
-	        android:id="@+id/foxSpeed"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_alignLeft="@+id/TextView06"
-	        android:layout_below="@+id/TextView06"
-	        android:max="10" 
-	        android:textStyle="bold"/>
-	
-	    <TextView
-	        android:id="@+id/TextView06"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignLeft="@+id/TextView02"
-	        android:layout_below="@+id/TextView02"
-	        android:layout_marginTop="28dp"
-	        android:text="@string/foxSpeed"
-	        android:textColor="#E40045" 
-	        android:textStyle="bold"/>
-	
-	    <RadioGroup
-	        android:id="@+id/sheep_radios"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@+id/sheep_text2"
-	        android:layout_marginTop="23dp"
-	        android:orientation="vertical">
-	        
-	        <TextView
-	        android:id="@+id/radioButtonHeader"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:singleLine="true"
-	        android:textColor="#E40045"
-	        android:textStyle="bold"
-	        android:text="# of Sheep" />
-	
-	        <RadioButton
-	         android:id="@+id/ten_sheeps"
-	         android:layout_width="wrap_content"
-	         android:layout_height="wrap_content"
-	         android:gravity="right"
-	         android:text="ten" />
-	        
-	        <RadioButton
-	        android:id="@+id/fifteen_sheeps"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:gravity="right"
-	        android:text="fifteen" />
-	         
-	       <RadioButton
-	        android:id="@+id/twenty_sheeps"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:gravity="right"
-	        android:text="twenty" />
-	
-	    </RadioGroup>
-	    
-	     <RadioGroup
-	        android:id="@+id/fox_radios"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_alignRight="@+id/sheep_radios"
-	        android:layout_marginTop="23dp"
-	        android:layout_below="@+id/sheep_text2"
-	       android:layout_marginLeft="200dp"
-	        android:orientation="vertical">
-	        
-	        <TextView
-	        android:id="@+id/foxButtonHeader"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:singleLine="true"
-	        android:textColor="#E40045"
-	        android:textStyle="bold"
-	        android:text="# of fox" />
-	
-	        <RadioButton
-	         android:id="@+id/five_foxes"
-	         android:layout_width="wrap_content"
-	         android:layout_height="wrap_content"
-	         android:text="five" />
-	        
-	        <RadioButton
-	        android:id="@+id/eight_foxes"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="eight" />
-	         
-	       <RadioButton
-	        android:id="@+id/twelve_foxes"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="twelve" />
-	
-	    </RadioGroup>
-	
-	     <TextView
-	         android:id="@+id/TextView05"
-	         android:layout_width="wrap_content"
-	         android:layout_height="wrap_content"
-	         android:layout_alignLeft="@+id/dogSpeed"
-	         android:text="@string/dogSpeed"
-	         android:textColor="#E40045" 
-	         android:textStyle="bold"/>
-	
-	     <SeekBar
-	         android:id="@+id/dogSpeed"
-	         android:layout_width="match_parent"
-	         android:layout_height="wrap_content"
-	         android:layout_alignLeft="@+id/sheep_radios"
-	         android:layout_below="@+id/TextView05"
-	         android:max="10" 
-	         android:textStyle="bold"/>
+	    android:layout_below="@+id/topbar"
+	    android:paddingBottom="50dp">
 	
 
-	
-	</RelativeLayout>
- 
-	<com.google.android.gms.ads.AdView android:id="@+id/adView"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:layout_gravity="center"
-                         ads:adUnitId="ca-app-pub-2245689993612349/6894665915"
-                         ads:adSize="BANNER"/>
+		<RelativeLayout 
+		    android:id="@+id/settingsView"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+	        android:paddingLeft="@dimen/activity_horizontal_margin"
+    		android:paddingRight="@dimen/activity_horizontal_margin"
+		    tools:context=".GameSettingsActivity">
+		    
+		
+		    <TextView
+		        android:id="@+id/TextView04"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignBaseline="@+id/TextView02"
+		        android:layout_alignBottom="@+id/TextView02"
+		        android:layout_alignRight="@+id/dogSpeed"
+		        android:text="@string/maxSpeed" />
+		
+		    <TextView
+		        android:id="@+id/TextView02"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignLeft="@+id/dogSpeed"
+		        android:layout_below="@+id/dogSpeed"
+		        android:text="@string/minSpeed" />
+		
+		    <TextView
+		        android:id="@+id/TextView03"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignRight="@+id/foxSpeed"
+		        android:layout_below="@+id/foxSpeed"
+		        android:text="@string/maxSpeed" />
+		
+		    <TextView
+		        android:id="@+id/TextView01"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignLeft="@+id/foxSpeed"
+		        android:layout_alignTop="@+id/TextView03"
+		        android:text="@string/minSpeed" />
+		
+		    <TextView
+		        android:id="@+id/sheep_text2"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignBaseline="@+id/sheep_text"
+		        android:layout_alignBottom="@+id/sheep_text"
+		        android:layout_alignRight="@+id/sheepSpeed"
+		        android:text="@string/maxSpeed" />
+		
+		    <TextView
+		        android:id="@+id/sheep_text"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignLeft="@+id/sheepSpeed"
+		        android:layout_below="@+id/sheepSpeed"
+		        android:text="@string/minSpeed" />
+		
+		    <TextView
+		        android:id="@+id/textV06"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignRight="@+id/foxSpeed"
+		        android:layout_alignTop="@+id/foxSpeed"
+		        android:singleLine="true"
+		        android:textColor="#E40045" />
+		
+		    <TextView
+		        android:id="@+id/textV07"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignRight="@+id/sheepSpeed"
+		        android:layout_alignTop="@+id/sheepSpeed"
+		        android:singleLine="true"
+		        android:textColor="#E40045" >
+		    </TextView>
+		
+		    <TextView
+		        android:id="@+id/textV05"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignRight="@+id/dogSpeed"
+		        android:layout_alignTop="@+id/dogSpeed"
+		        android:singleLine="true"
+		        android:textColor="#E40045" />
+		
+		    <TextView
+		        android:id="@+id/TextView07"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignLeft="@+id/TextView01"
+		        android:layout_below="@+id/TextView01"
+		        android:layout_marginTop="25dp"
+		        android:text="@string/sheepSpeed"
+		        android:textColor="#E40045" 
+		        android:textStyle="bold"/>
+		
+		    <SeekBar
+		        android:id="@+id/sheepSpeed"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_alignLeft="@+id/TextView07"
+		        android:layout_below="@+id/TextView07"
+		        android:max="10" 
+		        android:textStyle="bold"/>
+		
+		    <SeekBar
+		        android:id="@+id/foxSpeed"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_alignLeft="@+id/TextView06"
+		        android:layout_below="@+id/TextView06"
+		        android:max="10" 
+		        android:textStyle="bold"/>
+		
+		    <TextView
+		        android:id="@+id/TextView06"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignLeft="@+id/TextView02"
+		        android:layout_below="@+id/TextView02"
+		        android:layout_marginTop="28dp"
+		        android:text="@string/foxSpeed"
+		        android:textColor="#E40045" 
+		        android:textStyle="bold"/>
+		
+		    <RadioGroup
+		        android:id="@+id/sheep_radios"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@+id/sheep_text2"
+		        android:layout_marginTop="23dp"
+		        android:orientation="vertical">
+		        
+		        <TextView
+		        android:id="@+id/radioButtonHeader"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:singleLine="true"
+		        android:textColor="#E40045"
+		        android:textStyle="bold"
+		        android:text="# of Sheep" />
+		
+		        <RadioButton
+		         android:id="@+id/ten_sheeps"
+		         android:layout_width="wrap_content"
+		         android:layout_height="wrap_content"
+		         android:gravity="right"
+		         android:text="ten" />
+		        
+		        <RadioButton
+		        android:id="@+id/fifteen_sheeps"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:gravity="right"
+		        android:text="fifteen" />
+		         
+		       <RadioButton
+		        android:id="@+id/twenty_sheeps"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:gravity="right"
+		        android:text="twenty" />
+		
+		    </RadioGroup>
+		    
+		     <RadioGroup
+		        android:id="@+id/fox_radios"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_alignRight="@+id/sheep_radios"
+		        android:layout_marginTop="23dp"
+		        android:layout_below="@+id/sheep_text2"
+		       android:layout_marginLeft="200dp"
+		        android:orientation="vertical">
+		        
+		        <TextView
+		        android:id="@+id/foxButtonHeader"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:singleLine="true"
+		        android:textColor="#E40045"
+		        android:textStyle="bold"
+		        android:text="# of fox" />
+		
+		        <RadioButton
+		         android:id="@+id/five_foxes"
+		         android:layout_width="wrap_content"
+		         android:layout_height="wrap_content"
+		         android:text="five" />
+		        
+		        <RadioButton
+		        android:id="@+id/eight_foxes"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="eight" />
+		         
+		       <RadioButton
+		        android:id="@+id/twelve_foxes"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="twelve" />
+		
+		    </RadioGroup>
+		
+		     <TextView
+		         android:id="@+id/TextView05"
+		         android:layout_width="wrap_content"
+		         android:layout_height="wrap_content"
+		         android:layout_alignLeft="@+id/dogSpeed"
+		         android:text="@string/dogSpeed"
+		         android:textColor="#E40045" 
+		         android:textStyle="bold"/>
+		
+		     <SeekBar
+		         android:id="@+id/dogSpeed"
+		         android:layout_width="match_parent"
+		         android:layout_height="wrap_content"
+		         android:layout_alignLeft="@+id/sheep_radios"
+		         android:layout_below="@+id/TextView05"
+		         android:max="10" 
+		         android:textStyle="bold"/>
+		</RelativeLayout>
+	</ScrollView>
+    <com.google.android.gms.ads.AdView android:id="@+id/adView"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_centerHorizontal="true"
+				   android:layout_alignParentBottom="true"
+                   ads:adUnitId="ca-app-pub-2245689993612349/6894665915"
+                   ads:adSize="BANNER"/> 
 
-</LinearLayout>
+</RelativeLayout>

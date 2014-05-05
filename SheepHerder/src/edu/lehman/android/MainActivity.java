@@ -8,8 +8,8 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
 /**
  * MainActivity initializes the main page with options to control settings or
@@ -21,7 +21,7 @@ public class MainActivity extends Activity {
 
 	private static final String LOG_TAG = "MainActivity";
 	private Button settings, startGame, quitButton;
-	private LinearLayout topLevelLayout;
+	private ViewGroup topLevelLayout;
 	private AdView mAdView;
 	public boolean adsEnabled = true;
 
@@ -37,7 +37,7 @@ public class MainActivity extends Activity {
 		settings = (Button) findViewById(R.id.settingsButton);
 		startGame = (Button) findViewById(R.id.startButton);
 		quitButton = (Button) findViewById(R.id.quitButton);
-		topLevelLayout = (LinearLayout) findViewById(R.id.topLevelLayout);
+		topLevelLayout = (ViewGroup) findViewById(R.id.topLevelLayout);
 		
 		Log.i(LOG_TAG, "MainActivity.onCreate()");
 	}

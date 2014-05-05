@@ -10,8 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -29,7 +29,7 @@ public class GameSettingsActivity extends Activity implements Settings {
 	private static final String LOG_TAG = "GameSettingsActivity";
 
 	private AdView mAdView;
-	private LinearLayout topLevelLayout;
+	private ViewGroup topLevelLayout;
 	
 	private SeekBar dogSpeedSeekBar, foxSpeedSeekBar, sheepSpeedSeekBar;
 	private TextView textView1, textView2, textView3;
@@ -70,7 +70,7 @@ public class GameSettingsActivity extends Activity implements Settings {
 		foxRadioGroup = (RadioGroup) findViewById(R.id.fox_radios);
 		sheepRadioGroup = (RadioGroup) findViewById(R.id.sheep_radios);
 
-		topLevelLayout = (LinearLayout) findViewById(R.id.topLevelLayout);
+		topLevelLayout = (ViewGroup) findViewById(R.id.topLevelLayout);
 		
 		Log.i(LOG_TAG, "GameSettingsActivity.onCreate()");
 	}

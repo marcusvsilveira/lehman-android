@@ -111,8 +111,8 @@ public class SheepHerderActivity extends Activity implements Settings {
 	private void showInstructionsModal() {
 		// Display a modal screen on how to play the game and wait for
 		// user to tap the screen before starting the game thread
-		alert.setTitle("Instructions");
-		alert.setMessage("Tap the screen to move the dog and keep the sheep away from the foxes!");
+		alert.setTitle(R.string.instructions);
+		alert.setMessage(R.string.message);
 
 		alert.setPositiveButton("Start", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
@@ -171,13 +171,13 @@ public class SheepHerderActivity extends Activity implements Settings {
 			public void end() {
 				String finalTimerText;
 				if (prematureFinish) {
-					finalTimerText = "Game Over!";
+					finalTimerText = R.string.game_over + "";
 				} else {
 					surfaceView.stop();
-					finalTimerText = "Time's Up!";
+					finalTimerText = R.string.times_up + "";
 				}
 
-				updateText(finalTimerText, "Score = " + score);
+				updateText(finalTimerText, R.string.score + " = " + score);
 
 				showGameOverModal();
 			}
@@ -187,16 +187,16 @@ public class SheepHerderActivity extends Activity implements Settings {
 					@Override
 					public void run() {
 						int hse = HIGHEST_SCORE;
-						alert.setTitle("Game Over!");
+						alert.setTitle(R.string.game_over);
 
 						if (score > hse) {
 							hse = score;
 						}
 
-						alert.setMessage("Your score: " + score
-								+ "\nHighest score: " + hse);
+						alert.setMessage(R.string.your_score + score
+								+ "\n" + R.string.highest_score + hse);
 
-						alert.setPositiveButton("Play Again",
+						alert.setPositiveButton(R.string.play_again,
 								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,
 											int whichButton) {
@@ -207,12 +207,12 @@ public class SheepHerderActivity extends Activity implements Settings {
 
 										score = POINTS_AT_START;
 										updateText(totalTime + "",
-												"Score = " + score);
+												 R.string.score + " = " + score);
 										restartSurface();
 									}
 								});
 
-						alert.setNegativeButton("Return to Main Menu",
+						alert.setNegativeButton(R.string.main_menu_prompt,
 								new DialogInterface.OnClickListener() {
 
 									@Override

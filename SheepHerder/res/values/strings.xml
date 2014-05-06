@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Sheep Herder</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="instructions">Instructions</string>
     <string name="title_activity_game_settings_panel">GameSettingsPanel</string>
     <string name="title_activity_sheep_herder">SheepHerderActivity</string>
     <string name="back">Back</string>
@@ -20,4 +19,12 @@
 	<string name="maxSpeed">Max</string>
 	<string name="minSpeed">Min</string>
 	<string name="start">Start</string>
+	<string name="game_over">Game Over!</string>
+	<string name="times_up">Time\'s Up!</string>
+	<string name="play_again">Play Again</string>
+	<string name="score">Score</string>
+	<string name="your_score">Your Score:</string>
+	<string name="highest_score">Highest Score:</string>
+	<string name="message">"Tap the screen to move the dog and keep the sheep away from the foxes!"</string>
+	<string name="main_menu_prompt">Return to Main Menu</string>
 </resources>

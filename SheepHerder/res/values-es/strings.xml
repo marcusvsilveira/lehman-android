@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Android en espanol</string>
+    <string name="app_name">Sheep Herder</string>
     <string name="action_settings">Controles</string>
-    <string name="hello_world">Ola Mundo 2!</string>
+    <string name="hello_world">Ola Mundo!</string>
     <string name="title_activity_game_settings_panel">Panel de Control</string>
     <string name="title_activity_sheep_herder">Actividad SheepHerder</string>
     <string name="back">Volver</string>
@@ -12,5 +12,21 @@
     <string name="sheepHerder">Sheep Herder</string>
 	<string name="quit">Salir</string>
 	<string name="title">Pastor de ovejas</string>
+	<string name="dogSpeed">Velocidad del perro</string>
+	<string name="sheepSpeed">Velocidad del ovejas</string>
+	<string name="foxSpeed">Velocidad del zorro</string>
+	<string name="numSheeps">Numero del ovejas</string>
+	<string name="numFoxes">Numero del zorros</string>
+	<string name="maxSpeed">Max</string>
+	<string name="minSpeed">Min</string>
 	<string name="start">Listo</string>
+	<string name="game_over">El Juego!</string>
+	<string name="times_up">Tiempo para arriba!</string>
+	<string name="play_again">Jugar del nuevo</string>
+	<string name="score">Resultado</string>
+	<string name="your_score">Usted resultado:</string>
+	<string name="highest_score">El Mejor Resultado:</string>
+	<string name="message">Toque la pantalla para mover el perro y mantener a las ovejas lejos de los zorros!</string>
+	<string name="main_menu_prompt">Volver a Main Menu</string>
+	
 </resources>

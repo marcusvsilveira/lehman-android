@@ -58,7 +58,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 	// variables to represent the total amount of time that can be played
 	// and the interval this timer counts down in. Currently, the user has
 	// 2 minutes of playtime measured in seconds
-	private final int SECONDS_IN_FUTURE = 1 * 10;
+	private final int SECONDS_IN_FUTURE = 2 * 60;
 	private final int INTERVAL = 1 * 1000;
 	private TimerTask countdownTimer;
 

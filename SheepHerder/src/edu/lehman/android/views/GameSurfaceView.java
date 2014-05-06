@@ -456,9 +456,13 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 	 * Tells the game thread to start again
 	 */
 	public void restart() {
-		//createObjects();
-		//start();
-		running = true;
+		createObjects();
+		
+		if (gameThread != null){
+			gameThread = null;
+		}
+		
+		start();
 	}
 
 	/**

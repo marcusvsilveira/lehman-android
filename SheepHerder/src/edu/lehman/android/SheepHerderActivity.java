@@ -111,10 +111,10 @@ public class SheepHerderActivity extends Activity implements Settings {
 	private void showInstructionsModal() {
 		// Display a modal screen on how to play the game and wait for
 		// user to tap the screen before starting the game thread
-		alert.setTitle("Instructions");
-		alert.setMessage("Tap the screen to move the dog and keep the sheep away from the foxes!");
+		alert.setTitle(getResources().getString(R.string.instructions));
+		alert.setMessage(getResources().getString(R.string.message));
 
-		alert.setPositiveButton("Start", new DialogInterface.OnClickListener() {
+		alert.setPositiveButton(getResources().getString(R.string.start), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				surfaceView.start();
 
@@ -140,7 +140,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 
 				updateText(String.format("%02d", totalTime / 60) + ":"
 						+ String.format("%02d", totalTime % 60),
-						"Score = " + score);
+						getResources().getString(R.string.score) + " = " + score);
 
 				totalTime--;
 
@@ -171,13 +171,14 @@ public class SheepHerderActivity extends Activity implements Settings {
 			public void end() {
 				String finalTimerText;
 				if (prematureFinish) {
-					finalTimerText = "Game Over!";
+					surfaceView.stop();
+					finalTimerText = getResources().getString(R.string.game_over);
 				} else {
 					surfaceView.stop();
-					finalTimerText = "Time's Up!";
+					finalTimerText = getResources().getString(R.string.times_up);
 				}
 
-				updateText(finalTimerText, "Score = " + score);
+				updateText(finalTimerText, getResources().getString(R.string.score) + " = " + score);
 
 				showGameOverModal();
 			}
@@ -187,16 +188,16 @@ public class SheepHerderActivity extends Activity implements Settings {
 					@Override
 					public void run() {
 						int hse = HIGHEST_SCORE;
-						alert.setTitle("Game Over!");
+						alert.setTitle(getResources().getString(R.string.game_over));
 
 						if (score > hse) {
 							hse = score;
 						}
 
-						alert.setMessage("Your score: " + score
-								+ "\nHighest score: " + hse);
+						alert.setMessage(getResources().getString(R.string.your_score) + score
+								+ "\n" + getResources().getString(R.string.highest_score) + hse);
 
-						alert.setPositiveButton("Play Again",
+						alert.setPositiveButton(getResources().getString(R.string.play_again),
 								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,
 											int whichButton) {
@@ -207,12 +208,13 @@ public class SheepHerderActivity extends Activity implements Settings {
 
 										score = POINTS_AT_START;
 										updateText(totalTime + "",
-												"Score = " + score);
+												getResources().getString(R.string.score) + " = " + score);
+										prematureFinish = false;
 										restartSurface();
 									}
 								});
 
-						alert.setNegativeButton("Return to Main Menu",
+						alert.setNegativeButton(R.string.main_menu_prompt,
 								new DialogInterface.OnClickListener() {
 
 									@Override
@@ -255,6 +257,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 	}
 
 	private void restartSurface() {
+		startTimer();
 		surfaceView.restart();
 	}
 

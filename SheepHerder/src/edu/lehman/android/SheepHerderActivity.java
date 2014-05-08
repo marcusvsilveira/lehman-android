@@ -296,7 +296,6 @@ public class SheepHerderActivity extends Activity implements Settings {
 	@Override
 	protected void onRestart() {
 		super.onRestart();
-		surfaceView.restart();
 
 		Log.i(LOG_TAG, "SheepHerderActivity.onRestart()");
 	}

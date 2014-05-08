@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -207,8 +206,11 @@ public class SheepHerderActivity extends Activity implements Settings {
 										storePreferences();
 
 										score = POINTS_AT_START;
-										updateText(totalTime + "",
+										
+										updateText(String.format("%02d", totalTime / 60) + ":"
+												+ String.format("%02d", totalTime % 60),
 												getResources().getString(R.string.score) + " = " + score);
+										
 										prematureFinish = false;
 										restartSurface();
 									}
@@ -257,8 +259,8 @@ public class SheepHerderActivity extends Activity implements Settings {
 	}
 
 	private void restartSurface() {
-		startTimer();
 		surfaceView.restart();
+		startTimer();
 	}
 
 	/**

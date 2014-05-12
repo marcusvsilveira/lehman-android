@@ -16,6 +16,8 @@
 	<string name="foxSpeed">Fox Speed</string>
 	<string name="numSheeps">Number of Sheep</string>
 	<string name="numFoxes">Number of Foxes</string>
+	<string name="numOfSheep"># of Sheep</string>
+	<string name="numOfFoxes"># of Foxes</string>
 	<string name="maxSpeed">Max</string>
 	<string name="minSpeed">Min</string>
 	<string name="start">Start</string>
@@ -27,4 +29,10 @@
 	<string name="highest_score">Highest Score:</string>
 	<string name="message">"Tap the screen to move the dog and keep the sheep away from the foxes!"</string>
 	<string name="main_menu_prompt">Return to Main Menu</string>
+	<string name="five">five</string>
+	<string name="eight">eight</string>
+	<string name="ten">ten</string>
+	<string name="twelve">twelve</string>
+	<string name="fifteen">fifteen</string>
+	<string name="twenty">twenty</string>
 </resources>

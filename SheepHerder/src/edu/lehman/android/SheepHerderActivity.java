@@ -96,7 +96,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_sheep_herder);
-		score = POINTS_AT_START;
+		
 		surfaceLayout = (RelativeLayout) findViewById(R.id.gamelayout);
 		topLevelLayout = (ViewGroup) findViewById(R.id.topLevelLayout);
 		timerView = (TextView) findViewById(R.id.timer);
@@ -318,7 +318,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 				finish();
 			}
 		});
-
+		score = POINTS_AT_START;
 		loadPreferences();
 
 		createSurface();

@@ -179,28 +179,28 @@
 		        android:singleLine="true"
 		        android:textColor="#E40045"
 		        android:textStyle="bold"
-		        android:text="# of Sheep" />
+		        android:text="@string/numOfSheep" />
 		
 		        <RadioButton
 		         android:id="@+id/ten_sheeps"
 		         android:layout_width="wrap_content"
 		         android:layout_height="wrap_content"
 		         android:gravity="right"
-		         android:text="ten" />
+		         android:text="@string/ten" />
 		        
 		        <RadioButton
 		        android:id="@+id/fifteen_sheeps"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:gravity="right"
-		        android:text="fifteen" />
+		        android:text="@string/fifteen" />
 		         
 		       <RadioButton
 		        android:id="@+id/twenty_sheeps"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:gravity="right"
-		        android:text="twenty" />
+		        android:text="@string/twenty" />
 		
 		    </RadioGroup>
 		    
@@ -221,25 +221,25 @@
 		        android:singleLine="true"
 		        android:textColor="#E40045"
 		        android:textStyle="bold"
-		        android:text="# of fox" />
+		        android:text="@string/numOfFoxes" />
 		
 		        <RadioButton
 		         android:id="@+id/five_foxes"
 		         android:layout_width="wrap_content"
 		         android:layout_height="wrap_content"
-		         android:text="five" />
+		         android:text="@string/five" />
 		        
 		        <RadioButton
 		        android:id="@+id/eight_foxes"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:text="eight" />
+		        android:text="@string/eight" />
 		         
 		       <RadioButton
 		        android:id="@+id/twelve_foxes"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:text="twelve" />
+		        android:text="@string/twelve" />
 		
 		    </RadioGroup>
 		

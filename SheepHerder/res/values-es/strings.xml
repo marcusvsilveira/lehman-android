@@ -25,10 +25,10 @@
 	<string name="game_over">Fin del Juego!</string>
 	<string name="times_up">Cierra el tiempo</string>
 	<string name="play_again">Jugar de nuevo</string>
-	<string name="score">Marcador</string>
+	<string name="score">Marca</string>
 	<string name="your_score">Su marca:</string>
 	<string name="highest_score">Su Mejor Marca:</string>
-	<string name="message">Toque la pantalla para mover el perro y mantener a las ovejas lejos de los zorros!</string>
+	<string name="message">Toque la pantalla para mover el perro y mantener las ovejas lejos de los zorros!</string>
 	<string name="main_menu_prompt">Volver a Main Menu</string>
 	<string name="five">cinco</string>
 	<string name="eight">ocho</string>

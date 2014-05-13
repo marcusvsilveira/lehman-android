@@ -5,6 +5,7 @@ import java.util.Random;
 
 import android.util.Log;
 import edu.lehman.android.factory.AnimalType;
+import edu.lehman.android.interfaces.Settings;
 import edu.lehman.android.views.GameSurfaceView.Boundaries;
 
 public class Fox extends Animal {
@@ -48,12 +49,16 @@ public class Fox extends Animal {
 
 	public void move(Dog dog, List<Sheep> sheepList) {
 		if (dog.collidesWith(this)) {
-			Log.i(LOG_TAG, "FOX WAS CAUGHT");
+			if(Settings.DEBUG_MODE) {
+				Log.i(LOG_TAG, "FOX WAS CAUGHT");
+			}
 			caught(sheepList);
 		} else {
 			if(isEating) {
 				if(eatingClock > 0) {
-					Log.i(LOG_TAG, "FOX IS EATING");
+					if(Settings.DEBUG_MODE) {
+						Log.i(LOG_TAG, "FOX IS EATING");
+					}
 					eatingClock--;
 					return; //can't move
 				} else {
@@ -66,10 +71,14 @@ public class Fox extends Animal {
 			}
 			
 			if (dog.closeTo(this, DOG_AWARENESS_RANGE)) {
-				Log.i(LOG_TAG, "FOX EVADE");
+				if(Settings.DEBUG_MODE) {
+					Log.i(LOG_TAG, "FOX EVADE");
+				}
 				evade(dog);
 			} else {
-				Log.i(LOG_TAG, "FOX CHASING");
+				if(Settings.DEBUG_MODE) {
+					Log.i(LOG_TAG, "FOX CHASING");
+				}
 				boolean chasing = chaseClosest(sheepList);
 				if(!chasing) {
 					//TODO move around randomly?
@@ -232,7 +241,9 @@ public class Fox extends Animal {
 	}
 
 	private void eat(Sheep sheep) {
-		Log.i(LOG_TAG, "FOX CAUGHT A SHEEP");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "FOX CAUGHT A SHEEP");
+		}
 		//fox is eating now
 		isEating = true;
 		this.meal = sheep;

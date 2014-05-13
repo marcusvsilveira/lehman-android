@@ -1,7 +1,5 @@
 package edu.lehman.android.views;
 
-import interfaces.Orientable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -14,6 +12,8 @@ import edu.lehman.android.domain.Position;
 import edu.lehman.android.domain.Sheep;
 import edu.lehman.android.factory.AnimalFactory;
 import edu.lehman.android.factory.AnimalType;
+import edu.lehman.android.interfaces.Orientable;
+import edu.lehman.android.interfaces.Settings;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -128,7 +128,9 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 			try {
 				Thread.sleep(GAME_SPEED);
 			} catch (InterruptedException e) {
-				Log.e(LOG_TAG, "Game loop was interrupted");
+				if(Settings.DEBUG_MODE) {
+					Log.e(LOG_TAG, "Game loop was interrupted");
+				}
 			}
 		}
 	}
@@ -181,10 +183,14 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 							foxPosition.getY() - foxBitmap.getHeight() / 2,
 							null);
 					if (!wasEating && fox.isEating()) {
-						Log.e(LOG_TAG, "Fox started to eat");
+						if(Settings.DEBUG_MODE) {
+							Log.e(LOG_TAG, "Fox started to eat");
+						}
 						SheepHerderActivity.score -= POINTS_START_LOSING_SHEEP;
 					} else if (wasEating && !fox.isEating()) {
-						Log.e(LOG_TAG, "Fox finished eating");
+						if(Settings.DEBUG_MODE) {
+							Log.e(LOG_TAG, "Fox finished eating");
+						}
 						SheepHerderActivity.score -= POINTS_LOSE_SHEEP;
 					}
 				} else {
@@ -193,22 +199,26 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 						// bonus!!
 						// increase fox speed (more difficult) or add more foxes
 						// - just don't go over the speed limit :-)
-						Log.e(LOG_TAG, "You scared the fox away");
+						if(Settings.DEBUG_MODE) {
+							Log.e(LOG_TAG, "You scared the fox away");
+						}
 						SheepHerderActivity.score += POINTS_FOX_RUN_AWAY;
 					} else {
 						// TODO -> possibly give move time for the game as a
 						// bonus!!
 						// increase fox speed (more difficult) or add more foxes
 						// - just don't go over the speed limit :-)
-						Log.e(LOG_TAG, "You got the fox");
+						if(Settings.DEBUG_MODE) {
+							Log.e(LOG_TAG, "You got the fox");
+						}
 						SheepHerderActivity.score += POINTS_CATCH_FOX;
 					}
 				}
 			} else {
-				// Log.e(LOG_TAG,
-				// "Fox is not visible, check if it can respawn");
 				if (fox.canRespawn()) {
-					Log.e(LOG_TAG, "Fox is ready to respawn");
+					if(Settings.DEBUG_MODE) {
+						Log.e(LOG_TAG, "Fox is ready to respawn");
+					}
 					Position foxNewPos = spawnFox(locationGenerator,
 							Fox.NUM_EDGES, Fox.OFF_SCREEN_FOX_RANGE,
 							Fox.FOX_STARTING_POINT);
@@ -216,9 +226,13 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 					canvas.drawBitmap(foxBitmap,
 							foxNewPos.getX() - foxBitmap.getWidth() / 2,
 							foxNewPos.getY() - foxBitmap.getHeight() / 2, null);
-					Log.e(LOG_TAG, "Fox is now visible, position: " + foxNewPos);
+					if(Settings.DEBUG_MODE) {
+						Log.e(LOG_TAG, "Fox is now visible, position: " + foxNewPos);
+					}
 				} else {
+//					if(Settings.DEBUG_MODE) {
 //					Log.e(LOG_TAG, "Fox is not visible and not ready to respawn");
+//					}
 				}
 			}
 		}
@@ -234,7 +248,9 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 		if (sheepList != null) {
 			if (sheepList.isEmpty()) {
 				// GAME IS OVER!
-				Log.i(LOG_TAG, "No more sheep available - all gone!");
+				if(Settings.DEBUG_MODE) {
+					Log.i(LOG_TAG, "No more sheep available - all gone!");
+				}
 				stop();
 			} else {
 				Bitmap currentSheepBitmap;
@@ -532,7 +548,9 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 		}
 
 		public void printBoundaries() {
-			Log.i("Boundaries: ", WIDTH + "x" + HEIGHT);
+			if(Settings.DEBUG_MODE) {
+				Log.i("Boundaries: ", WIDTH + "x" + HEIGHT);
+			}
 		}
 	}
 }

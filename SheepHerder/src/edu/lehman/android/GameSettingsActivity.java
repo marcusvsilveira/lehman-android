@@ -2,7 +2,7 @@ package edu.lehman.android;
 
 import com.google.android.gms.ads.AdView;
 
-import interfaces.Settings;
+import edu.lehman.android.interfaces.Settings;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -71,8 +71,9 @@ public class GameSettingsActivity extends Activity implements Settings {
 		sheepRadioGroup = (RadioGroup) findViewById(R.id.sheep_radios);
 
 		topLevelLayout = (ViewGroup) findViewById(R.id.topLevelLayout);
-		
-		Log.i(LOG_TAG, "GameSettingsActivity.onCreate()");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "GameSettingsActivity.onCreate()");
+		}
 	}
 
 	/**
@@ -159,7 +160,9 @@ public class GameSettingsActivity extends Activity implements Settings {
 	@Override
 	protected void onRestart() {
 		super.onRestart();
-		Log.i(LOG_TAG, "GameSettingsActivity.onRestart()");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "GameSettingsActivity.onRestart()");
+		}
 	}
 
 	/**
@@ -260,8 +263,9 @@ public class GameSettingsActivity extends Activity implements Settings {
 
 					}
 				});
-
-		Log.i(LOG_TAG, "GameSettingsActivity.onStart()");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "GameSettingsActivity.onStart()");
+		}
 	}
 
 	/*
@@ -274,7 +278,9 @@ public class GameSettingsActivity extends Activity implements Settings {
 			mAdView.resume();
 		}
 		loadPreferences();
-		Log.i(LOG_TAG, "GameSettingsActivity.onResume()");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "GameSettingsActivity.onResume()");
+		}
 	}
 
 	@Override
@@ -284,13 +290,17 @@ public class GameSettingsActivity extends Activity implements Settings {
 		}
 		storePreferences();
 		super.onPause();
-		Log.i(LOG_TAG, "GameSettingsActivity.onPause()");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "GameSettingsActivity.onPause()");
+		}
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		Log.i(LOG_TAG, "GameSettingsActivity.onStop()");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "GameSettingsActivity.onStop()");
+		}
 	}
 
 	@Override
@@ -299,7 +309,9 @@ public class GameSettingsActivity extends Activity implements Settings {
 			mAdView.destroy();
 		}
 		super.onDestroy();
-		Log.i(LOG_TAG, "GameSettingsActivity.onDestroy()");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "GameSettingsActivity.onDestroy()");
+		}
 	}
 
 	/*

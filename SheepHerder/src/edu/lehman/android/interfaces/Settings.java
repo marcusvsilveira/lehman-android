@@ -1,4 +1,4 @@
-package interfaces;
+package edu.lehman.android.interfaces;
 
 public interface Settings {
 	public static final String PREFS_NAME = "MyPrefsFile";
@@ -16,6 +16,8 @@ public interface Settings {
 	public static final int DEFAULT_FOX_SPEED = 7;
 	public static final int DEFAULT_SHEEP_SPEED = 3;
 	public static final int DEFAULT_SCORE = 0;
+	
+	public static final boolean DEBUG_MODE = false;
 	
 	public void loadPreferences();
 }

@@ -2,6 +2,7 @@ package edu.lehman.android;
 
 import com.google.android.gms.ads.AdView;
 
+import edu.lehman.android.interfaces.Settings;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -38,8 +39,9 @@ public class MainActivity extends Activity {
 		startGame = (Button) findViewById(R.id.startButton);
 		quitButton = (Button) findViewById(R.id.quitButton);
 		topLevelLayout = (ViewGroup) findViewById(R.id.topLevelLayout);
-		
-		Log.i(LOG_TAG, "MainActivity.onCreate()");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "MainActivity.onCreate()");
+		}
 	}
 
 	/**
@@ -82,7 +84,9 @@ public class MainActivity extends Activity {
 				startActivity(startGameIntent);
 			}
 		});
-		Log.i(LOG_TAG, "MainActivity.onStart()");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "MainActivity.onStart()");
+		}
 	}
 
 	/*
@@ -92,7 +96,9 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onRestart() {
 		super.onRestart();
-		Log.i(LOG_TAG, "MainActivity.onRestart()");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "MainActivity.onRestart()");
+		}
 	}
 	
 	@Override
@@ -101,7 +107,9 @@ public class MainActivity extends Activity {
 		if(adsEnabled) {
 			mAdView.resume();
 		}
-		Log.i(LOG_TAG, "MainActivity.onResume()");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "MainActivity.onResume()");
+		}
 	}
 
 	@Override
@@ -110,13 +118,17 @@ public class MainActivity extends Activity {
 			mAdView.pause();
 		}
 		super.onPause();
-		Log.i(LOG_TAG, "MainActivity.onPause()");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "MainActivity.onPause()");
+		}
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		Log.i(LOG_TAG, "MainActivity.onStop()");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "MainActivity.onStop()");
+		}
 	}
 
 	@Override
@@ -125,7 +137,9 @@ public class MainActivity extends Activity {
 			mAdView.destroy();
 		}
 		super.onDestroy();
-		Log.i(LOG_TAG, "MainActivity.onDestroy()");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "MainActivity.onDestroy()");
+		}
 	}
 
 }

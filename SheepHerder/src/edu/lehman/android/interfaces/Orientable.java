@@ -1,4 +1,4 @@
-package interfaces;
+package edu.lehman.android.interfaces;
 
 /**
  * An interface that maintains instance variables that allows an entity of the game

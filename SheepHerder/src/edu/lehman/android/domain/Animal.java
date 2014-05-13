@@ -1,7 +1,7 @@
 package edu.lehman.android.domain;
 
-import interfaces.Orientable;
 import edu.lehman.android.factory.AnimalType;
+import edu.lehman.android.interfaces.Orientable;
 import edu.lehman.android.views.GameSurfaceView.Boundaries;
 
 /**

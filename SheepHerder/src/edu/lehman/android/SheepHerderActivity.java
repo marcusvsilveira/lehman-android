@@ -6,8 +6,8 @@ import java.util.TimerTask;
 
 import com.google.android.gms.ads.AdView;
 
+import edu.lehman.android.interfaces.Settings;
 import edu.lehman.android.views.GameSurfaceView;
-import interfaces.Settings;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -103,8 +103,9 @@ public class SheepHerderActivity extends Activity implements Settings {
 		scoreView = (TextView) findViewById(R.id.score);
 
 		mAdView = (AdView) findViewById(R.id.adView);
-
-		Log.i(LOG_TAG, "SheepHerderActivity.onCreate()");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "SheepHerderActivity.onCreate()");
+		}
 	}
 
 	private void showInstructionsModal() {
@@ -296,8 +297,9 @@ public class SheepHerderActivity extends Activity implements Settings {
 	@Override
 	protected void onRestart() {
 		super.onRestart();
-
-		Log.i(LOG_TAG, "SheepHerderActivity.onRestart()");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "SheepHerderActivity.onRestart()");
+		}
 	}
 
 	/*
@@ -326,8 +328,9 @@ public class SheepHerderActivity extends Activity implements Settings {
 		alert = new AlertDialog.Builder(this);
 
 		showInstructionsModal();
-
-		Log.i(LOG_TAG, "SheepHerderActivity.onStart()");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "SheepHerderActivity.onStart()");
+		}
 	}
 
 	/*
@@ -338,8 +341,9 @@ public class SheepHerderActivity extends Activity implements Settings {
 		super.onResume();
 		// Resume the AdView.
 		mAdView.resume();
-		
-		Log.i(LOG_TAG, "SheepHerderActivity.onResume()");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "SheepHerderActivity.onResume()");
+		}
 	}
 
 	/*
@@ -364,8 +368,9 @@ public class SheepHerderActivity extends Activity implements Settings {
 		if (this.surfaceView != null) {
 			this.surfaceView.stop();
 		}
-
-		Log.i(LOG_TAG, "SheepHerderActivity.onPause()");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "SheepHerderActivity.onPause()");
+		}
 	}
 
 	/*
@@ -374,7 +379,9 @@ public class SheepHerderActivity extends Activity implements Settings {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		Log.i(LOG_TAG, "SheepHerderActivity.onStop()");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "SheepHerderActivity.onStop()");
+		}
 	}
 
 	/*
@@ -386,7 +393,8 @@ public class SheepHerderActivity extends Activity implements Settings {
 		mAdView.destroy();
 
 		super.onDestroy();
-
-		Log.i(LOG_TAG, "SheepHerderActivity.onDestroy()");
+		if(Settings.DEBUG_MODE) {
+			Log.i(LOG_TAG, "SheepHerderActivity.onDestroy()");
+		}
 	}
 }

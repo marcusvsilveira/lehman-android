@@ -472,6 +472,7 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 	 * Tells the game thread to start again
 	 */
 	public void restart() {
+		recycle();
 		createObjects();
 		
 		if (gameThread != null){
@@ -497,6 +498,10 @@ public class GameSurfaceView extends SurfaceView implements Callback, Runnable,
 		} catch (InterruptedException e) {
 			// ignore because the game is ending
 		}
+		recycle();
+	}
+
+	private void recycle() {
 		if(this.backgroundBitmapDrawable != null) {
 			this.backgroundBitmapDrawable.getBitmap().recycle();
 		}

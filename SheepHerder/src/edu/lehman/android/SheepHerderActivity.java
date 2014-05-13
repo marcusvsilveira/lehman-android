@@ -142,8 +142,6 @@ public class SheepHerderActivity extends Activity implements Settings {
 						+ String.format("%02d", totalTime % 60),
 						getResources().getString(R.string.score) + " = " + score);
 
-				totalTime--;
-
 				if (totalTime <= 0) {
 					this.cancel();
 
@@ -153,6 +151,7 @@ public class SheepHerderActivity extends Activity implements Settings {
 					this.cancel();
 					end();
 				}
+				totalTime--;
 			}
 
 			private void updateText(final String timerText,
